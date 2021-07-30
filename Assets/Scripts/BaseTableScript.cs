@@ -4,9 +4,13 @@ using UnityEngine;
 
 public class BaseTableScript : MonoBehaviour
 {
+    private BoxCollider bc;
+    
     // Start is called before the first frame update
     void Start()
     {
+        bc = GetComponent<BoxCollider>();
+        Physics.IgnoreLayerCollision(8,9);
         
     }
 
