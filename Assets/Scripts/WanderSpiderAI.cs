@@ -6,42 +6,23 @@ using Random = UnityEngine.Random;
 
 public class WanderSpiderAI : MonoBehaviour
 {
-    public float moveSpeed = 0.009f;
-    public float rotSpeed = 1.5f;
-    private Collider collid;
+    public float moveSpeed = 0.004f;
+    //public float moveSpeed = 0.002f;
+    public float rotSpeed = 0.5f;
     private bool isWandering = false;
     private bool isRotatingLeft = false;
     private bool isRotatingRight = false;
+    private bool isAvoiding = false;
     private bool isWalking = false;
-    private int id;
     
-    // Start is called before the first frame update
-    void Start()
+    private Animator animator;
+    
+    void Awake()
     {
-        /*if (isWandering == false)
-        {
-            StartCoroutine(Wander());
-        }
-
-        if (isRotatingRight == true)
-        {
-            transform.Rotate(transform.up * rotSpeed);
-        }
-
-        if (isRotatingLeft == true)
-        {
-            transform.Rotate(transform.up * -rotSpeed);
-        }
-
-        if (isWalking == true)
-        {
-            transform.position += transform.forward * moveSpeed;
-        }*/
-        //collid = GetComponent<Collider>();
-        //id = GetInstanceID();
+        animator = GetComponent<Animator>();
     }
 
-    void FixedUpdate()
+    private void Move()
     {
         if (isWandering == false)
         {
@@ -57,99 +38,74 @@ public class WanderSpiderAI : MonoBehaviour
         {
             transform.Rotate(transform.up * -rotSpeed);
         }
+        
+        if (isAvoiding == true)
+        {
+            transform.Rotate(transform.up * 1.0f);
+        }
 
         if (isWalking == true)
         {
             transform.position += transform.forward * moveSpeed;
+            animator.SetBool("walk", true);
         }
-        
+        else
+        {
+            animator.SetBool("walk", false);
+        }
+    }
+    
+    void FixedUpdate()
+    {
+        Move();
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        isWalking = false;
+        StartCoroutine(Avoid());
     }
 
     private void OnCollisionStay(Collision other)
     {
-        if (other.gameObject.name == "table_2")
-        {
-            Debug.Log("collidetable");
-        }
-        if (other.gameObject.name == "TableColliders")
-        {
-            Debug.Log("colliders");
-        }
-        else
+        if (other.gameObject.name != "table_2")
         { 
-            /*if (isWandering == false)
-            {
-                StartCoroutine(Wander());
-            }*/
-
-            if (isRotatingRight == true)
-            {
-                transform.Rotate(transform.up * rotSpeed);
-            }
-            
-            /*if (isRotatingLeft == true)
-            {
-                transform.Rotate(transform.up * -rotSpeed);
-            }*/
-
-            /*if (isWalking == true)
-            {
-                transform.position += transform.forward * moveSpeed;
-            }*/
- 
+            isWalking = false;
+            StartCoroutine(Avoid()); 
         }
     }
-    
-    /*private void OnCollisionEnter(Collision enter)
+
+    private void OnCollisionExit(Collision other)
     {
-        if (enter.gameObject.name == "table_2")
+        if (other.gameObject.name != "table_2")
         {
-            Debug.Log("collidetable");
+            Debug.Log("testcold");
         }
-        if (enter.gameObject.name == "TableColliders")
-        {
-            Debug.Log("colliders");
-        }
-        else
-        { 
-            if (isWandering == false)
-            {
-                StartCoroutine(Wander());
-            }
+    }
 
-            if (isRotatingRight == true)
-            {
-                transform.Rotate(transform.up * rotSpeed);
-            }
-            
-            if (isRotatingLeft == true)
-            {
-                transform.Rotate(transform.up * -rotSpeed);
-            }
-
-            if (isWalking == true)
-            {
-                transform.position += transform.forward * moveSpeed;
-            }
-            Debug.Log("collide");
-        }
-
-    }*/
-
+    private void OnTriggerExit(Collider other)
+    {
+        Debug.Log("test");
+        animator.SetBool("rotate", false);
+    }
     
 
+    IEnumerator Avoid()
+    {
+        float avoidTime = Random.Range(0.1f, 1.0f);
+            isAvoiding = true;
+            animator.SetBool("rotate", true);
+            yield return new WaitForSeconds(avoidTime);
+            isAvoiding = false;
+    }
+    
     IEnumerator Wander()
     {
-        /*int rotTime = Random.Range(1,3);
-        int rotateWait = Random.Range(1,4);
-        int rotateLorR = Random.Range(0, 3);
-        int walkWait = Random.Range(1, 4);
-        int walkTime = Random.Range(1, 3);*/
-        float rotTime = Random.Range(0.1f,1.0f);
+        float rotTime = Random.Range(0.5f,1.0f);
         float rotateWait = Random.Range(0.1f,0.3f);
         float rotateLorR = Random.Range(1, 3);
-        float walkWait = Random.Range(0.1f, 3);
-        float walkTime = Random.Range(0.5f,2.0f);
+        float walkWait = Random.Range(0.5f, 3);
+        float walkTime = Random.Range(0.5f,3.0f);
 
         isWandering = true;
 
@@ -158,104 +114,26 @@ public class WanderSpiderAI : MonoBehaviour
         yield return new WaitForSeconds(walkTime);
         isWalking = false;
         yield return new WaitForSeconds(rotateWait);
+        
         if (rotateLorR == 1)
         {
             isRotatingRight = true;
+            animator.SetBool("rotate", true);
             yield return new WaitForSeconds(rotTime);
             isRotatingRight = false;
+            animator.SetBool("rotate", false);
         }
+        
         if (rotateLorR == 2)
         {
             isRotatingLeft = true;
+            animator.SetBool("rotate", true);
             yield return new WaitForSeconds(rotTime);
             isRotatingLeft = false;
-        }
+            animator.SetBool("rotate", false);
 
+        }
+        
         isWandering = false;
     }
-    
-    
-    /*private void OnTriggerEnter(Collider other)
-    {
-        if (isWandering == false)
-        {
-            StartCoroutine(Wander());
-        }
-
-        if (isRotatingRight == true)
-        {
-            transform.Rotate(transform.up * rotSpeed);
-        }
-
-        if (isRotatingLeft == true)
-        {
-            transform.Rotate(transform.up * -rotSpeed);
-        }
-
-        if (isWalking == true)
-        {
-            transform.position += transform.forward * moveSpeed;
-        }
-    }*/
-
-    /*private void OnCollisionEnter(Collision dataFromCollision)
-    {
-        if (isWandering == false)
-        {
-            StartCoroutine(Wander());
-        }
-        if (isRotatingRight == true)
-        {
-            transform.Rotate(90.0f, 0.0f, 0.0f);
-        }
-        if (isRotatingRight == true)
-        {
-            transform.Rotate(90.0f, 0.0f, 0.0f);
-        }
-
-        /*if (isRotatingLeft == true)
-        {
-            transform.Rotate(transform.right * -rotSpeed);
-        }#1#
-        /*if (isRotatingRight == true)
-        {
-            transform.Rotate(transform.up * rotSpeed);
-        }
-
-        if (isRotatingLeft == true)
-        {
-            transform.Rotate(transform.up * -rotSpeed);
-        }#1#
-
-        if (isWalking == true)
-        {
-            transform.position += transform.forward * moveSpeed;
-        }
-        
-        /*if (dataFromCollision.gameObject.GetInstanceID() != id)#1#
-        if (dataFromCollision.gameObject.name == "2spider")
-        {
-            Debug.Log("HIT SPIDER");
-            if (isWandering == false)
-            {
-                StartCoroutine(Wander());
-            }
-
-            if (isRotatingRight == true)
-            {
-                transform.Rotate(transform.up * rotSpeed);
-            }
-
-            if (isRotatingLeft == true)
-            {
-                transform.Rotate(transform.up * -rotSpeed);
-            }
-
-            if (isWalking == true)
-            {
-                transform.position += transform.forward * moveSpeed;
-            }
-        }
-        
-    }*/
 }
