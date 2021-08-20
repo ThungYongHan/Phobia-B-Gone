@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class PhobiaSelectionMenuCamera : MonoBehaviour
@@ -14,14 +15,14 @@ public class PhobiaSelectionMenuCamera : MonoBehaviour
     public float totalTime = 2;
     private bool gvrStatus;
     public float gvrTimer;
-    public UnityEvent GVRClick;
+   // public UnityEvent GVRSpider;
     
     void Start()
     {
     }
-    
+
     void Update()
-    { 
+    {
         var ray = new Ray(this.transform.position, this.transform.forward);
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit, 10))
@@ -30,74 +31,30 @@ public class PhobiaSelectionMenuCamera : MonoBehaviour
             gvrTimer += Time.deltaTime;
             imgCircle.fillAmount = gvrTimer / totalTime;
             _gazedAtObject = lasthit;
+            // ensure that whenever the reticle is moved away from the collider, the imgCircle reflects it
             if (_gazedAtObject == lasthit)
             {
                 if (gvrTimer > totalTime)
                 {
                     Debug.Log("hello");
-                    if (_gazedAtObject.name == "TestSpiderButton")
-                    { 
-                        GVRClick.Invoke();
+                    if (_gazedAtObject.name == "SpiderButton")
+                    {
+                        SceneManager.LoadScene("sparecardboar");
                     }
+
                 }
             }
             else
             {
                 imgCircle.fillAmount = 0;
             }
-
-            /*//_gazedAtObject?.SendMessage("OnPointerExit");
-                //lasthit = hit.transform.gameObject;
-                //_gazedAtObject = lasthit;
-                //_gazedAtObject.SendMessage("OnPointerEnter")
-                //collision = hit.point;
-            //Debug.Log("test");*/
         }
         else
         {
-          // _gazedAtObject.SendMessage("OnPointerExit");
-           _gazedAtObject = null;
-           gvrTimer = 0;
-           imgCircle.fillAmount = 0;
-          // txt.text = "no";
+            _gazedAtObject = null;
+            gvrTimer = 0;
+            imgCircle.fillAmount = 0;
         }
-
-        /*if (gvrStatus)
-        {
-            gvrTimer += Time.deltaTime;
-            imgCircle.fillAmount = gvrTimer / totalTime;
-        }
-
-        if (gvrTimer > totalTime)
-        {
-            GVRClick.Invoke();
-        }*/
-        
-        
     }
 
-    /*public void GvrOn()
-    {
-        gvrStatus = true; 
-        
-    }
-
-    public void GvrOff()
-    {
-        gvrStatus = false;
-        gvrTimer = 0;
-        imgCircle.fillAmount = 0;
-    }
-
-    public void OnPointerEnter(PointerEventData eventData)
-    {
-        gvrStatus = true;
-    }
-
-    public void OnPointerExit(PointerEventData eventData)
-    {
-        gvrStatus = false;
-        gvrTimer = 0;
-        imgCircle.fillAmount = 0;
-    }*/
 }

@@ -16,7 +16,7 @@ public class WanderSpiderAI : MonoBehaviour
     private bool isWalking = false;
     
     private Animator animator;
-    
+    public Rigidbody rb;
     void Awake()
     {
         animator = GetComponent<Animator>();
@@ -32,11 +32,15 @@ public class WanderSpiderAI : MonoBehaviour
         if (isRotatingRight == true)
         {
             transform.Rotate(transform.up * rotSpeed);
+           //transform.Rotate(0, 0.1f, 0 * Time.deltaTime);
+
         }
 
         if (isRotatingLeft == true)
         {
             transform.Rotate(transform.up * -rotSpeed);
+            //transform.Rotate(0, 0.1f, 0 * Time.deltaTime);
+
         }
         
         if (isAvoiding == true)

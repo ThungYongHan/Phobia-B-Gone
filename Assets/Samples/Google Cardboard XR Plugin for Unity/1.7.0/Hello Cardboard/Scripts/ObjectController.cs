@@ -87,6 +87,7 @@ public class ObjectController : MonoBehaviour
     public void OnPointerEnter()
     {
         SetMaterial(true);
+        Debug.Log("true");
     }
 
     /// <summary>

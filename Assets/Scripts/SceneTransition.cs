@@ -5,7 +5,6 @@ using UnityEngine.SceneManagement;
 
 public class SceneTransition : MonoBehaviour
 {
-    // Start is called before the first frame update
     void Start()
     {
         Debug.Log("Load New Scene");
@@ -14,5 +13,14 @@ public class SceneTransition : MonoBehaviour
     public void LoadScene()
     {
         SceneManager.LoadScene(1);
+    }
+    public void LoadSpiderMenu()
+    {
+        SceneManager.LoadScene("sparecardboar");
+    }
+    
+    public void LoadSelectionMenu()
+    {
+        SceneManager.LoadScene("selectphobia");
     }
 }

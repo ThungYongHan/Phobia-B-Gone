@@ -5,7 +5,7 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class testcanvas : MonoBehaviour
+public class formtestscript : MonoBehaviour
 {
    // private Text txt;
     public GameObject lasthit = null;

@@ -5,7 +5,7 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class testcanvas : MonoBehaviour
+public class testingform : MonoBehaviour
 {
    // private Text txt;
     public GameObject lasthit = null;
@@ -18,10 +18,32 @@ public class testcanvas : MonoBehaviour
     public float gvrTimer;
     public UnityEvent GVRClick;
     public UnityEvent GVRClick2;
+    public Canvas myCanvas;
+    private BoxCollider ButtonTest1 = null;
+    private BoxCollider ButtonTest2 = null;
+    private BoxCollider NoButton1 = null;
+    private BoxCollider ConfirmButton1 = null;
 
+    //public GameObject testObject;
+    
     void Start()
     {
         //txt = GameObject.Find("Text").GetComponent<Text>();
+        ButtonTest1 = GameObject.Find("ButtonTest1").GetComponent<BoxCollider>();
+        ButtonTest2 = GameObject.Find("ButtonTest2").GetComponent<BoxCollider>();
+        NoButton1 = GameObject.Find("NoButton1").GetComponent<BoxCollider>();
+        ConfirmButton1 = GameObject.Find("ConfirmButton1").GetComponent<BoxCollider>();
+        // set HiddenCanvas Button's Collider to false at the start to prevent "ghost" box colliders
+        NoButton1.enabled = false;
+        ConfirmButton1.enabled = false;
+        /*if (testObject != null)
+        {
+            myCanvas = testObject.GetComponent<Canvas>();
+            
+            Debug.Log("testcanvas");
+        }*/
+        myCanvas = GameObject.Find("HiddenCanvas").GetComponent<Canvas>();
+        myCanvas.enabled = false;
     }
     
     
@@ -42,12 +64,26 @@ public class testcanvas : MonoBehaviour
                 if (gvrTimer > totalTime)
                 {
                     Debug.Log("hello");
-                    if (_gazedAtObject.name == "TestSpiderButton")
-                    { 
-                        GVRClick.Invoke();
+                    if (_gazedAtObject.name == "ButtonTest1")
+                    {
+                        enableCanvas1();
+                        /*if (testObject != null)
+                        {
+                            myCanvas = testObject.GetComponent<Canvas>();
+                            myCanvas.enabled = true;
+                            Debug.Log("testcanvas");
+                        }*/
                     }
-                                        
-                    if (_gazedAtObject.name == "BackSceneButton")
+                    if (_gazedAtObject.name == "NoButton1")
+                    {
+                        disableCanvas1();
+                        /*myCanvas.enabled = false;
+                        ButtonTest1.enabled = true;
+                        ButtonTest2.enabled = true;
+                        NoButton1.enabled = false;
+                        ConfirmButton1.enabled = false;*/
+                    }                
+                    if (_gazedAtObject.name == "ButtonTest2")
                     {
                         GVRClick2.Invoke();
                     }
@@ -112,4 +148,22 @@ public class testcanvas : MonoBehaviour
         gvrTimer = 0;
         imgCircle.fillAmount = 0;
     }*/
+
+    public void enableCanvas1()
+    {
+        myCanvas.enabled = true;
+        ButtonTest1.enabled = false;
+        ButtonTest2.enabled = false;
+        NoButton1.enabled = true;
+        ConfirmButton1.enabled = true;
+    }
+    
+    public void disableCanvas1()
+    {
+        myCanvas.enabled = false;
+        ButtonTest1.enabled = true;
+        ButtonTest2.enabled = true;
+        NoButton1.enabled = false;
+        ConfirmButton1.enabled = false;
+    }
 }
