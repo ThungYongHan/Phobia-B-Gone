@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class testcanvas : MonoBehaviour
@@ -26,7 +27,7 @@ public class testcanvas : MonoBehaviour
     
     
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     { 
       //  txt = GameObject.Find("Text").GetComponent<Text>();
         var ray = new Ray(this.transform.position, this.transform.forward);
@@ -44,12 +45,16 @@ public class testcanvas : MonoBehaviour
                     Debug.Log("hello");
                     if (_gazedAtObject.name == "TestSpiderButton")
                     { 
-                        GVRClick.Invoke();
+                        SceneManager.LoadScene("DemoScene");
+
+                       // GVRClick.Invoke();
                     }
                                         
                     if (_gazedAtObject.name == "BackSceneButton")
                     {
-                        GVRClick2.Invoke();
+                       //  GVRClick2.Invoke();
+                       SceneManager.LoadScene("SelectPhobia");
+
                     }
                 }
             }

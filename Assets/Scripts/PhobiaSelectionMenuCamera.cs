@@ -21,7 +21,7 @@ public class PhobiaSelectionMenuCamera : MonoBehaviour
     {
     }
 
-    void Update()
+    void FixedUpdate()
     {
         var ray = new Ray(this.transform.position, this.transform.forward);
         RaycastHit hit;
