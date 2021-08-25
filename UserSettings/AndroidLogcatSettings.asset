@@ -1,0 +1,119 @@
+{
+    "m_SelectedDeviceId": "f6699a7e0405",
+    "m_SelectedPackage": {
+        "deviceId": "f6699a7e0405",
+        "name": "com.DefaultCompany.IndividualProject",
+        "processId": 18747,
+        "exited": false
+    },
+    "m_SelectedPriority": 0,
+    "m_KnownPackagesForSerialization": [
+        {
+            "deviceId": "f6699a7e0405",
+            "name": "com.DefaultCompany.IndividualProject",
+            "processId": 31637,
+            "exited": true
+        },
+        {
+            "deviceId": "f6699a7e0405",
+            "name": "com.DefaultCompany.IndividualProject",
+            "processId": 2692,
+            "exited": true
+        },
+        {
+            "deviceId": "f6699a7e0405",
+            "name": "com.DefaultCompany.IndividualProject",
+            "processId": 7051,
+            "exited": true
+        },
+        {
+            "deviceId": "f6699a7e0405",
+            "name": "com.DefaultCompany.IndividualProject",
+            "processId": 6138,
+            "exited": true
+        },
+        {
+            "deviceId": "f6699a7e0405",
+            "name": "com.DefaultCompany.IndividualProject",
+            "processId": 7503,
+            "exited": true
+        },
+        {
+            "deviceId": "f6699a7e0405",
+            "name": "com.miui.home",
+            "processId": 1784,
+            "exited": false
+        },
+        {
+            "deviceId": "f6699a7e0405",
+            "name": "com.DefaultCompany.IndividualProject",
+            "processId": 12769,
+            "exited": false
+        },
+        {
+            "deviceId": "f6699a7e0405",
+            "name": "com.DefaultCompany.IndividualProject",
+            "processId": 17169,
+            "exited": false
+        },
+        {
+            "deviceId": "f6699a7e0405",
+            "name": "com.DefaultCompany.IndividualProject",
+            "processId": 18747,
+            "exited": false
+        }
+    ],
+    "m_Tags": {
+        "m_Entries": [
+            {
+                "m_Name": "Filter by all listed tags",
+                "m_Selected": false
+            },
+            {
+                "m_Name": "No Filter",
+                "m_Selected": true
+            },
+            {
+                "m_Name": "",
+                "m_Selected": false
+            },
+            {
+                "m_Name": "Tag Control...",
+                "m_Selected": false
+            },
+            {
+                "m_Name": "",
+                "m_Selected": false
+            },
+            {
+                "m_Name": "Unity",
+                "m_Selected": false
+            },
+            {
+                "m_Name": "CRASH",
+                "m_Selected": false
+            }
+        ]
+    },
+    "m_MemoryViewerState": {
+        "MemoryWindowHeight": 300.0,
+        "MemoryWindowWidth": 170.0,
+        "MemoryTypeEnabled": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+        ],
+        "MemoryGroup": 2,
+        "Behavior": 0
+    },
+    "m_Filter": "",
+    "m_FilterIsRegularExpression": false,
+    "m_SymbolPaths": []
+}

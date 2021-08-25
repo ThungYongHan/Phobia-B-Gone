@@ -1,3 +1,4 @@
+/*
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -34,7 +35,7 @@ public class PBSpiderScript : MonoBehaviour
         /*if (isWandering == false)
         {
             StartCoroutine(Wander());
-        }*/
+        }#1#
     }
 
     /*IEnumerator Wander()
@@ -43,7 +44,7 @@ public class PBSpiderScript : MonoBehaviour
         int rotateWait = Random.Range(1, 4);
         int rotateLorR = Random.Range(1, 2);
         int walkWait
-    }*/
+    }#1#
     
     void FixedUpdate()
     { 
@@ -58,3 +59,4 @@ public class PBSpiderScript : MonoBehaviour
     
 
 }
+*/

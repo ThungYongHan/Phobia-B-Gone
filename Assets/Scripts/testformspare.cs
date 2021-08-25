@@ -1,3 +1,4 @@
+/*
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -16,26 +17,22 @@ public class testingform : MonoBehaviour
     public float totalTime = 2;
     private bool gvrStatus;
     public float gvrTimer;
-    /*public UnityEvent GVRClick;
-    public UnityEvent GVRClick2;*/
+    public UnityEvent GVRClick;
+    public UnityEvent GVRClick2;
     public Canvas myCanvas;
     
-    /*private BoxCollider ButtonTest1 = null;
-    private BoxCollider ButtonTest2 = null;*/
+    private BoxCollider ButtonTest1 = null;
+    private BoxCollider ButtonTest2 = null;
     
-    private BoxCollider OptionTest0 = null;
     private BoxCollider OptionTest1 = null;
     private BoxCollider OptionTest2 = null;
-    private BoxCollider OptionTest3 = null;
-    private BoxCollider OptionTest4 = null;
 
     private TMPro.TextMeshProUGUI numTest;
-    private TMPro.TextMeshProUGUI numTest2;
     private TextMeshPro testText;
     
     
-    private BoxCollider CancelButton = null;
-    private BoxCollider ConfirmButton = null;
+    private BoxCollider NoButton1 = null;
+    private BoxCollider ConfirmButton1 = null;
     public GameObject test;
     public GameObject test2;
     public JSONReadandWrite scriptB;
@@ -43,16 +40,11 @@ public class testingform : MonoBehaviour
 
     private int chosenOption = 0;
     
-    private Button theButton0;
-    private ColorBlock theColor0;
     private Button theButton1;
     private ColorBlock theColor1;
+    
     private Button theButton2;
     private ColorBlock theColor2;
-    private Button theButton3;
-    private ColorBlock theColor3;
-    private Button theButton4;
-    private ColorBlock theColor4;
 
     public TextAsset JsonFile;
     
@@ -65,26 +57,23 @@ public class testingform : MonoBehaviour
         string json = JsonUtility.ToJson(saveObject);
         Debug.Log(json);
 
-        SaveObject loadedSaveObject JsonUtility.FromJson<SaveObject>(json);#1#
-    }*/
+        SaveObject loadedSaveObject JsonUtility.FromJson<SaveObject>(json);#2#
+    }#1#
     void Awake()
     {
-        // PatientConnection pat = JsonUtility.FromJson<PatientConnection>(JsonFile.text);
-        theButton0 = GameObject.Find("OptionTest0").GetComponent<Button>();
-        theColor0 = theButton0.colors;
+        
+        
+       // PatientConnection pat = JsonUtility.FromJson<PatientConnection>(JsonFile.text);
+       
         
         theButton1 = GameObject.Find("OptionTest1").GetComponent<Button>();
         theColor1 = theButton1.colors;
         
         theButton2 = GameObject.Find("OptionTest2").GetComponent<Button>();
         theColor2 = theButton2.colors;
+        /*theColor.normalColor = Color.green;
+        theButton.colors = theColor;#1#
         
-        theButton3 = GameObject.Find("OptionTest3").GetComponent<Button>();
-        theColor3 = theButton3.colors;
-        
-        theButton4 = GameObject.Find("OptionTest4").GetComponent<Button>();
-        theColor4 = theButton4.colors;
-
         test2 = GameObject.Find("HiddenCanvas");
         
         
@@ -100,7 +89,7 @@ public class testingform : MonoBehaviour
         scriptB.SaveToJson();
          // scriptB.LoadFromJson();
 
-        /*if (GameObject.Find("ButtonTest1") != null)
+        if (GameObject.Find("ButtonTest1") != null)
         {
             ButtonTest1 = GameObject.Find("ButtonTest1").GetComponent<BoxCollider>();
         }
@@ -108,36 +97,25 @@ public class testingform : MonoBehaviour
         if (GameObject.Find("ButtonTest2") != null)
         {
             ButtonTest2 = GameObject.Find("ButtonTest2").GetComponent<BoxCollider>();
-        }*/
-        
-        if (GameObject.Find("OptionTest0") != null)
-        {
-            OptionTest0 = GameObject.Find("OptionTest0").GetComponent<BoxCollider>();
         }
+        
         if (GameObject.Find("OptionTest1") != null)
         {
             OptionTest1 = GameObject.Find("OptionTest1").GetComponent<BoxCollider>();
         }
+        
         if (GameObject.Find("OptionTest2") != null)
         {
             OptionTest2 = GameObject.Find("OptionTest2").GetComponent<BoxCollider>();
         }
-        if (GameObject.Find("OptionTest3") != null)
-        {
-            OptionTest3 = GameObject.Find("OptionTest3").GetComponent<BoxCollider>();
-        }
-        if (GameObject.Find("OptionTest4") != null)
-        {
-            OptionTest4 = GameObject.Find("OptionTest4").GetComponent<BoxCollider>();
-        }
         
 //        ButtonTest1 = GameObject.Find("ButtonTest1").GetComponent<BoxCollider>();
 //        ButtonTest2 = GameObject.Find("ButtonTest2").GetComponent<BoxCollider>();
-        CancelButton = GameObject.Find("CancelButton").GetComponent<BoxCollider>();
-        ConfirmButton = GameObject.Find("ConfirmButton").GetComponent<BoxCollider>();
+        NoButton1 = GameObject.Find("NoButton1").GetComponent<BoxCollider>();
+        ConfirmButton1 = GameObject.Find("ConfirmButton1").GetComponent<BoxCollider>();
         // set HiddenCanvas Button's Collider to false at the start to prevent "ghost" box colliders
-        CancelButton.enabled = false;
-        ConfirmButton.enabled = false;
+        NoButton1.enabled = false;
+        ConfirmButton1.enabled = false;
         if (testObject != null)
         {
             myCanvas = testObject.GetComponent<Canvas>();
@@ -157,7 +135,7 @@ public class testingform : MonoBehaviour
             numTest = test2.transform.GetChild(2).GetComponent<Text>();
             Debug.Log(numTest);
 //            numTest.text = "TestingCheck";
-        }*/
+        }#1#
         
         var ray = new Ray(this.transform.position, this.transform.forward);
         RaycastHit hit;
@@ -171,18 +149,37 @@ public class testingform : MonoBehaviour
             {
                 if (gvrTimer > totalTime)
                 {
-                    /*if (_gazedAtObject.name == "ButtonTest1")
+                    if (_gazedAtObject.name == "ButtonTest1")
                     {
                         Debug.Log("hello");
                         enableCanvas1();
-                    }*/
-                    if (_gazedAtObject.name == "ConfirmButton")
+                        /*if (_gazedAtObject.name == "ConfirmButton1")
+                        {
+
+                            Debug.Log("please");
+                            if (test != null)
+                            {
+                                scriptB.SaveToJson();
+                            }
+                            else
+                            {
+                                Debug.Log("alert");
+                            }
+                        }#1#
+                        /*if (testObject != null)
+                        {
+                            myCanvas = testObject.GetComponent<Canvas>();
+                            myCanvas.enabled = true;
+                            Debug.Log("testcanvas");
+                        }#1#
+                    }
+                    if (_gazedAtObject.name == "ConfirmButton1")
                     {
                         if (test != null)
                         {
-                            //Debug.Log("please");
+                            Debug.Log("please");
                             // passing data to JSONReadandWrite
-                            scriptB.Saving("testscenario", 2, chosenOption);
+                            scriptB.Saving("testscenario", 2, 1);
                             disableCanvas1();
                             // scriptB.SaveToJson();
                         }
@@ -191,29 +188,26 @@ public class testingform : MonoBehaviour
                             Debug.Log("alert");
                         }
                     }
-                    if (_gazedAtObject.name == "CancelButton")
+                    if (_gazedAtObject.name == "NoButton1")
                     {
                         // scriptB.Saving("testscenario", 2, 1);
                         disableCanvas1();
                     }       
                     
-                    if (_gazedAtObject.name == "SelectButton")
+                    if (_gazedAtObject.name == "ConfirmationButton")
                     {
                         
                         // get 4th child of hidden canvas (which is a TextMeshProUGUI component)
                         if (test2 != null)
                         {   
                             Debug.Log(test2);
-                            numTest = test2.transform.GetChild(1).GetComponent<TextMeshProUGUI>();
-                            numTest2 = test2.transform.GetChild(4).GetComponent<TextMeshProUGUI>();
-
+                            numTest = test2.transform.GetChild(3).GetComponent<TextMeshProUGUI>();
                             Debug.Log(numTest);
                             // change the text of the TMP text ui object
                             // numTest.text = "Your Chosen Option is " + chosenOption.ToString();
 
                              scriptB.LoadFromJson();
                              numTest.text = scriptB.LoadFromJson();
-                             numTest2.text = chosenOption.ToString();
 
                              
                             // numTest.("testing");
@@ -226,86 +220,36 @@ public class testingform : MonoBehaviour
                         enableCanvas1();
                     }       
                     
-                    if (_gazedAtObject.name == "OptionTest0")
-                    {
-                        theColor0.normalColor = Color.green;
-                        theButton0.colors = theColor0;
-                        theColor1.normalColor = Color.white;
-                        theButton1.colors = theColor1;
-                        theColor2.normalColor = Color.white;
-                        theButton2.colors = theColor2;
-                        theColor3.normalColor = Color.white;
-                        theButton3.colors = theColor3;
-                        theColor4.normalColor = Color.white;
-                        theButton4.colors = theColor4;
-                        chosenOption = 0;
-                    } 
-                    
                     if (_gazedAtObject.name == "OptionTest1")
                     {
-                        theColor0.normalColor = Color.white;
-                        theButton0.colors = theColor0;
                         theColor1.normalColor = Color.green;
                         theButton1.colors = theColor1;
+                        
                         theColor2.normalColor = Color.white;
                         theButton2.colors = theColor2;
-                        theColor3.normalColor = Color.white;
-                        theButton3.colors = theColor3;
-                        theColor4.normalColor = Color.white;
-                        theButton4.colors = theColor4;
+
                         chosenOption = 1;
+                        Debug.Log(chosenOption);
+
+                        // disableCanvas1();
                     }     
                     
                     if (_gazedAtObject.name == "OptionTest2")
                     {
-                        theColor0.normalColor = Color.white;
-                        theButton0.colors = theColor0;
-                        theColor1.normalColor = Color.white;
-                        theButton1.colors = theColor1;
                         theColor2.normalColor = Color.green;
                         theButton2.colors = theColor2;
-                        theColor3.normalColor = Color.white;
-                        theButton3.colors = theColor3;
-                        theColor4.normalColor = Color.white;
-                        theButton4.colors = theColor4;
+                        
+                        theColor1.normalColor = Color.white;
+                        theButton1.colors = theColor1;
+                        
                         chosenOption = 2;
-                    }  
-                    
-                    if (_gazedAtObject.name == "OptionTest3")
-                    {
-                        theColor0.normalColor = Color.white;
-                        theButton0.colors = theColor0;
-                        theColor1.normalColor = Color.white;
-                        theButton1.colors = theColor1;
-                        theColor2.normalColor = Color.white;
-                        theButton2.colors = theColor2;
-                        theColor3.normalColor = Color.green;
-                        theButton3.colors = theColor3;
-                        theColor4.normalColor = Color.white;
-                        theButton4.colors = theColor4;
-                        chosenOption = 3;
-                    } 
-                    
-                    if (_gazedAtObject.name == "OptionTest4")
-                    {
-                        theColor0.normalColor = Color.white;
-                        theButton0.colors = theColor0;
-                        theColor1.normalColor = Color.white;
-                        theButton1.colors = theColor1;
-                        theColor2.normalColor = Color.white;
-                        theButton2.colors = theColor2;
-                        theColor3.normalColor = Color.white;
-                        theButton3.colors = theColor3;
-                        theColor4.normalColor = Color.green;
-                        theButton4.colors = theColor4;
-                        chosenOption = 4;
-                        //Debug.Log(chosenOption);
+                        Debug.Log(chosenOption);
                         // disableCanvas1();
-                    } 
+                    }  
                     /*if (_gazedAtObject.name == "ButtonTest2")
                     {
                         GVRClick2.Invoke();
-                    }*/
+                    }#1#
                 }
             }
             else
@@ -324,24 +268,33 @@ public class testingform : MonoBehaviour
     public void enableCanvas1()
     {
         myCanvas.enabled = true;
-        OptionTest0.enabled = false;
+//        ButtonTest1.enabled = false;
+//        ButtonTest2.enabled = false;
         OptionTest1.enabled = false;
         OptionTest2.enabled = false;
-        OptionTest3.enabled = false;
-        OptionTest4.enabled = false;
-        CancelButton.enabled = true;
-        ConfirmButton.enabled = true;
+        NoButton1.enabled = true;
+        ConfirmButton1.enabled = true;
     }
     
     public void disableCanvas1()
     {
         myCanvas.enabled = false;
-        CancelButton.enabled = false;
-        ConfirmButton.enabled = false;
-        OptionTest0.enabled = true;
+ //       ButtonTest1.enabled = true;
+ //       ButtonTest2.enabled = true;
+        NoButton1.enabled = false;
+        ConfirmButton1.enabled = false;
         OptionTest1.enabled = true;
         OptionTest2.enabled = true;
-        OptionTest3.enabled = true;
-        OptionTest4.enabled = true;
     }
+
+    /*private void SaveButton1()
+    {
+        
+    }
+
+    private class SaveObject
+    {
+        public int evalChoice;
+    }#1#
 }
+*/
