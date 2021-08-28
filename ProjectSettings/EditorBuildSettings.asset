@@ -20,13 +20,13 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/sparecardboar.unity
     guid: 374bb65b4da475c419bc9c5e090c8847
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/DemoScene.unity
     guid: 9112996dc9932f84da35f8c0bf8ffc2e
   - enabled: 0
     path: Assets/Scenes/testrotate.unity
     guid: 3c01f2767657ab74dae225b7ae46059b
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/testform.unity
     guid: 076c8ff271386c34aab226672ca3758f
   - enabled: 0
