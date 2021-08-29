@@ -5,7 +5,6 @@ using UnityEngine;
 public class LoadSpider : MonoBehaviour
 {
     public GameObject[] spiderPrefabs;
-
     public Transform spawnPoint;
     // Start is called before the first frame update
     void Start()

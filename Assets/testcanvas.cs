@@ -16,8 +16,8 @@ public class testcanvas : MonoBehaviour
     public float totalTime = 2;
     private bool gvrStatus;
     public float gvrTimer;
-    public UnityEvent GVRClick;
-    public UnityEvent GVRClick2;
+    /*public UnityEvent GVRClick;
+    public UnityEvent GVRClick2;*/
     public SpiderSelection scriptC;
     public GameObject test;
     private BoxCollider NextSpider = null;
@@ -33,7 +33,6 @@ public class testcanvas : MonoBehaviour
         // then reference the gameobject's script
     }
     
-    // Update is called once per frame
     void FixedUpdate()
     { 
       //  txt = GameObject.Find("Text").GetComponent<Text>();
@@ -71,18 +70,18 @@ public class testcanvas : MonoBehaviour
                         scriptC.PreviousSpider();
                         PreviousSpider.enabled = false;
                     }
+                    
+                    if (_gazedAtObject.name == "TestCarrySpider")
+                    { 
+                        scriptC.StartSession();
+                        NextSpider.enabled = false;
+                    }
                 }
             }
             else
             {
                 imgCircle.fillAmount = 0;
             }
-            /*//_gazedAtObject?.SendMessage("OnPointerExit");
-                //lasthit = hit.transform.gameObject;
-                //_gazedAtObject = lasthit;
-                //_gazedAtObject.SendMessage("OnPointerEnter")
-                //collision = hit.point;
-            //Debug.Log("test");*/
         }
         else
         {

@@ -144,7 +144,7 @@ public class InsectGaze : MonoBehaviour
             _gazedAtObject = lasthit;
             if (sliderMax == false)
             {
-                Debug.Log("checking");
+                //Debug.Log("checking");
                 InsectGazing();
                 DisableCanvas1();
             }
@@ -215,8 +215,21 @@ public class InsectGaze : MonoBehaviour
                         if (test != null)
                         {
                             // passing data to JSONReadandWrite
-                            scriptB.Saving("testscenario", 2, chosenOption);
-                            Debug.Log("disable");
+                            //PlayerPrefs.GetInt loads the PlayerPrefs data stored into the key
+                            // if == 0 then it is the first item in the array (cartoon spider)
+                            // if == 1 then it is the second item in the array (normal spider)
+                            if (PlayerPrefs.GetInt("selectedSpider") == 0)
+                            {
+                                Debug.Log("testing0");
+                                // realism input 1 for cartoon spider(array 0) because realism should start from 1
+                                scriptB.Saving("testscenario", 1, chosenOption);
+                            }
+                            if (PlayerPrefs.GetInt("selectedSpider") == 1)
+                            {
+                                Debug.Log("testing1");
+                                scriptB.Saving("testscenario", 2, chosenOption);
+                            }
+                            //Debug.Log("disable");
                             DisableCanvas2();
                         }
                         else

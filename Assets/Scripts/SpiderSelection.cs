@@ -31,6 +31,6 @@ public class SpiderSelection : MonoBehaviour
     public void StartSession()
     {
         PlayerPrefs.SetInt("selectedSpider", selectedSpider);
-        SceneManager.LoadScene(1, LoadSceneMode.Single);
+        SceneManager.LoadScene("DemoScene");
     }
 }
