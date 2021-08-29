@@ -14,7 +14,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/BigFurniturePack/Demo/demo.unity
     guid: 1d4ec92269d4f9e4a9419f03b6748af4
-  - enabled: 0
+  - enabled: 1
     path: Assets/selectphobia.unity
     guid: 9627421f1d1c83840a868ba8e52828c5
   - enabled: 0

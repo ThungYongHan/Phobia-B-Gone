@@ -8,7 +8,6 @@ using UnityEngine.UI;
 
 public class testcanvas : MonoBehaviour
 {
-   // private Text txt;
     public GameObject lasthit = null;
     //public Vector3 collision = Vector3.zero;
     private const float _maxDistance = 10;
@@ -19,12 +18,20 @@ public class testcanvas : MonoBehaviour
     public float gvrTimer;
     public UnityEvent GVRClick;
     public UnityEvent GVRClick2;
+    public SpiderSelection scriptC;
+    public GameObject test;
+    private BoxCollider NextSpider = null;
+    private BoxCollider PreviousSpider = null;
 
     void Start()
     {
+        test = GameObject.Find("Spiders");
+        scriptC = test.GetComponent<SpiderSelection>();
+        NextSpider = GameObject.Find("NextSpider").GetComponent<BoxCollider>();
+        PreviousSpider = GameObject.Find("PreviousSpider").GetComponent<BoxCollider>();
         //txt = GameObject.Find("Text").GetComponent<Text>();
+        // then reference the gameobject's script
     }
-    
     
     // Update is called once per frame
     void FixedUpdate()
@@ -32,7 +39,7 @@ public class testcanvas : MonoBehaviour
       //  txt = GameObject.Find("Text").GetComponent<Text>();
         var ray = new Ray(this.transform.position, this.transform.forward);
         RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, 10))
+        if (Physics.Raycast(ray, out hit, _maxDistance))
         {
             lasthit = hit.transform.gameObject;
             gvrTimer += Time.deltaTime;
@@ -42,19 +49,27 @@ public class testcanvas : MonoBehaviour
             {
                 if (gvrTimer > totalTime)
                 {
-                    Debug.Log("hello");
                     if (_gazedAtObject.name == "TestSpiderButton")
                     { 
                         SceneManager.LoadScene("DemoScene");
-
-                       // GVRClick.Invoke();
                     }
                                         
                     if (_gazedAtObject.name == "BackSceneButton")
                     {
                        //  GVRClick2.Invoke();
-                       SceneManager.LoadScene("SelectPhobia");
-
+                       SceneManager.LoadScene("selectphobia");
+                    }
+                    
+                    if (_gazedAtObject.name == "NextSpider")
+                    { 
+                        scriptC.NextSpider();
+                        NextSpider.enabled = false;
+                    }
+                    
+                    if (_gazedAtObject.name == "PreviousSpider")
+                    { 
+                        scriptC.PreviousSpider();
+                        PreviousSpider.enabled = false;
                     }
                 }
             }
@@ -62,7 +77,6 @@ public class testcanvas : MonoBehaviour
             {
                 imgCircle.fillAmount = 0;
             }
-
             /*//_gazedAtObject?.SendMessage("OnPointerExit");
                 //lasthit = hit.transform.gameObject;
                 //_gazedAtObject = lasthit;
@@ -72,13 +86,16 @@ public class testcanvas : MonoBehaviour
         }
         else
         {
-          // _gazedAtObject.SendMessage("OnPointerExit");
            _gazedAtObject = null;
            gvrTimer = 0;
            imgCircle.fillAmount = 0;
-          // txt.text = "no";
+           // this code is genius and totally unexpected
+           // it works because when you disable the box collider of NextSpider, the raycast does not detect anything, which it then comes to this else clause, which
+           // enables it again, making it look seamless
+           NextSpider.enabled = true;
+           PreviousSpider.enabled = true;
+           //PreviousSpider.enabled = true;
         }
-
         /*if (gvrStatus)
         {
             gvrTimer += Time.deltaTime;
@@ -89,10 +106,7 @@ public class testcanvas : MonoBehaviour
         {
             GVRClick.Invoke();
         }*/
-        
-        
     }
-
     /*public void GvrOn()
     {
         gvrStatus = true; 
