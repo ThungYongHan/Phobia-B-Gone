@@ -1,43 +1,13 @@
 {
     "m_SelectedDeviceId": "f6699a7e0405",
     "m_SelectedPackage": {
-        "deviceId": "f6699a7e0405",
-        "name": "com.DefaultCompany.IndividualProject",
-        "processId": 18747,
+        "deviceId": "",
+        "name": "",
+        "processId": 0,
         "exited": false
     },
     "m_SelectedPriority": 0,
     "m_KnownPackagesForSerialization": [
-        {
-            "deviceId": "f6699a7e0405",
-            "name": "com.DefaultCompany.IndividualProject",
-            "processId": 31637,
-            "exited": true
-        },
-        {
-            "deviceId": "f6699a7e0405",
-            "name": "com.DefaultCompany.IndividualProject",
-            "processId": 2692,
-            "exited": true
-        },
-        {
-            "deviceId": "f6699a7e0405",
-            "name": "com.DefaultCompany.IndividualProject",
-            "processId": 7051,
-            "exited": true
-        },
-        {
-            "deviceId": "f6699a7e0405",
-            "name": "com.DefaultCompany.IndividualProject",
-            "processId": 6138,
-            "exited": true
-        },
-        {
-            "deviceId": "f6699a7e0405",
-            "name": "com.DefaultCompany.IndividualProject",
-            "processId": 7503,
-            "exited": true
-        },
         {
             "deviceId": "f6699a7e0405",
             "name": "com.miui.home",
@@ -48,19 +18,31 @@
             "deviceId": "f6699a7e0405",
             "name": "com.DefaultCompany.IndividualProject",
             "processId": 12769,
-            "exited": false
+            "exited": true
         },
         {
             "deviceId": "f6699a7e0405",
             "name": "com.DefaultCompany.IndividualProject",
             "processId": 17169,
-            "exited": false
+            "exited": true
         },
         {
             "deviceId": "f6699a7e0405",
             "name": "com.DefaultCompany.IndividualProject",
             "processId": 18747,
-            "exited": false
+            "exited": true
+        },
+        {
+            "deviceId": "f6699a7e0405",
+            "name": "com.DefaultCompany.IndividualProject",
+            "processId": 7173,
+            "exited": true
+        },
+        {
+            "deviceId": "f6699a7e0405",
+            "name": "com.DefaultCompany.IndividualProject",
+            "processId": 8428,
+            "exited": true
         }
     ],
     "m_Tags": {
