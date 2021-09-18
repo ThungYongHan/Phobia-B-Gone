@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/firebase_database_url,@string/gcm_defaultSenderId,@string/google_storage_bucket,@string/project_id,@string/google_api_key,@string/google_crash_reporting_api_key,@string/google_app_id,@string/default_web_client_id">
+  <string name="firebase_database_url" translatable="false">https://tranquil-gasket-279705-default-rtdb.asia-southeast1.firebasedatabase.app</string>
+  <string name="gcm_defaultSenderId" translatable="false">139799374693</string>
+  <string name="google_storage_bucket" translatable="false">tranquil-gasket-279705.appspot.com</string>
+  <string name="project_id" translatable="false">tranquil-gasket-279705</string>
+  <string name="google_api_key" translatable="false">AIzaSyBzXUXWj4LrG0rniEEwwf2KMkeEi51AVJ8</string>
+  <string name="google_crash_reporting_api_key" translatable="false">AIzaSyBzXUXWj4LrG0rniEEwwf2KMkeEi51AVJ8</string>
+  <string name="google_app_id" translatable="false">1:139799374693:android:0bf7fb00f55ff23e6dcf8c</string>
+  <string name="default_web_client_id" translatable="false">139799374693-tgl7cugdpvlpkb0vgibqclc5hu7k72kq.apps.googleusercontent.com</string>
+</resources>

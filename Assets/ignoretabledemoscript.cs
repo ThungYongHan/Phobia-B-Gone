@@ -7,7 +7,7 @@ public class ignoretabledemoscript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-       // Physics.IgnoreLayerCollision(10,8);
+       Physics.IgnoreLayerCollision(10,8);
     }
 
     // Update is called once per frame

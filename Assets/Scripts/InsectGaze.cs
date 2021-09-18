@@ -37,7 +37,7 @@ public class InsectGaze : MonoBehaviour
     
     private TMPro.TextMeshProUGUI numTest;
     private TMPro.TextMeshProUGUI numTest2;
-    private TextMeshPro testText;
+    // private TextMeshPro testText;
     
     public GameObject test;
     public GameObject test2;

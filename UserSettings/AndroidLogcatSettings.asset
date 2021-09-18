@@ -10,18 +10,6 @@
     "m_KnownPackagesForSerialization": [
         {
             "deviceId": "f6699a7e0405",
-            "name": "com.miui.home",
-            "processId": 1784,
-            "exited": false
-        },
-        {
-            "deviceId": "f6699a7e0405",
-            "name": "com.DefaultCompany.IndividualProject",
-            "processId": 12769,
-            "exited": true
-        },
-        {
-            "deviceId": "f6699a7e0405",
             "name": "com.DefaultCompany.IndividualProject",
             "processId": 17169,
             "exited": true
@@ -43,6 +31,18 @@
             "name": "com.DefaultCompany.IndividualProject",
             "processId": 8428,
             "exited": true
+        },
+        {
+            "deviceId": "f6699a7e0405",
+            "name": "com.DefaultCompany.PhobiaBGone",
+            "processId": 28443,
+            "exited": true
+        },
+        {
+            "deviceId": "f6699a7e0405",
+            "name": "com.miui.home",
+            "processId": 1796,
+            "exited": false
         }
     ],
     "m_Tags": {

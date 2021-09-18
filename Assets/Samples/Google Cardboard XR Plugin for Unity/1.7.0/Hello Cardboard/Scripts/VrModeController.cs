@@ -41,7 +41,8 @@ public class VrModeController : MonoBehaviour
     /// <summary>
     /// Gets a value indicating whether the VR mode is enabled.
     /// </summary>
-    private bool _isVrModeEnabled
+    /// changed to public from private for isvrmode, exit and enter vr
+    public bool _isVrModeEnabled
     {
         get
         {
@@ -75,12 +76,12 @@ public class VrModeController : MonoBehaviour
     /// </summary>
     public void Update()
     {
-        if (_isVrModeEnabled)
+        /*if (_isVrModeEnabled)
         {
-            if (Api.IsCloseButtonPressed)
+            /*if (Api.IsCloseButtonPressed)
             {
                 ExitVR();
-            }
+            }#1#
 
             if (Api.IsGearButtonPressed)
             {
@@ -92,17 +93,18 @@ public class VrModeController : MonoBehaviour
         else
         {
             // TODO(b/171727815): Add a button to switch to VR mode.
-            if (_isScreenTouched)
+            /*if (_isScreenTouched)
             {
                 EnterVR();
-            }
-        }
+            }#1#
+        }*/
     }
 
     /// <summary>
     /// Enters VR mode.
     /// </summary>
-    private void EnterVR()
+    /// changed from private to public for enter and exit?
+    public void EnterVR()
     {
         StartCoroutine(StartXR());
         if (Api.HasNewDeviceParams())
@@ -114,7 +116,7 @@ public class VrModeController : MonoBehaviour
     /// <summary>
     /// Exits VR mode.
     /// </summary>
-    private void ExitVR()
+    public void ExitVR()
     {
         StopXR();
     }

@@ -19,7 +19,7 @@ TagManager:
   - TestColliderLayer
   - Spider
   - SpiderCollisionBlocker
-  - 
+  - LightIgnoreLayer
   - 
   - 
   - 
