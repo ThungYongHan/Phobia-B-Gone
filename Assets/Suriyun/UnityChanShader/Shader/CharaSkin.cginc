@@ -78,7 +78,7 @@ v2f vert( appdata_base v )
 float4 frag( v2f i ) : COLOR
 {
 	float4_t diffSamplerColor = tex2D( _MainTex, i.uv );
-
+	//float4_t diffSamplerColor = tex2D( _MainTex, i.uv ) * 1;
 	// Falloff. Convert the angle between the normal and the camera direction into a lookup for the gradient
 	float_t normalDotEye = dot( i.normal, i.eyeDir );
 	float_t falloffU = clamp( 1 - abs( normalDotEye ), 0.02, 0.98 );

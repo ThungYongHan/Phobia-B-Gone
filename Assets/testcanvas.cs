@@ -24,7 +24,8 @@ public class testcanvas : MonoBehaviour
     public GameObject GazeOptionPanel;
     public GameObject PhobiaSelectionMenuPanel;
     public GameObject GazePrePanel;
-
+    public GameObject GamePrePanel;
+    
     public GameObject test;
     public GameObject test2;
     
@@ -103,6 +104,9 @@ public class testcanvas : MonoBehaviour
         PhobiaSelectionMenuPanel = GameObject.Find("PhobiaSelectionMenuPanel");
         GazePrePanel = GameObject.Find("GazePrePanel");
         GazePrePanel.SetActive(false);
+        
+        GamePrePanel = GameObject.Find("GamePrePanel");
+        GamePrePanel.SetActive(false);
         //  Debug.Log(GazeOptionPanel);
         GazeOptionPanel.SetActive(false);
     }
@@ -148,6 +152,14 @@ public class testcanvas : MonoBehaviour
                     if (_gazedAtObject.name == "GazeStart")
                     {
                         scriptC.StartSession();
+                        SceneManager.LoadScene("DemoScene");
+                    }
+                    
+                    
+                    if (_gazedAtObject.name == "GameStart")
+                    {
+                        scriptC.StartSession();
+                        SceneManager.LoadScene("Bathroom");
                     }
                                         
                     if (_gazedAtObject.name == "GazeExposureButton")
@@ -155,6 +167,14 @@ public class testcanvas : MonoBehaviour
                         //GazePrePanel.SetActive(true);
                         DoctorCanvas.SetActive(false);
                         GazeOptionPanel.SetActive(true);
+                        PhobiaSelectionMenuPanel.SetActive(false);
+                    }
+                    
+                    if (_gazedAtObject.name == "GamifiedExposureButton")
+                    {
+                        //GazePrePanel.SetActive(true);
+                        DoctorCanvas.SetActive(false);
+                        GamePrePanel.SetActive(true);
                         PhobiaSelectionMenuPanel.SetActive(false);
                     }
                                         
@@ -181,11 +201,11 @@ public class testcanvas : MonoBehaviour
                         gvrTimer = 0;
                     }
                     
-                    if (_gazedAtObject.name == "TestCarrySpider")
+                    /*if (_gazedAtObject.name == "TestCarrySpider")
                     { 
                         scriptC.StartSession();
                         //NextSpider.enabled = false;
-                    }
+                    }*/
                     
                     if (_gazedAtObject.name == "TreatmentProgress")
                     {

@@ -44,6 +44,12 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/warningsplash.unity
     guid: 203827d802411204489744ef6eb1dd98
+  - enabled: 1
+    path: Assets/Scenes/Bathroom.unity
+    guid: 816a88178f8c7b845a02d0f9eb585896
+  - enabled: 0
+    path: Assets/LowPolyInterior/Scenes/LowPolyInterior_Demo.unity
+    guid: be7da2d78e467814186fe24a4e542b91
   m_configObjects:
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: bed178fbbf08b174aa2ddb29f7610f5b, type: 2}
     xr.sdk.mock-hmd.settings: {fileID: 11400000, guid: 8a104db0b9c87564d8f717ea89a38da9, type: 2}
