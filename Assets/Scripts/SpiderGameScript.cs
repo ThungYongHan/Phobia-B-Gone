@@ -14,25 +14,26 @@ public class SpiderGameScript : MonoBehaviour
     public Canvas myCanvas2;
     public Canvas myCanvas3;
     */
-
+    //public LoadSpiderGame scriptE;
     public GameObject lasthit = null;
     //private const float _maxDistance = 10;
     private GameObject _gazedAtObject = null;
     public Image imgCircle;
-    public float totalTime = 2;
+    // changed gaze time for game script 
+    public float totalTime = 0.5f;
     public float gvrTimer;
     private GameObject parent;
     private Slider slider;
     // slider filling speed
-    public float FillSpeed = 5f;
+    //public float FillSpeed = 5f;
     private float targetProgress = 0;
-    
+    public GameObject test;
     private BoxCollider OptionTest0 = null;
     private BoxCollider OptionTest1 = null;
     private BoxCollider OptionTest2 = null;
     private BoxCollider OptionTest3 = null;
     private BoxCollider OptionTest4 = null;
-
+    public LoadSpiderGame scriptE;
     private BoxCollider SelectButton = null;
     private BoxCollider CancelButton = null;
     private BoxCollider ConfirmButton = null;
@@ -63,6 +64,9 @@ public class SpiderGameScript : MonoBehaviour
 
     private void Awake()
     {
+        test = GameObject.Find("GameSpawn");
+        scriptE = test.GetComponent<LoadSpiderGame>();
+
         /*test = GameObject.Find("HiddenCanvas");
         test2 = GameObject.Find("HiddenCanvas");
         if (test != null)
@@ -144,13 +148,16 @@ public class SpiderGameScript : MonoBehaviour
             lasthit = hit.transform.gameObject;
             gvrTimer += Time.deltaTime;
             _gazedAtObject = lasthit;
-            if (_gazedAtObject.name == "CuteSpiderGame(Clone)")
+            if (_gazedAtObject.name == "CuteSpiderGame(Clone)" || _gazedAtObject.name == "NormalSpiderGame(Clone)" || _gazedAtObject.name == "RealisticSpiderGame(Clone)")
             {
                 //IncrementProgress(1.0f);
                 imgCircle.fillAmount = gvrTimer / totalTime;
                 if (gvrTimer > totalTime)
                 {
                     Debug.Log("You are looking at the spider!");
+                    // this only destroys the gameobject that I am looking at, not the other gameobjects with the same name
+                    Destroy(_gazedAtObject);
+                    scriptE.spawnRandomLocation();
                 }
                 
             }

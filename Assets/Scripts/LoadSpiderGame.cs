@@ -26,13 +26,17 @@ public class LoadSpiderGame : MonoBehaviour
 
         GameObject prefab = spiderPrefabs[selectedSpider];
         clone = Instantiate(prefab, spawnPoint.position, spawnPoint.rotation * Quaternion.Euler (0f, 180f, 0f));
+        //clone2 = Instantiate(prefab, spawnPoint2.position, spawnPoint2.rotation * Quaternion.Euler (0f, 90f, 0f));
+        //clone3 = Instantiate(prefab, spawnPoint3.position, spawnPoint3.rotation * Quaternion.Euler (0f, 180f, 0f));
+        //clone4 = Instantiate(prefab, spawnPoint4.position, spawnPoint4.rotation * Quaternion.Euler(0f, 180f, 0f));
+        //clone5 = Instantiate(prefab, spawnPoint5.position, spawnPoint5.rotation * Quaternion.Euler(0f, 180f, 0f));
         /*
         clone2 = Instantiate(prefab, spawnPoint2.position, spawnPoint2.rotation * Quaternion.Euler (0f, 180f, 0f));
         clone3 = Instantiate(prefab, spawnPoint3.position, spawnPoint3.rotation * Quaternion.Euler (0f, 180f, 0f));
         clone4 = Instantiate(prefab, spawnPoint4.position, spawnPoint4.rotation * Quaternion.Euler (0f, 180f, 0f));
         clone5 = Instantiate(prefab, spawnPoint5.position, spawnPoint5.rotation * Quaternion.Euler (0f, 180f, 0f));
         */
-        
+
         /*if (selectedGazeNum == 1)
         {
             // clone = Instantiate(prefab, spawnPoint.position, Quaternion.identity);
@@ -70,12 +74,12 @@ public class LoadSpiderGame : MonoBehaviour
              exampleFunction(clone4);
              exampleFunction(clone5);
         }*/
-        
+
         //GameObject clone2 = Instantiate(prefab, spawnPoint2.position, Quaternion.identity);
         /*GameObject clone3 = Instantiate(prefab, spawnPoint3.position, Quaternion.identity);
         GameObject clone4 = Instantiate(prefab, spawnPoint4.position, Quaternion.identity);
         GameObject clone5 = Instantiate(prefab, spawnPoint5.position, Quaternion.identity);*/
-        
+
         // using function and parameter because just calling clone with end up with only the last clone recieving the changes
         /*exampleFunction(clone);
         exampleFunction(clone2);
@@ -108,6 +112,126 @@ public class LoadSpiderGame : MonoBehaviour
         }*/
     }
     
+    public void spawnRandomLocation()
+    {
+        int randSpawn = Random.Range(1, 6);
+        //int randSpawn = 3;
+        selectedSpider = PlayerPrefs.GetInt("selectedSpider");
+        // selectedGazeNum = PlayerPrefs.GetInt("selectedGazeNum");
+        //  selectedGazeSize = PlayerPrefs.GetInt("selectedGazeSize");
+        
+        //Debug.Log(selectedGazeSize);
+        //Debug.Log(selectedGazeNum);
+
+        GameObject prefab = spiderPrefabs[selectedSpider];
+        switch(randSpawn)
+        {
+            case 1:
+                clone = Instantiate(prefab, spawnPoint.position, spawnPoint.rotation * Quaternion.Euler (0f, 180f, 0f));    
+                break;
+            case 2:
+                clone2 = Instantiate(prefab, spawnPoint2.position, spawnPoint2.rotation * Quaternion.Euler (0f, 90f, 0f));
+                break;
+            case 3:
+                clone3 = Instantiate(prefab, spawnPoint3.position, spawnPoint3.rotation * Quaternion.Euler (0f, 180f, 0f));
+                break;
+            case 4:
+                clone4 = Instantiate(prefab, spawnPoint4.position, spawnPoint4.rotation * Quaternion.Euler (0f, 180f, 0f));
+                break;
+            case 5:
+                clone5 = Instantiate(prefab, spawnPoint5.position, spawnPoint5.rotation * Quaternion.Euler(0f, 180f, 0f));
+                break;
+        }        
+        /*clone = Instantiate(prefab, spawnPoint.position, spawnPoint.rotation * Quaternion.Euler (0f, 180f, 0f));
+        
+        clone2 = Instantiate(prefab, spawnPoint2.position, spawnPoint2.rotation * Quaternion.Euler (0f, 180f, 0f));
+        
+        clone3 = Instantiate(prefab, spawnPoint3.position, spawnPoint3.rotation * Quaternion.Euler (0f, 180f, 0f));
+        
+        clone4 = Instantiate(prefab, spawnPoint4.position, spawnPoint4.rotation * Quaternion.Euler (0f, 180f, 0f));
+        
+        clone5 = Instantiate(prefab, spawnPoint5.position, spawnPoint5.rotation * Quaternion.Euler(0f, 180f, 0f));*/
+        /*
+        clone2 = Instantiate(prefab, spawnPoint2.position, spawnPoint2.rotation * Quaternion.Euler (0f, 180f, 0f));
+        clone3 = Instantiate(prefab, spawnPoint3.position, spawnPoint3.rotation * Quaternion.Euler (0f, 180f, 0f));
+        clone4 = Instantiate(prefab, spawnPoint4.position, spawnPoint4.rotation * Quaternion.Euler (0f, 180f, 0f));
+        clone5 = Instantiate(prefab, spawnPoint5.position, spawnPoint5.rotation * Quaternion.Euler (0f, 180f, 0f));
+        */
+
+        /*if (selectedGazeNum == 1)
+        {
+            // clone = Instantiate(prefab, spawnPoint.position, Quaternion.identity);
+            // to make the spider spawn and walk towards the player (post rotation)
+            clone = Instantiate(prefab, spawnPoint.position, spawnPoint.rotation * Quaternion.Euler(0f, 180f, 0f));
+            exampleFunction(clone);
+        }
+        if (selectedGazeNum == 3)
+        {
+             /*clone = Instantiate(prefab, spawnPoint.position, Quaternion.identity);
+             clone2 = Instantiate(prefab, spawnPoint2.position, Quaternion.identity);
+             clone3 = Instantiate(prefab, spawnPoint3.position, Quaternion.identity);#1#
+             clone = Instantiate(prefab, spawnPoint.position, spawnPoint.rotation * Quaternion.Euler (0f, 180f, 0f));
+             clone2 = Instantiate(prefab, spawnPoint2.position, spawnPoint2.rotation * Quaternion.Euler (0f, 180f, 0f));
+             clone3 = Instantiate(prefab, spawnPoint3.position, spawnPoint3.rotation * Quaternion.Euler (0f, 180f, 0f));
+             exampleFunction(clone);
+             exampleFunction(clone2);
+             exampleFunction(clone3);
+        }
+        if (selectedGazeNum == 5)
+        {
+             /*clone = Instantiate(prefab, spawnPoint.position, Quaternion.identity);
+             clone2 = Instantiate(prefab, spawnPoint2.position, Quaternion.identity);
+             clone3 = Instantiate(prefab, spawnPoint3.position, Quaternion.identity);
+             clone4 = Instantiate(prefab, spawnPoint4.position, Quaternion.identity);
+             clone5 = Instantiate(prefab, spawnPoint5.position, Quaternion.identity);#1#
+             clone = Instantiate(prefab, spawnPoint.position, spawnPoint.rotation * Quaternion.Euler (0f, 180f, 0f));
+             clone2 = Instantiate(prefab, spawnPoint2.position, spawnPoint2.rotation * Quaternion.Euler (0f, 180f, 0f));
+             clone3 = Instantiate(prefab, spawnPoint3.position, spawnPoint3.rotation * Quaternion.Euler (0f, 180f, 0f));
+             clone4 = Instantiate(prefab, spawnPoint4.position, spawnPoint4.rotation * Quaternion.Euler (0f, 180f, 0f));
+             clone5 = Instantiate(prefab, spawnPoint5.position, spawnPoint5.rotation * Quaternion.Euler (0f, 180f, 0f));
+             exampleFunction(clone);
+             exampleFunction(clone2);
+             exampleFunction(clone3);
+             exampleFunction(clone4);
+             exampleFunction(clone5);
+        }*/
+
+        //GameObject clone2 = Instantiate(prefab, spawnPoint2.position, Quaternion.identity);
+        /*GameObject clone3 = Instantiate(prefab, spawnPoint3.position, Quaternion.identity);
+        GameObject clone4 = Instantiate(prefab, spawnPoint4.position, Quaternion.identity);
+        GameObject clone5 = Instantiate(prefab, spawnPoint5.position, Quaternion.identity);*/
+
+        // using function and parameter because just calling clone with end up with only the last clone recieving the changes
+        /*exampleFunction(clone);
+        exampleFunction(clone2);
+        exampleFunction(clone3);
+        exampleFunction(clone4);
+        exampleFunction(clone5);*/
+        /*int selectedGazeSize = PlayerPrefs.GetInt("selectedGazeSize");
+        if (selectedGazeSize == 1)
+        {
+            // change clone gameobject scale using code (using multiply as different assets have different scales)
+            Vector3 newScale = clone.transform.localScale;
+            newScale *= 1f;
+            clone.transform.localScale = newScale;
+            //Debug.Log(clone.transform.localScale);
+            // clone.transform.localScale = new Vector3(0.02f, 0.02f, 0.02f);
+        }
+        if (selectedGazeSize == 2)
+        {
+            // clone.transform.localScale = new Vector3(0.04f, 0.04f, 0.04f);
+            Vector3 newScale = clone.transform.localScale;
+            newScale *= 2f;
+            clone.transform.localScale = newScale;
+        }
+        if (selectedGazeSize == 3)
+        {
+            // clone.transform.localScale = new Vector3(0.06f, 0.06f, 0.06f);
+            Vector3 newScale = clone.transform.localScale;
+            newScale *= 3f;
+            clone.transform.localScale = newScale;
+        }*/
+    }
     public void exampleFunction(GameObject spiderExample)
     {
         // int selectedGazeSize = PlayerPrefs.GetInt("selectedGazeSize");

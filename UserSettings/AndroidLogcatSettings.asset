@@ -1,9 +1,9 @@
 {
     "m_SelectedDeviceId": "f6699a7e0405",
     "m_SelectedPackage": {
-        "deviceId": "",
-        "name": "",
-        "processId": 0,
+        "deviceId": "f6699a7e0405",
+        "name": "com.DefaultCompany.PhobiaBGone",
+        "processId": 24627,
         "exited": false
     },
     "m_SelectedPriority": 0,
@@ -42,6 +42,18 @@
             "deviceId": "f6699a7e0405",
             "name": "com.miui.home",
             "processId": 1796,
+            "exited": false
+        },
+        {
+            "deviceId": "f6699a7e0405",
+            "name": "com.DefaultCompany.PhobiaBGone",
+            "processId": 22824,
+            "exited": false
+        },
+        {
+            "deviceId": "f6699a7e0405",
+            "name": "com.DefaultCompany.PhobiaBGone",
+            "processId": 24627,
             "exited": false
         }
     ],

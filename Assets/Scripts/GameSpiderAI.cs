@@ -1,4 +1,4 @@
-    using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,7 +14,6 @@ public class GameSpiderAI : MonoBehaviour
     private bool isRotatingRight = false;
     private bool isAvoiding = false;
     private bool isWalking = false;
-    
     private Animator animator;
     public Rigidbody rb;
     void Awake()
@@ -39,13 +38,14 @@ public class GameSpiderAI : MonoBehaviour
         if (isRotatingLeft == true)
         {
             transform.Rotate(transform.up * -rotSpeed);
-            //transform.Rotate(0, 0.1f, 0 * Time.deltaTime);
+            //transform.Rotate(0, 0.1f, 0 * Time.deltaTime);    
 
         }
         
         if (isAvoiding == true)
         {
-            transform.Rotate(transform.up * 1.0f);
+            //transform.position += transform.forward * 0.0002f;
+            transform.Rotate(transform.up * 1);
         }
 
         if (isWalking == true)
@@ -64,19 +64,36 @@ public class GameSpiderAI : MonoBehaviour
         Move();
     }
 
-    private void OnTriggerStay(Collider other)
+    /*private void OnTriggerStay(Collider other)
     {
         isWalking = false;
         StartCoroutine(Avoid());
     }
+    */
 
+    private void OnCollisionEnter(Collision other)
+    {
+        if (other.gameObject.name != "Floor_05") 
+        { 
+            isWalking = false;
+            StartCoroutine(Avoid());
+        }
+        else
+        {
+            
+        }
+    }
     private void OnCollisionStay(Collision other)
     {
         // prevents the spider from rotating when just having normal collision with floor
-        if (other.gameObject.name != "Floor_05")
+        if (other.gameObject.name != "Floor_05") 
         { 
             isWalking = false;
-            StartCoroutine(Avoid()); 
+            StartCoroutine(Avoid());
+        }
+        else
+        {
+            
         }
         
     }
@@ -86,19 +103,21 @@ public class GameSpiderAI : MonoBehaviour
         if (other.gameObject.name != "Floor_05")
         {
             Debug.Log("testcold");
+            animator.SetBool("rotate", false);
         }
     }
 
-    private void OnTriggerExit(Collider other)
+    /*private void OnTriggerExit(Collider other)
     {
         Debug.Log("test");
         animator.SetBool("rotate", false);
-    }
+    }*/
     
 
     IEnumerator Avoid()
     {
-        float avoidTime = Random.Range(0.1f, 1.0f);
+        Debug.Log("testing");
+        float avoidTime = Random.Range(0.1f, 3.0f);
             isAvoiding = true;
             animator.SetBool("rotate", true);
             yield return new WaitForSeconds(avoidTime);
@@ -111,7 +130,7 @@ public class GameSpiderAI : MonoBehaviour
         float rotateWait = Random.Range(0.1f,0.3f);
         float rotateLorR = Random.Range(1, 3);
         float walkWait = Random.Range(0.5f, 3);
-        float walkTime = Random.Range(0.5f,3.0f);
+        float walkTime = Random.Range(2f,4.0f);
 
         isWandering = true;
 

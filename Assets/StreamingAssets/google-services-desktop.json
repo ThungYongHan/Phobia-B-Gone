@@ -1,71 +1,34 @@
 {
   "project_info": {
-    "project_number": "139799374693",
-    "firebase_url": "https://tranquil-gasket-279705-default-rtdb.asia-southeast1.firebasedatabase.app",
-    "project_id": "tranquil-gasket-279705",
-    "storage_bucket": "tranquil-gasket-279705.appspot.com"
+    "project_number": "416726465251",
+"firebase_url": "https://phobia-b-gone-5daaa-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "phobia-b-gone-5daaa",
+    "storage_bucket": "phobia-b-gone-5daaa.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:139799374693:android:0bf7fb00f55ff23e6dcf8c",
+        "mobilesdk_app_id": "1:416726465251:android:5abf1f6a2e844b5c9ea3d6",
         "android_client_info": {
           "package_name": "com.DefaultCompany.PhobiaBGone"
         }
       },
       "oauth_client": [
         {
-          "client_id": "139799374693-tgl7cugdpvlpkb0vgibqclc5hu7k72kq.apps.googleusercontent.com",
+          "client_id": "416726465251-k35q8pbbmff2ilkde9q1ibn3tlj3rpj3.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBzXUXWj4LrG0rniEEwwf2KMkeEi51AVJ8"
+          "current_key": "AIzaSyDf2UKBWxTn6wS31OpBWZfOmG9U3EZxYNE"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "139799374693-tgl7cugdpvlpkb0vgibqclc5hu7k72kq.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:139799374693:android:b0a55875ffba8c786dcf8c",
-        "android_client_info": {
-          "package_name": "com.google.firebase.unity.database.testapp"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "139799374693-693rqn47n7rdm8nk1sk2fepi4lu59h5a.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.google.firebase.unity.database.testapp",
-            "certificate_hash": "678e475221aae33707574a1975442f5ab5494971"
-          }
-        },
-        {
-          "client_id": "139799374693-tgl7cugdpvlpkb0vgibqclc5hu7k72kq.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyBzXUXWj4LrG0rniEEwwf2KMkeEi51AVJ8"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "139799374693-tgl7cugdpvlpkb0vgibqclc5hu7k72kq.apps.googleusercontent.com",
+              "client_id": "416726465251-k35q8pbbmff2ilkde9q1ibn3tlj3rpj3.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
