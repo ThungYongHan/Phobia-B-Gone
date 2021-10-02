@@ -3,35 +3,11 @@
     "m_SelectedPackage": {
         "deviceId": "f6699a7e0405",
         "name": "com.DefaultCompany.PhobiaBGone",
-        "processId": 24627,
+        "processId": 20067,
         "exited": false
     },
     "m_SelectedPriority": 0,
     "m_KnownPackagesForSerialization": [
-        {
-            "deviceId": "f6699a7e0405",
-            "name": "com.DefaultCompany.IndividualProject",
-            "processId": 17169,
-            "exited": true
-        },
-        {
-            "deviceId": "f6699a7e0405",
-            "name": "com.DefaultCompany.IndividualProject",
-            "processId": 18747,
-            "exited": true
-        },
-        {
-            "deviceId": "f6699a7e0405",
-            "name": "com.DefaultCompany.IndividualProject",
-            "processId": 7173,
-            "exited": true
-        },
-        {
-            "deviceId": "f6699a7e0405",
-            "name": "com.DefaultCompany.IndividualProject",
-            "processId": 8428,
-            "exited": true
-        },
         {
             "deviceId": "f6699a7e0405",
             "name": "com.DefaultCompany.PhobiaBGone",
@@ -42,18 +18,36 @@
             "deviceId": "f6699a7e0405",
             "name": "com.miui.home",
             "processId": 1796,
-            "exited": false
+            "exited": true
         },
         {
             "deviceId": "f6699a7e0405",
             "name": "com.DefaultCompany.PhobiaBGone",
             "processId": 22824,
-            "exited": false
+            "exited": true
         },
         {
             "deviceId": "f6699a7e0405",
             "name": "com.DefaultCompany.PhobiaBGone",
             "processId": 24627,
+            "exited": true
+        },
+        {
+            "deviceId": "f6699a7e0405",
+            "name": "com.DefaultCompany.PhobiaBGone",
+            "processId": 13344,
+            "exited": true
+        },
+        {
+            "deviceId": "f6699a7e0405",
+            "name": "com.andrewshu.android.reddit",
+            "processId": 3345,
+            "exited": false
+        },
+        {
+            "deviceId": "f6699a7e0405",
+            "name": "com.DefaultCompany.PhobiaBGone",
+            "processId": 20067,
             "exited": false
         }
     ],

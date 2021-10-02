@@ -13,7 +13,7 @@ public class FirebaseUserManager : MonoBehaviour
 {
     DatabaseReference reference;
 
-    public VrModeController scriptB;
+    //public VrModeController scriptB;
     public string message;
     public Text signuperrormessage;
     public Text loginerrormessage;
@@ -36,7 +36,7 @@ public class FirebaseUserManager : MonoBehaviour
         signuperrormessage = GameObject.Find("signuperrormessage").GetComponent<UnityEngine.UI.Text>();
         loginerrormessage = GameObject.Find("loginerrormessage").GetComponent<UnityEngine.UI.Text>();
         //XRGeneralSettings.Instance.Manager.InitializeLoader();
-        XRGeneralSettings.Instance.Manager.DeinitializeLoader();
+        //XRGeneralSettings.Instance.Manager.DeinitializeLoader();
         SignUpCanvas = GameObject.Find("SignUpCanvas").GetComponent<Canvas>();
         SignUpCanvas.enabled = false;
         LogInCanvas = GameObject.Find("LogInCanvas").GetComponent<Canvas>();
@@ -140,13 +140,13 @@ public class FirebaseUserManager : MonoBehaviour
         {
             if (logintask.IsCanceled)
             {
-                Debug.LogError("SignInWithEmailAndPasswordAsync was canceled.");
+                Debug.Log("SignInWithEmailAndPasswordAsync was canceled.");
                 return;
             }
 
             if (logintask.IsFaulted)
             {
-                Debug.LogError("SignInWithEmailAndPasswordAsync encountered an error:" + logintask.Exception);
+                Debug.Log("SignInWithEmailAndPasswordAsync encountered an error:" + logintask.Exception);
                 if (logintask.Exception != null)
                 {
                     message = "Login failed";

@@ -9,6 +9,9 @@ using UnityEngine.UI;
 
 public class testcanvas : MonoBehaviour
 {
+    /*Firebase.Auth.FirebaseAuth auth;
+    Firebase.Auth.FirebaseUser user;*/
+    
     public GameObject lasthit = null;
 
     public GameObject DoctorCanvas;
@@ -61,6 +64,7 @@ public class testcanvas : MonoBehaviour
 
     void Start()
     {
+        //InitializeFirebase();
         // cannot disable screen space camera canvas for some reason, so switching the code to call it as a gameobject and disabling it entirely
         DoctorCanvas = GameObject.Find("DoctorCanvas");
         
@@ -177,10 +181,15 @@ public class testcanvas : MonoBehaviour
                         GamePrePanel.SetActive(true);
                         PhobiaSelectionMenuPanel.SetActive(false);
                     }
-                                        
+                    
                     if (_gazedAtObject.name == "BackSceneButton")
                     {
                        SceneManager.LoadScene("selectphobia");
+                    }
+                    
+                    if (_gazedAtObject.name == "TreatmentProgress")
+                    {
+                        SceneManager.LoadScene("SpiderTreatmentProgressVR");
                     }
                     
                     if (_gazedAtObject.name == "NextSpider")
@@ -201,13 +210,7 @@ public class testcanvas : MonoBehaviour
                         gvrTimer = 0;
                     }
                     
-                    /*if (_gazedAtObject.name == "TestCarrySpider")
-                    { 
-                        scriptC.StartSession();
-                        //NextSpider.enabled = false;
-                    }*/
-                    
-                    if (_gazedAtObject.name == "TreatmentProgress")
+                    /*if (_gazedAtObject.name == "TreatmentProgress")
                     {
                         if (scriptD._isVrModeEnabled)
                         {
@@ -219,7 +222,7 @@ public class testcanvas : MonoBehaviour
                             scriptD.EnterVR();
                             TreatmentProgress.enabled = false;
                         }
-                    }
+                    }*/
                     
                     if (_gazedAtObject.name == "GazeSmall")
                     {
@@ -330,4 +333,30 @@ public class testcanvas : MonoBehaviour
            // TreatmentProgress.enabled = true;
         }
     }
+    /*// Handle initialization of the necessary firebase modules:
+    void InitializeFirebase() {
+        Debug.Log("Setting up Firebase Auth");
+        auth = Firebase.Auth.FirebaseAuth.DefaultInstance;
+        auth.StateChanged += AuthStateChanged;
+        AuthStateChanged(this, null);
+    }
+
+// Track state changes of the auth object.
+    void AuthStateChanged(object sender, System.EventArgs eventArgs) {
+        if (auth.CurrentUser != user) {
+            bool signedIn = user != auth.CurrentUser && auth.CurrentUser != null;
+            if (!signedIn && user != null) {
+                Debug.Log("Signed out " + user.UserId);
+            }
+            user = auth.CurrentUser;
+            if (signedIn) {
+                Debug.Log("Signed in " + user.UserId);
+            }
+        }
+    }
+
+    void OnDestroy() {
+        auth.StateChanged -= AuthStateChanged;
+        auth = null;
+    }*/
 }

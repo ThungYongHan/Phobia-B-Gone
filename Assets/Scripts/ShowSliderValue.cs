@@ -6,18 +6,19 @@ using TMPro;
 
 public class ShowSliderValue : MonoBehaviour
 {
-    private TextMeshProUGUI sliderNum;
+    public TextMeshProUGUI sliderNum;
+    public Slider SliderUI;
     // Start is called before the first frame update
     void Start()
     {
         sliderNum = GetComponent<TextMeshProUGUI>();
-        sliderNum.text = "testing";
-
+        sliderNum.text = "0";
     }
 
-    // Update is called once per frame
-    void Update()
+    public void SliderValueUpdate()
     {
-        
+        Debug.Log(SliderUI.value);
+        string sliderMessage = SliderUI.value.ToString();
+        sliderNum.text = sliderMessage;
     }
 }

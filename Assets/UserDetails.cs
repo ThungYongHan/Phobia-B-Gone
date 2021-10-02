@@ -7,5 +7,10 @@ public class UserDetails
     public string Username;
     public string Password;
     public string Email;
-    //public string Questionnaire;
+}
+
+public class Questionnaire
+{
+    //public string AnswerDateTime;
+    public string AnswerNum;
 }
