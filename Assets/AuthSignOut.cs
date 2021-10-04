@@ -13,7 +13,6 @@ using UnityEngine.XR.Management;
 public class AuthSignOut : MonoBehaviour
 {
     FirebaseAuth auth;
-    // Start is called before the first frame update
 
     public void Start()
     {
@@ -22,6 +21,6 @@ public class AuthSignOut : MonoBehaviour
     public void SignOutButton()
     {
         auth.SignOut();
-        SceneManager.LoadScene("AuthSampleScene");
+        SceneManager.LoadScene("LogInSignUp");
     }
 }

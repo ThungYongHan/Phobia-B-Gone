@@ -27,7 +27,7 @@ using UnityEngine.XR.Management;
 /// </summary>
 public class VrModeController : MonoBehaviour
 {
-    /// <summary>
+    /*/// <summary>
     /// Gets a value indicating whether the screen has been touched this frame.
     /// </summary>
     private bool _isScreenTouched
@@ -36,13 +36,12 @@ public class VrModeController : MonoBehaviour
         {
             return Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began;
         }
-    }
+    }*/
 
     /// <summary>
     /// Gets a value indicating whether the VR mode is enabled.
     /// </summary>
-    /// changed to public from private for isvrmode, exit and enter vr
-    public bool _isVrModeEnabled
+    private bool _isVrModeEnabled
     {
         get
         {
@@ -61,14 +60,14 @@ public class VrModeController : MonoBehaviour
         Screen.sleepTimeout = SleepTimeout.NeverSleep;
         Screen.brightness = 1.0f;
 
-        // Checks if the device parameters are stored and scans them if not.
+        /*// Checks if the device parameters are stored and scans them if not.
         // This is only required if the XR plugin is initialized on startup,
         // otherwise these API calls can be removed and just be used when the XR
         // plugin is started.
         if (!Api.HasDeviceParams())
         {
             Api.ScanDeviceParams();
-        }
+        }*/
     }
 
     /// <summary>
@@ -76,41 +75,40 @@ public class VrModeController : MonoBehaviour
     /// </summary>
     public void Update()
     {
-        /*if (_isVrModeEnabled)
+        if (_isVrModeEnabled)
         {
             /*if (Api.IsCloseButtonPressed)
             {
                 ExitVR();
-            }#1#
+            }
 
             if (Api.IsGearButtonPressed)
             {
                 Api.ScanDeviceParams();
-            }
-
+            }*/
             Api.UpdateScreenParams();
         }
         else
         {
-            // TODO(b/171727815): Add a button to switch to VR mode.
-            /*if (_isScreenTouched)
+            /*// TODO(b/171727815): Add a button to switch to VR mode.
+            if (_isScreenTouched)
             {
                 EnterVR();
-            }#1#
-        }*/
+            }*/
+        }
     }
 
     /// <summary>
     /// Enters VR mode.
     /// </summary>
-    /// changed from private to public for enter and exit?
+    ///     
     public void EnterVR()
     {
         StartCoroutine(StartXR());
-        if (Api.HasNewDeviceParams())
+        /*if (Api.HasNewDeviceParams())
         {
             Api.ReloadDeviceParams();
-        }
+        }*/
     }
 
     /// <summary>
@@ -129,7 +127,7 @@ public class VrModeController : MonoBehaviour
     /// <returns>
     /// Returns result value of <c>InitializeLoader</c> method from the XR General Settings Manager.
     /// </returns>
-    private IEnumerator StartXR()
+    public IEnumerator StartXR()
     {
         Debug.Log("Initializing XR...");
         yield return XRGeneralSettings.Instance.Manager.InitializeLoader();

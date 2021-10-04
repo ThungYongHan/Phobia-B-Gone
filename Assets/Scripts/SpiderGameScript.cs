@@ -21,27 +21,29 @@ public class SpiderGameScript : MonoBehaviour
     public Image imgCircle;
     // changed gaze time for game script 
     public float totalTime = 0.5f;
-    public float gvrTimer;
+    public float gazeTimer;
     private GameObject parent;
-    private Slider slider;
+    // private Slider slider;
     // slider filling speed
     //public float FillSpeed = 5f;
     private float targetProgress = 0;
     public GameObject test;
-    private BoxCollider OptionTest0 = null;
+    /*private BoxCollider OptionTest0 = null;
     private BoxCollider OptionTest1 = null;
     private BoxCollider OptionTest2 = null;
     private BoxCollider OptionTest3 = null;
-    private BoxCollider OptionTest4 = null;
+    private BoxCollider OptionTest4 = null;*/
     public LoadSpiderGame scriptE;
+    /*
     private BoxCollider SelectButton = null;
     private BoxCollider CancelButton = null;
     private BoxCollider ConfirmButton = null;
+    */
     
-    private TMPro.TextMeshProUGUI numTest;
-    private TMPro.TextMeshProUGUI numTest2;
-    // private TextMeshPro testText;
-    
+    private TextMeshProUGUI numTest;
+    private TextMeshProUGUI numTest2;
+    public int scoreNum = 0;
+    public TextMeshPro ScoreText;
     /*public GameObject test;
     public GameObject test2;
     public JSONReadandWrite scriptB;
@@ -66,7 +68,6 @@ public class SpiderGameScript : MonoBehaviour
     {
         test = GameObject.Find("GameSpawn");
         scriptE = test.GetComponent<LoadSpiderGame>();
-
         /*test = GameObject.Find("HiddenCanvas");
         test2 = GameObject.Find("HiddenCanvas");
         if (test != null)
@@ -146,25 +147,25 @@ public class SpiderGameScript : MonoBehaviour
         if (Physics.Raycast(ray, out hit, 10000))
         {
             lasthit = hit.transform.gameObject;
-            gvrTimer += Time.deltaTime;
+            gazeTimer += Time.deltaTime;
             _gazedAtObject = lasthit;
             if (_gazedAtObject.name == "CuteSpiderGame(Clone)" || _gazedAtObject.name == "NormalSpiderGame(Clone)" || _gazedAtObject.name == "RealisticSpiderGame(Clone)")
             {
                 //IncrementProgress(1.0f);
-                imgCircle.fillAmount = gvrTimer / totalTime;
-                if (gvrTimer > totalTime)
+                imgCircle.fillAmount = gazeTimer / totalTime;
+                if (gazeTimer > totalTime)
                 {
                     Debug.Log("You are looking at the spider!");
+                    ScoreText.text = (scoreNum += 1).ToString();
                     // this only destroys the gameobject that I am looking at, not the other gameobjects with the same name
                     Destroy(_gazedAtObject);
                     scriptE.spawnRandomLocation();
                 }
-                
             }
             else
             {
                 _gazedAtObject = null;
-                gvrTimer = 0;
+                gazeTimer = 0;
                 imgCircle.fillAmount = 0;
             }
             /*if (sliderMax == false)
@@ -187,11 +188,7 @@ public class SpiderGameScript : MonoBehaviour
                 }
             }*/
         }
-        
-       
-        
     }
-
     /*
     private void InsectGazing()
     {
@@ -221,7 +218,6 @@ public class SpiderGameScript : MonoBehaviour
             imgCircle.fillAmount = 0;
         }
     }*/
-
     /*private void FormGazing()
     {
         if (_gazedAtObject.name != "Plane" && _gazedAtObject.name != "table_2" &&
@@ -370,7 +366,6 @@ public class SpiderGameScript : MonoBehaviour
             imgCircle.fillAmount = 0;
         }
     }*/
-
     /*private void IncrementProgress(float newProgress)
     {
         targetProgress = slider.value + newProgress;

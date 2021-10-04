@@ -11,6 +11,6 @@ public class UserDetails
 
 public class Questionnaire
 {
-    //public string AnswerDateTime;
-    public string AnswerNum;
+    public string AnswerDateTime;
+    public string AnswerScore;
 }

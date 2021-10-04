@@ -8,7 +8,7 @@ public class WanderSpiderAI : MonoBehaviour
 {
     public float moveSpeed = 0.004f;
     //public float moveSpeed = 0.002f;
-    public float rotSpeed = 0.5f;
+    public float rotSpeed = 0.6f;
     private bool isWandering = false;
     private bool isRotatingLeft = false;
     private bool isRotatingRight = false;
@@ -16,7 +16,7 @@ public class WanderSpiderAI : MonoBehaviour
     private bool isWalking = false;
     
     private Animator animator;
-    public Rigidbody rb;
+    // public Rigidbody rb;
     void Awake()
     {
         animator = GetComponent<Animator>();
@@ -45,7 +45,18 @@ public class WanderSpiderAI : MonoBehaviour
         
         if (isAvoiding == true)
         {
-            transform.Rotate(transform.up * 1.0f);
+            transform.position += transform.forward * 0.0002f;
+            transform.Rotate(transform.up * 2.0f);
+            //transform.Rotate(transform.up * rotSpeed);
+            /*int rotate = Random.Range(1, 3);
+            if (rotate == 1)
+            {
+                transform.Rotate(transform.up * 2.0f);
+            }
+            else
+            {
+                transform.Rotate(transform.up * - 2.0f);
+            }*/
         }
 
         if (isWalking == true)
@@ -70,6 +81,15 @@ public class WanderSpiderAI : MonoBehaviour
         StartCoroutine(Avoid());
     }
 
+    private void OnCollisionEnter(Collision other)
+    {
+        if (other.gameObject.name != "table_2")
+        { 
+            isWalking = false;
+            StartCoroutine(Avoid()); 
+        }
+    }
+    
     private void OnCollisionStay(Collision other)
     {
         if (other.gameObject.name != "table_2")
@@ -84,6 +104,7 @@ public class WanderSpiderAI : MonoBehaviour
         if (other.gameObject.name != "table_2")
         {
             Debug.Log("testcold");
+            animator.SetBool("rotate", false);
         }
     }
 
@@ -91,6 +112,7 @@ public class WanderSpiderAI : MonoBehaviour
     {
         Debug.Log("test");
         animator.SetBool("rotate", false);
+        StopCoroutine(Avoid());
     }
     
 

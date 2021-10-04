@@ -6,20 +6,8 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 0
-    path: Assets/Samples/Google Cardboard XR Plugin for Unity/1.7.0/Hello Cardboard/Scenes/HelloCardboard.unity
-    guid: 145a2a45d7bc746b19cb68410368bf96
-  - enabled: 0
-    path: Assets/Scenes/ImphenziaTutorial.unity
-    guid: 7d837d2154213104ca49f2041134cf9d
-  - enabled: 0
     path: Assets/BigFurniturePack/Demo/demo.unity
     guid: 1d4ec92269d4f9e4a9419f03b6748af4
-  - enabled: 0
-    path: Assets/selectphobia.unity
-    guid: 9627421f1d1c83840a868ba8e52828c5
-  - enabled: 1
-    path: Assets/Scenes/DemoScene.unity
-    guid: 9112996dc9932f84da35f8c0bf8ffc2e
   - enabled: 0
     path: Assets/Scenes/testrotate.unity
     guid: 3c01f2767657ab74dae225b7ae46059b
@@ -33,31 +21,25 @@ EditorBuildSettings:
     path: Assets/Scenes/gazescenetest.unity
     guid: dd49aca29d56d0e408d748c8796c62d4
   - enabled: 0
-    path: Assets/Easy Primitive People/PrimitivePeopleDemoScene.unity
-    guid: 7eaef681ef0135348aecb17330d9d261
-  - enabled: 0
-    path: Assets/Youe++/Gaze UI/Exemple/GazeUI.unity
-    guid: cc737a101c8d49e418c2c0491e3d0dd2
-  - enabled: 0
     path: Assets/Scenes/warningsplash.unity
     guid: 203827d802411204489744ef6eb1dd98
-  - enabled: 0
-    path: Assets/Scenes/Bathroom.unity
-    guid: 816a88178f8c7b845a02d0f9eb585896
   - enabled: 0
     path: Assets/LowPolyInterior/Scenes/LowPolyInterior_Demo.unity
     guid: be7da2d78e467814186fe24a4e542b91
   - enabled: 0
-    path: Assets/Scenes/AuthAndDatabase.unity
-    guid: 57900037b1008c14b9cb8266cc0a2ea2
-  - enabled: 1
+    path: 
+    guid: 00000000000000000000000000000000
+  - enabled: 0
     path: Assets/Scenes/AuthSampleScene.unity
     guid: 931cdd1fdb6b0e442b5903fdf664b287
   - enabled: 0
     path: Assets/Scenes/SampleScene.unity
     guid: b0c6151a93cdd7c4d8e7bcc59101ffad
   - enabled: 1
-    path: Assets/Scenes/2dphobiaselectmenu.unity
+    path: Assets/Scenes/LogInSignUp.unity
+    guid: df3c8357a6f8a3b41ba3571f8cfd66b3
+  - enabled: 1
+    path: Assets/Scenes/PhobiaSelectMenu.unity
     guid: 62b22b0910e2b724cbb93595e59caae3
   - enabled: 1
     path: Assets/Scenes/FirstSpiderEval.unity
@@ -65,9 +47,18 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/SpiderPhobiaMenu.unity
     guid: dd7fa4f1c48883946b14cc63738fc4aa
-  - enabled: 1
+  - enabled: 0
     path: Assets/SpiderTreatmentProgressVR.unity
     guid: 1757201842f785e45a65bfdacf5e091c
+  - enabled: 1
+    path: Assets/Scenes/SpiderExposureTaskScene.unity
+    guid: f3fe616c026b5db4cb7edc47d441a24a
+  - enabled: 1
+    path: Assets/Scenes/SpiderBathroom.unity
+    guid: 816a88178f8c7b845a02d0f9eb585896
+  - enabled: 1
+    path: Assets/Scenes/TreatmentProgress2D.unity
+    guid: 629a9ab9dcfe8b24db66c5b1e3d3cdb9
   m_configObjects:
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: bed178fbbf08b174aa2ddb29f7610f5b, type: 2}
     xr.sdk.mock-hmd.settings: {fileID: 11400000, guid: 8a104db0b9c87564d8f717ea89a38da9, type: 2}

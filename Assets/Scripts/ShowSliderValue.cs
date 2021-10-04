@@ -17,7 +17,7 @@ public class ShowSliderValue : MonoBehaviour
 
     public void SliderValueUpdate()
     {
-        Debug.Log(SliderUI.value);
+        // Debug.Log(SliderUI.value);
         string sliderMessage = SliderUI.value.ToString();
         sliderNum.text = sliderMessage;
     }

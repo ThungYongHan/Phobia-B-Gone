@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -5,22 +6,38 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
+using UnityEngine.XR.Management;
+using Random = System.Random;
 
-public class testcanvas : MonoBehaviour
+public class SpiderPhobiaMenuCamera : MonoBehaviour
 {
-    /*Firebase.Auth.FirebaseAuth auth;
+    /*/*Firebase.Auth.FirebaseAuth auth;
     Firebase.Auth.FirebaseUser user;*/
     
+    private string[] spiderFacts =
+    {
+        "Spiders eat more insects than birds and bats combined.",
+        "For its weight, spider web silk is stronger and tougher than steel.",
+        "Some species of jumping spiders can see light spectrums that humans cannot.",
+        "Spiders are nearsighted.",
+        "Spiders have pale blue blood.",
+        "Spiders do not have muscles, but instead move their legs by shifting internal body fluid.",
+        "Spiders help control insect populations such as flies and caterpillars.",
+        "By eating pests like fleas and mosquitoes, spiders can prevent the spread of disease.",
+        "Most tarantula species pose no threat to humans.",
+        "Less than 0.5% of spider species are considered as potentially dangerous to humans."
+    };
+    
     public GameObject lasthit = null;
-
     public GameObject DoctorCanvas;
     private const float _maxDistance = 10;
     private GameObject _gazedAtObject = null;
     public Image imgCircle;
     public float totalTime = 2;
-    private bool gvrStatus;
-    public float gvrTimer;
+    private bool gazeStatus;
+    public float gazeTimer;
     
     public SpiderSelection scriptC;
     public VrModeController scriptD;
@@ -58,22 +75,42 @@ public class testcanvas : MonoBehaviour
     private ColorBlock GazeColor5;
     public GameObject Doctor;
     public TextMeshPro SpeechBubbleText;
-    
-    public TextMeshPro GazeInstructionText;
-    public TextMeshPro RelaxationText;
 
+    public GameObject GazeDoctor;
+    public GameObject GameDoctor;
+    public TextMeshPro SpiderGazeFactsText;
+    public TextMeshPro SpiderGameFactsText;
+    public TextMeshPro GazeInstructionText;
+    public TextMeshPro GazeRelaxtionText;
+    
+    public TextMeshPro GameInstructionText;
+    public TextMeshPro GameRelaxtionText;
+
+    public Camera mainCamera;
     void Start()
     {
+        
         //InitializeFirebase();
         // cannot disable screen space camera canvas for some reason, so switching the code to call it as a gameobject and disabling it entirely
         DoctorCanvas = GameObject.Find("DoctorCanvas");
         
         GazeInstructionText = GameObject.Find("GazeInstructionText").GetComponent<TextMeshPro>();
         Debug.Log(GazeInstructionText);
-        RelaxationText = GameObject.Find("RelaxationText").GetComponent<TextMeshPro>();
-        RelaxationText.enabled = false;
+        GazeRelaxtionText = GameObject.Find("GazeRelaxationText").GetComponent<TextMeshPro>();
+        GazeRelaxtionText.enabled = false;
+        
+        GameInstructionText = GameObject.Find("GameInstructionText").GetComponent<TextMeshPro>();
+        Debug.Log(GameInstructionText);
+        GameRelaxtionText = GameObject.Find("GameRelaxationText").GetComponent<TextMeshPro>();
+        GameRelaxtionText.enabled = false;
+        
         Doctor = GameObject.Find("SpeechBubble");
         SpeechBubbleText = Doctor.transform.GetChild(0).GetComponent<TextMeshPro>();
+        GazeDoctor = GameObject.Find("SpiderGazeFacts");
+        SpiderGazeFactsText = GazeDoctor.transform.GetChild(0).GetComponent<TextMeshPro>();
+        
+        GameDoctor = GameObject.Find("SpiderGameFacts");
+        SpiderGameFactsText = GameDoctor.transform.GetChild(0).GetComponent<TextMeshPro>();
         // SpeechBubbleText.text = ("I hate myself");
         
         test2 = GameObject.Find("Main Camera");
@@ -122,12 +159,13 @@ public class testcanvas : MonoBehaviour
         if (Physics.Raycast(ray, out hit, _maxDistance))
         {
             lasthit = hit.transform.gameObject;
-            gvrTimer += Time.deltaTime;
-            imgCircle.fillAmount = gvrTimer / totalTime;
+            gazeTimer += Time.deltaTime;
+            imgCircle.fillAmount = gazeTimer / totalTime;
             _gazedAtObject = lasthit;
             if (_gazedAtObject == lasthit)
             {
-                if (gvrTimer < totalTime)
+                // talk about how you let them view instructions?
+                if (gazeTimer < totalTime)
                 {
                     if (_gazedAtObject.name == "GazeExposureButton")
                     { 
@@ -137,41 +175,102 @@ public class testcanvas : MonoBehaviour
                     { 
                         SpeechBubbleText.text = ("Exposure Session Where You Try To Find Spiders");
                     }
+                    if (_gazedAtObject.name == "TreatmentProgress")
+                    { 
+                        SpeechBubbleText.text = ("View Your Overall Treatment Progress");
+                    }
+                    if (_gazedAtObject.name == "BackSceneButton")
+                    {
+                        SpeechBubbleText.text = ("Go Back To Phobia Selection Menu");
+                    }
                 }
 
-                if (gvrTimer > totalTime)
+                if (gazeTimer > totalTime)
                 {
-                    if (_gazedAtObject.name == "NextSlide")
+                    if (_gazedAtObject.name == "RandomSpiderGazeFactsDoctor ")
                     {
-                        GazeInstructionText.enabled = false;
-                        RelaxationText.enabled = true;
+                        /*String fact1 = "Spiders eat more insects than birds and bats combined";
+                        String fact2 = "For its weight, spider web silk is stronger and tougher than steel.";
+                        String fact3 = "Some species of jumping spiders can see light spectrums that humans cannot.";
+                        String fact4 = "Spiders are nearsighted.";
+                        String fact5 = "Spiders have pale blue blood.";
+                        String fact6 = "Spiders do not have muscles, but instead move their legs by shifting internal body fluid";
+                        String fact7 = "Spiders help control insect populations such as flies and caterpillars";
+                        String fact8 = "By eating pests like fleas and mosquitoes, spiders can prevent the spread of disease";
+                        String fact9 = "Most tarantula species pose no threat to humans";
+                        String fact10 = "Less than 0.5% of spider species are considered as potentially dangerous to humans";*/
+                        Random rand = new Random();
+                        int factsNum = rand.Next(0, spiderFacts.Length);
+                        Debug.Log(spiderFacts.Length);
+                        SpiderGazeFactsText.text = spiderFacts[factsNum];
+                        gazeTimer = 0;
                     }
                     
-                    if (_gazedAtObject.name == "PreviousSlide")
+                    if (_gazedAtObject.name == "RandomSpiderGameFactsDoctor")
+                    {
+                        Random rand = new Random();
+                        int factsNum = rand.Next(0, spiderFacts.Length);
+                        Debug.Log(spiderFacts.Length);
+                        SpiderGameFactsText.text = spiderFacts[factsNum];
+                        gazeTimer = 0;
+                    }
+                    
+                    if (_gazedAtObject.name == "NextGazeSlide")
+                    {
+                        GazeInstructionText.enabled = false;
+                        GazeRelaxtionText.enabled = true;
+                        gazeTimer = 0;
+                    }
+                    
+                    if (_gazedAtObject.name == "PreviousGazeSlide")
                     {
                         GazeInstructionText.enabled = true;
-                        RelaxationText.enabled = false;
+                        GazeRelaxtionText.enabled = false;
+                        gazeTimer = 0;
+                    }
+                    
+                    if (_gazedAtObject.name == "NextGameSlide")
+                    {
+                        GameInstructionText.enabled = false;
+                        GameRelaxtionText.enabled = true;
+                        gazeTimer = 0;
+                    }
+                    
+                    if (_gazedAtObject.name == "PreviousGameSlide")
+                    {
+                        GameInstructionText.enabled = true;
+                        GameRelaxtionText.enabled = false;
+                        gazeTimer = 0;
                     }
                     
                     if (_gazedAtObject.name == "GazeStart")
                     {
                         scriptC.StartSession();
-                        SceneManager.LoadScene("DemoScene");
+                        SceneManager.LoadScene("SpiderExposureTaskScene");
+                        gazeTimer = 0;
                     }
-                    
-                    
+
                     if (_gazedAtObject.name == "GameStart")
                     {
                         scriptC.StartSession();
-                        SceneManager.LoadScene("Bathroom");
+                        SceneManager.LoadScene("SpiderBathroom");
+                        gazeTimer = 0;
                     }
                                         
+                    if (_gazedAtObject.name == "GameBack")
+                    {
+                        GamePrePanel.SetActive(false);
+                        PhobiaSelectionMenuPanel.SetActive(true);
+                        gazeTimer = 0;
+                    }
+                    
                     if (_gazedAtObject.name == "GazeExposureButton")
                     {
                         //GazePrePanel.SetActive(true);
                         DoctorCanvas.SetActive(false);
                         GazeOptionPanel.SetActive(true);
                         PhobiaSelectionMenuPanel.SetActive(false);
+                        gazeTimer = 0;
                     }
                     
                     if (_gazedAtObject.name == "GamifiedExposureButton")
@@ -180,16 +279,17 @@ public class testcanvas : MonoBehaviour
                         DoctorCanvas.SetActive(false);
                         GamePrePanel.SetActive(true);
                         PhobiaSelectionMenuPanel.SetActive(false);
+                        gazeTimer = 0;
                     }
                     
                     if (_gazedAtObject.name == "BackSceneButton")
                     {
-                       SceneManager.LoadScene("selectphobia");
+                       SceneManager.LoadScene("2dphobiaselectmenu");
                     }
                     
                     if (_gazedAtObject.name == "TreatmentProgress")
                     {
-                        SceneManager.LoadScene("SpiderTreatmentProgressVR");
+                        SceneManager.LoadScene("TreatmentProgress2D");
                     }
                     
                     if (_gazedAtObject.name == "NextSpider")
@@ -200,14 +300,14 @@ public class testcanvas : MonoBehaviour
                         // it works because when you reset the timer, the timer starts again from 0 and it will have to wait until it is >2 seconds,
                         // making it look seamless when gazing at the same thing for a long time where it will enable and disable automatically
                         // also this will prevent the circle from being full in between scenes, which can cause unwanted interactions
-                        gvrTimer = 0;
+                        gazeTimer = 0;
                     }
                     
                     if (_gazedAtObject.name == "PreviousSpider")
                     { 
                         scriptC.PreviousSpider();
                         //PreviousSpider.enabled = false;
-                        gvrTimer = 0;
+                        gazeTimer = 0;
                     }
                     
                     /*if (_gazedAtObject.name == "TreatmentProgress")
@@ -299,14 +399,14 @@ public class testcanvas : MonoBehaviour
                         GazePrePanel.SetActive(true);
                         GazeOptionPanel.SetActive(false);
                         //scriptC.StartSession();
-                        gvrTimer = 0;
+                        gazeTimer = 0;
                     }
                     
                     if (_gazedAtObject.name == "GazeCancel")
                     {
                         GazeOptionPanel.SetActive(false);
                         PhobiaSelectionMenuPanel.SetActive(true);
-                        gvrTimer = 0;
+                        gazeTimer = 0;
                     }
                     
                     if (_gazedAtObject.name == "GazeBack")
@@ -314,7 +414,7 @@ public class testcanvas : MonoBehaviour
                         GazePrePanel.SetActive(false);
                         GazeOptionPanel.SetActive(true);
                         //PhobiaSelectionMenuPanel.SetActive(true);
-                        gvrTimer = 0;
+                        gazeTimer = 0;
                     }
                 }
             }
@@ -326,7 +426,7 @@ public class testcanvas : MonoBehaviour
         else
         {
            _gazedAtObject = null;
-           gvrTimer = 0;
+           gazeTimer = 0;
            imgCircle.fillAmount = 0;
            //NextSpider.enabled = true;
            //PreviousSpider.enabled = true;

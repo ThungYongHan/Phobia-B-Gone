@@ -222,7 +222,7 @@ public class FirebaseUserManager : MonoBehaviour
             FirebaseUser returnuser = logintask.Result;
             Debug.LogFormat("Firebase user is logged in  successfully :{0} ({1})", returnuser.DisplayName, returnuser.UserId);
             loginerrormessage.text = "The user is logged in successfully";
-            SceneManager.LoadScene("2dphobiaselectmenu");
+            SceneManager.LoadScene("PhobiaSelectMenu");
         });
     }
 }

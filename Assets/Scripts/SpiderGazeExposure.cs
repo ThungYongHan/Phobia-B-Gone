@@ -7,10 +7,10 @@ using UnityEngine.EventSystems;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
-public class InsectGaze : MonoBehaviour
+public class SpiderGazeExposure : MonoBehaviour
 {
-    public Canvas myCanvas1;
-    public Canvas myCanvas2;
+    /*public Canvas myCanvas1;
+    public Canvas myCanvas2;*/
     public Canvas myCanvas3;
 
     public GameObject lasthit = null;
@@ -18,14 +18,14 @@ public class InsectGaze : MonoBehaviour
     private GameObject _gazedAtObject = null;
     public Image imgCircle;
     public float totalTime = 2;
-    public float gvrTimer;
+    [FormerlySerializedAs("gvrTimer")] public float gazeTimer;
     private GameObject parent;
     private Slider slider;
     // slider filling speed
-    public float FillSpeed = 5f;
+    public float FillSpeed = 0.5f;
     private float targetProgress = 0;
     
-    private BoxCollider OptionTest0 = null;
+    /*private BoxCollider OptionTest0 = null;
     private BoxCollider OptionTest1 = null;
     private BoxCollider OptionTest2 = null;
     private BoxCollider OptionTest3 = null;
@@ -33,7 +33,7 @@ public class InsectGaze : MonoBehaviour
 
     private BoxCollider SelectButton = null;
     private BoxCollider CancelButton = null;
-    private BoxCollider ConfirmButton = null;
+    private BoxCollider ConfirmButton = null;*/
     
     private TMPro.TextMeshProUGUI numTest;
     private TMPro.TextMeshProUGUI numTest2;
@@ -41,12 +41,12 @@ public class InsectGaze : MonoBehaviour
     
     public GameObject test;
     public GameObject test2;
-    public JSONReadandWrite scriptB;
+    //public JSONReadandWrite scriptB;
     public GameObject testObject;
 
     private int chosenOption = 0;
     
-    private Button theButton0;
+    /*private Button theButton0;
     private ColorBlock theColor0;
     private Button theButton1;
     private ColorBlock theColor1;
@@ -55,7 +55,7 @@ public class InsectGaze : MonoBehaviour
     private Button theButton3;
     private ColorBlock theColor3;
     private Button theButton4;
-    private ColorBlock theColor4;
+    private ColorBlock theColor4;*/
 
     public bool sliderMax = false;
 
@@ -66,11 +66,11 @@ public class InsectGaze : MonoBehaviour
         if (test != null)
         {
             // then reference the gameobject's script
-            scriptB = test.GetComponent<JSONReadandWrite>();
+            //scriptB = test.GetComponent<JSONReadandWrite>();
         }
-        scriptB.SaveToJson();
+        //scriptB.SaveToJson();
 
-        theButton0 = GameObject.Find("OptionTest0").GetComponent<Button>();
+        /*theButton0 = GameObject.Find("OptionTest0").GetComponent<Button>();
         theColor0 = theButton0.colors;
         
         theButton1 = GameObject.Find("OptionTest1").GetComponent<Button>();
@@ -108,23 +108,24 @@ public class InsectGaze : MonoBehaviour
         SelectButton = GameObject.Find("SelectButton").GetComponent<BoxCollider>();
 
         CancelButton = GameObject.Find("CancelButton").GetComponent<BoxCollider>();
-        ConfirmButton = GameObject.Find("ConfirmButton").GetComponent<BoxCollider>();
+        ConfirmButton = GameObject.Find("ConfirmButton").GetComponent<BoxCollider>();*/
         // set HiddenCanvas Button's Collider to false at the start to prevent "ghost" box colliders
-        OptionTest0.enabled = false;
+        /*OptionTest0.enabled = false;
         OptionTest1.enabled = false;
         OptionTest2.enabled = false;
         OptionTest3.enabled = false;
         OptionTest4.enabled = false;
         SelectButton.enabled = false;
         CancelButton.enabled = false;
-        ConfirmButton.enabled = false;
+        ConfirmButton.enabled = false;*/
         
-        myCanvas1 = GameObject.Find("FormCanvas").GetComponent<Canvas>();
-        myCanvas2 = GameObject.Find("HiddenCanvas").GetComponent<Canvas>();
+        /*myCanvas1 = GameObject.Find("FormCanvas").GetComponent<Canvas>();
+        myCanvas2 = GameObject.Find("HiddenCanvas").GetComponent<Canvas>();*/
         myCanvas3 = GameObject.Find("ProgressCanvas").GetComponent<Canvas>();
         
-        myCanvas1.enabled = false;
+        /*myCanvas1.enabled = false;
         myCanvas2.enabled = false;
+        */
         
         parent = GameObject.Find("ProgressCanvas");
         slider = parent.transform.GetChild(0).GetComponent<Slider>();
@@ -140,32 +141,32 @@ public class InsectGaze : MonoBehaviour
         if (Physics.Raycast(ray, out hit, 10000))
         {
             lasthit = hit.transform.gameObject;
-            gvrTimer += Time.deltaTime;
+            gazeTimer += Time.deltaTime;
             _gazedAtObject = lasthit;
             if (sliderMax == false)
             {
                 //Debug.Log("checking");
                 InsectGazing();
-                DisableCanvas1();
+                //DisableCanvas1();
             }
             else
             {
                 // enable the hidden canvas
                 myCanvas3.enabled = false;
-                FormGazing();
+                //FormGazing();
                 // this is crucial, need to set if(myCanvas1.enabled == false) so that enableCanvas1() is not called each frame, which previously
                 // would have disabled "Confirm" and "Select" buttons in
                 // myCanvas2 and also set all buttons in myCanvas 1 to be always active (interactable)
-                if (myCanvas1.enabled == false)
+                /*if (myCanvas1.enabled == false)
                 {
                     EnableCanvas1(); 
-                }
+                }*/
             }
         }
         else
         {
             _gazedAtObject = null;
-            gvrTimer = 0;
+            gazeTimer = 0;
             imgCircle.fillAmount = 0;
         }
     }
@@ -184,8 +185,8 @@ public class InsectGaze : MonoBehaviour
         if (_gazedAtObject.name != "Plane" && _gazedAtObject.name != "table_2" && _gazedAtObject.name != "TableColliders")
         {
             IncrementProgress(1.0f);
-            imgCircle.fillAmount = gvrTimer / totalTime;
-            if (gvrTimer > totalTime)
+            imgCircle.fillAmount = gazeTimer / totalTime;
+            if (gazeTimer > totalTime)
             {
                 Debug.Log("You are looking at the spider!");
             }
@@ -194,20 +195,20 @@ public class InsectGaze : MonoBehaviour
         {
             IncrementProgress(0.0f);
             _gazedAtObject = null;
-            gvrTimer = 0;
+            gazeTimer = 0;
             imgCircle.fillAmount = 0;
         }
     }
 
-    private void FormGazing()
+    /*private void FormGazing()
     {
         if (_gazedAtObject.name != "Plane" && _gazedAtObject.name != "table_2" &&
             _gazedAtObject.name != "TableColliders" && _gazedAtObject.name != "capsulespiderworking1" && _gazedAtObject.name != "capsulespiderworking2" && _gazedAtObject.name != "capsulespiderworking3" )
         {
-            imgCircle.fillAmount = gvrTimer / totalTime;
+            imgCircle.fillAmount = gazeTimer / totalTime;
             if (_gazedAtObject == lasthit)
             {
-                if (gvrTimer > totalTime)
+                if (gazeTimer > totalTime)
                 {
                     if (_gazedAtObject.name == "ConfirmButton")
                     {
@@ -343,19 +344,19 @@ public class InsectGaze : MonoBehaviour
         else
         {
             _gazedAtObject = null;
-            gvrTimer = 0;
+            gazeTimer = 0;
             imgCircle.fillAmount = 0;
         }
-    }
+    }*/
 
     private void IncrementProgress(float newProgress)
     {
         targetProgress = slider.value + newProgress;
     }
 
-    private void EnableCanvas1()
+    /*private void EnableCanvas1()
     {
-        myCanvas1.enabled = true;
+        /*myCanvas1.enabled = true;
         OptionTest0.enabled = true;
         OptionTest1.enabled = true;
         OptionTest2.enabled = true;
@@ -363,13 +364,13 @@ public class InsectGaze : MonoBehaviour
         OptionTest4.enabled = true;
         SelectButton.enabled = true;
         CancelButton.enabled = false;
-        ConfirmButton.enabled = false;
+        ConfirmButton.enabled = false;#1#
     }
 
     private void DisableCanvas1()
     {
         //bulkBoxColliderGet();
-        myCanvas1.enabled = false;
+        /*myCanvas1.enabled = false;
         OptionTest0.enabled = false;
         OptionTest1.enabled = false;
         OptionTest2.enabled = false;
@@ -377,10 +378,10 @@ public class InsectGaze : MonoBehaviour
         OptionTest4.enabled = false;
         SelectButton.enabled = false;
         CancelButton.enabled = false;
-        ConfirmButton.enabled = false;
+        ConfirmButton.enabled = false;#1#
     }
 
-    private void EnableCanvas2()
+    /*private void EnableCanvas2()
     {
         //bulkBoxColliderGet();
         myCanvas2.enabled = true;
@@ -405,5 +406,5 @@ public class InsectGaze : MonoBehaviour
         OptionTest3.enabled = true;
         OptionTest4.enabled = true;
         SelectButton.enabled = true;
-    }
+    }#1#*/
 }

@@ -21,8 +21,8 @@ public class LoadSpider : MonoBehaviour
         selectedGazeNum = PlayerPrefs.GetInt("selectedGazeNum");
         selectedGazeSize = PlayerPrefs.GetInt("selectedGazeSize");
         
-        Debug.Log(selectedGazeSize);
-        Debug.Log(selectedGazeNum);
+        /*Debug.Log(selectedGazeSize);
+        Debug.Log(selectedGazeNum);*/
 
         GameObject prefab = spiderPrefabs[selectedSpider];
         if (selectedGazeNum == 1)
@@ -30,19 +30,57 @@ public class LoadSpider : MonoBehaviour
             // clone = Instantiate(prefab, spawnPoint.position, Quaternion.identity);
             // to make the spider spawn and walk towards the player (post rotation)
             clone = Instantiate(prefab, spawnPoint.position, spawnPoint.rotation * Quaternion.Euler(0f, 180f, 0f));
-            exampleFunction(clone);
+            selectSpiderSizeFunction(clone);
         }
         if (selectedGazeNum == 3)
         {
              /*clone = Instantiate(prefab, spawnPoint.position, Quaternion.identity);
              clone2 = Instantiate(prefab, spawnPoint2.position, Quaternion.identity);
-             clone3 = Instantiate(prefab, spawnPoint3.position, Quaternion.identity);*/
-             clone = Instantiate(prefab, spawnPoint.position, spawnPoint.rotation * Quaternion.Euler (0f, 180f, 0f));
-             clone2 = Instantiate(prefab, spawnPoint2.position, spawnPoint2.rotation * Quaternion.Euler (0f, 180f, 0f));
-             clone3 = Instantiate(prefab, spawnPoint3.position, spawnPoint3.rotation * Quaternion.Euler (0f, 180f, 0f));
-             exampleFunction(clone);
-             exampleFunction(clone2);
-             exampleFunction(clone3);
+             clone3 = Instantiate(prefab, spawnPoint3.position, Quaternion.identity);*/ 
+            /*clone = Instantiate(prefab, spawnPoint.position, spawnPoint.rotation * Quaternion.Euler (0f, 180f, 0f));
+            clone2 = Instantiate(prefab, spawnPoint2.position, spawnPoint2.rotation * Quaternion.Euler (0f, 180f, 0f));
+            clone3 = Instantiate(prefab, spawnPoint3.position, spawnPoint3.rotation * Quaternion.Euler (0f, 180f, 0f));
+            selectSpiderSizeFunction(clone);
+            selectSpiderSizeFunction(clone2);
+            selectSpiderSizeFunction(clone3);*/
+            if (selectedSpider == 0)
+            {
+                clone = Instantiate(prefab, spawnPoint.position, spawnPoint.rotation * Quaternion.Euler (0f, 180f, 0f));
+                clone2 = Instantiate(prefab, spawnPoint2.position, spawnPoint2.rotation * Quaternion.Euler (0f, 180f, 0f));
+                clone3 = Instantiate(prefab, spawnPoint3.position, spawnPoint3.rotation * Quaternion.Euler (0f, 180f, 0f));
+                selectSpiderSizeFunction(clone);
+                selectSpiderSizeFunction(clone2);
+                selectSpiderSizeFunction(clone3);
+                clone.GetComponent<CapsuleCollider>().center = new Vector3(0f, 0.21f, 0f);
+                clone2.GetComponent<CapsuleCollider>().center = new Vector3(0f, 0.21f, 0f);
+                clone3.GetComponent<CapsuleCollider>().center = new Vector3(0f, 0.21f, 0f);
+            }
+            
+            if (selectedSpider == 1)
+            {
+                clone = Instantiate(prefab, spawnPoint.position, spawnPoint.rotation * Quaternion.Euler (0f, 180f, 0f));
+                clone2 = Instantiate(prefab, spawnPoint2.position, spawnPoint2.rotation * Quaternion.Euler (0f, 180f, 0f));
+                clone3 = Instantiate(prefab, spawnPoint3.position, spawnPoint3.rotation * Quaternion.Euler (0f, 180f, 0f));
+                selectSpiderSizeFunction(clone);
+                selectSpiderSizeFunction(clone2);
+                selectSpiderSizeFunction(clone3);
+                clone.GetComponent<CapsuleCollider>().center = new Vector3(0f, 2.2f, 0f);
+                clone2.GetComponent<CapsuleCollider>().center = new Vector3(0f, 2.2f, 0f);
+                clone3.GetComponent<CapsuleCollider>().center = new Vector3(0f, 2.2f, 0f);
+            }
+            
+            if (selectedSpider == 2)
+            {
+                clone = Instantiate(prefab, spawnPoint.position, spawnPoint.rotation * Quaternion.Euler (0f, 180f, 0f));
+                clone2 = Instantiate(prefab, spawnPoint2.position, spawnPoint2.rotation * Quaternion.Euler (0f, 180f, 0f));
+                clone3 = Instantiate(prefab, spawnPoint3.position, spawnPoint3.rotation * Quaternion.Euler (0f, 180f, 0f));
+                selectSpiderSizeFunction(clone);
+                selectSpiderSizeFunction(clone2);
+                selectSpiderSizeFunction(clone3);
+                clone.GetComponent<CapsuleCollider>().center = new Vector3(0f, 1f, 0f);
+                clone2.GetComponent<CapsuleCollider>().center = new Vector3(0f, 1f, 0f);
+                clone3.GetComponent<CapsuleCollider>().center = new Vector3(0f, 1f, 0f);
+            }
         }
         if (selectedGazeNum == 5)
         {
@@ -56,11 +94,11 @@ public class LoadSpider : MonoBehaviour
              clone3 = Instantiate(prefab, spawnPoint3.position, spawnPoint3.rotation * Quaternion.Euler (0f, 180f, 0f));
              clone4 = Instantiate(prefab, spawnPoint4.position, spawnPoint4.rotation * Quaternion.Euler (0f, 180f, 0f));
              clone5 = Instantiate(prefab, spawnPoint5.position, spawnPoint5.rotation * Quaternion.Euler (0f, 180f, 0f));
-             exampleFunction(clone);
-             exampleFunction(clone2);
-             exampleFunction(clone3);
-             exampleFunction(clone4);
-             exampleFunction(clone5);
+             selectSpiderSizeFunction(clone);
+             selectSpiderSizeFunction(clone2);
+             selectSpiderSizeFunction(clone3);
+             selectSpiderSizeFunction(clone4);
+             selectSpiderSizeFunction(clone5);
         }
         
         //GameObject clone2 = Instantiate(prefab, spawnPoint2.position, Quaternion.identity);
@@ -100,7 +138,7 @@ public class LoadSpider : MonoBehaviour
         }*/
     }
     
-    public void exampleFunction(GameObject spiderExample)
+    public void selectSpiderSizeFunction(GameObject spiderExample)
     {
         // int selectedGazeSize = PlayerPrefs.GetInt("selectedGazeSize");
         //selectedGazeSize = PlayerPrefs.GetInt("selectedGazeSize");
@@ -117,6 +155,7 @@ public class LoadSpider : MonoBehaviour
             //Debug.Log(clone.transform.localScale);
             // clone.transform.localScale = new Vector3(0.02f, 0.02f, 0.02f);
         }
+        
         if (selectedGazeSize == 2)
         {
             // clone.transform.localScale = new Vector3(0.04f, 0.04f, 0.04f);
@@ -124,9 +163,11 @@ public class LoadSpider : MonoBehaviour
             newScale *= 1.5f;
             spiderExample.transform.localScale = newScale;
         }
+        
         if (selectedGazeSize == 3)
         {
             // clone.transform.localScale = new Vector3(0.06f, 0.06f, 0.06f);
+            // get spider scale in the scene?
             Vector3 newScale = spiderExample.transform.localScale;
             newScale *= 3f;
             spiderExample.transform.localScale = newScale;

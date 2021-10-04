@@ -1,9 +1,9 @@
 {
     "m_SelectedDeviceId": "f6699a7e0405",
     "m_SelectedPackage": {
-        "deviceId": "f6699a7e0405",
-        "name": "com.DefaultCompany.PhobiaBGone",
-        "processId": 20067,
+        "deviceId": "",
+        "name": "",
+        "processId": 0,
         "exited": false
     },
     "m_SelectedPriority": 0,
@@ -11,43 +11,37 @@
         {
             "deviceId": "f6699a7e0405",
             "name": "com.DefaultCompany.PhobiaBGone",
-            "processId": 28443,
-            "exited": true
-        },
-        {
-            "deviceId": "f6699a7e0405",
-            "name": "com.miui.home",
-            "processId": 1796,
+            "processId": 13866,
             "exited": true
         },
         {
             "deviceId": "f6699a7e0405",
             "name": "com.DefaultCompany.PhobiaBGone",
-            "processId": 22824,
+            "processId": 17525,
             "exited": true
         },
         {
             "deviceId": "f6699a7e0405",
             "name": "com.DefaultCompany.PhobiaBGone",
-            "processId": 24627,
+            "processId": 22487,
             "exited": true
         },
         {
             "deviceId": "f6699a7e0405",
             "name": "com.DefaultCompany.PhobiaBGone",
-            "processId": 13344,
+            "processId": 24629,
             "exited": true
         },
         {
             "deviceId": "f6699a7e0405",
-            "name": "com.andrewshu.android.reddit",
-            "processId": 3345,
-            "exited": false
+            "name": "com.DefaultCompany.PhobiaBGone",
+            "processId": 27149,
+            "exited": true
         },
         {
             "deviceId": "f6699a7e0405",
-            "name": "com.DefaultCompany.PhobiaBGone",
-            "processId": 20067,
+            "name": "com.android.settings",
+            "processId": 31257,
             "exited": false
         }
     ],
