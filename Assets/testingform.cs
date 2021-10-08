@@ -1,3 +1,4 @@
+/*
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -17,11 +18,11 @@ public class testingform : MonoBehaviour
     private bool gvrStatus;
     public float gvrTimer;
     /*public UnityEvent GVRClick;
-    public UnityEvent GVRClick2;*/
+    public UnityEvent GVRClick2;#1#
     public Canvas myCanvas;
     
     /*private BoxCollider ButtonTest1 = null;
-    private BoxCollider ButtonTest2 = null;*/
+    private BoxCollider ButtonTest2 = null;#1#
     
     private BoxCollider OptionTest0 = null;
     private BoxCollider OptionTest1 = null;
@@ -38,7 +39,7 @@ public class testingform : MonoBehaviour
     private BoxCollider ConfirmButton = null;
     public GameObject test;
     public GameObject test2;
-    public JSONReadandWrite scriptB;
+    //public JSONReadandWrite scriptB;
     public GameObject testObject;
 
     private int chosenOption = 0;
@@ -65,8 +66,8 @@ public class testingform : MonoBehaviour
         string json = JsonUtility.ToJson(saveObject);
         Debug.Log(json);
 
-        SaveObject loadedSaveObject JsonUtility.FromJson<SaveObject>(json);#1#
-    }*/
+        SaveObject loadedSaveObject JsonUtility.FromJson<SaveObject>(json);#2#
+    }#1#
     void Awake()
     {
         // PatientConnection pat = JsonUtility.FromJson<PatientConnection>(JsonFile.text);
@@ -108,7 +109,7 @@ public class testingform : MonoBehaviour
         if (GameObject.Find("ButtonTest2") != null)
         {
             ButtonTest2 = GameObject.Find("ButtonTest2").GetComponent<BoxCollider>();
-        }*/
+        }#1#
         
         if (GameObject.Find("OptionTest0") != null)
         {
@@ -157,7 +158,7 @@ public class testingform : MonoBehaviour
             numTest = test2.transform.GetChild(2).GetComponent<Text>();
             Debug.Log(numTest);
 //            numTest.text = "TestingCheck";
-        }*/
+        }#1#
         
         var ray = new Ray(this.transform.position, this.transform.forward);
         RaycastHit hit;
@@ -175,7 +176,7 @@ public class testingform : MonoBehaviour
                     {
                         Debug.Log("hello");
                         enableCanvas1();
-                    }*/
+                    }#1#
                     if (_gazedAtObject.name == "ConfirmButton")
                     {
                         if (test != null)
@@ -305,7 +306,7 @@ public class testingform : MonoBehaviour
                     /*if (_gazedAtObject.name == "ButtonTest2")
                     {
                         GVRClick2.Invoke();
-                    }*/
+                    }#1#
                 }
             }
             else
@@ -345,3 +346,4 @@ public class testingform : MonoBehaviour
         OptionTest4.enabled = true;
     }
 }
+*/

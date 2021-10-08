@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Firebase.Database;
 using Firebase.Auth;
+using Firebase.Extensions;
 using UnityEngine.SceneManagement;
 
 public class FormSubmitScript : MonoBehaviour
@@ -18,22 +19,28 @@ public class FormSubmitScript : MonoBehaviour
     //FirebaseAuth auth;
     void Start()
     {
+        FirebaseDatabase.DefaultInstance.SetPersistenceEnabled(false);
         reference = FirebaseDatabase.DefaultInstance.RootReference;
+        
         InitializeFirebase();
         CountPatientSpiderData();
+        /*Invoke("InitializeFirebase",0.1f);
+        Invoke("CountPatientSpiderData",0.2f);*/
         //auth = FirebaseAuth.DefaultInstance;
     }
     Questionnaire questionnaire = new Questionnaire();
     
     public void CountPatientSpiderData()
     {
-        reference.Child("Questionnaires").Child(user.UserId).Child("Spider").GetValueAsync().ContinueWith(task =>
+        //reference.Child("Questionnaires").Child(user.UserId).Child("Spider").GetValueAsync().ContinueWithOnMainThread(task =>
+
+        reference.Child("Questionnaires").Child(user.UserId).Child("Spider").GetValueAsync().ContinueWithOnMainThread(task =>
         {
             if (task.IsCompleted)
             {
                 DataSnapshot snapshot = task.Result;
-                Debug.Log("Successful");
                 Debug.Log(snapshot.ChildrenCount.ToString());
+                Debug.Log("Successful");
                 if (snapshot.ChildrenCount == 0)
                 {
                     iterateNum = 1;
@@ -52,8 +59,60 @@ public class FormSubmitScript : MonoBehaviour
         });
 
     }
-    
-    
+
+    /*public void CountPatientSpiderData()
+    {
+        //reference.Child("Questionnaires").Child(user.UserId).Child("Spider").GetValueAsync().ContinueWithOnMainThread(task =>
+        reference.Child("Questionnaires").Child(user.UserId).Child("Spider").ValueChanged += HandleValueChanged;
+
+        void HandleValueChanged(object sender, ValueChangedEventArgs args)
+        {
+            if (args.DatabaseError != null)
+            {
+                Debug.LogError(args.DatabaseError.Message);
+            }
+            else
+            {
+                Debug.Log(args.Snapshot.ChildrenCount);
+                if (args.Snapshot.ChildrenCount == 0)
+                {
+                    iterateNum = 1;
+                    Debug.Log("Empty Children, now starting from 1");
+                }
+                else
+                {
+                    iterateNum = (int)args.Snapshot.ChildrenCount;
+                    iterateNum = iterateNum + 1;
+                }
+                /*reference.Child("Questionnaires").Child(user.UserId).Child("Spider").GetValueAsync()
+                    .ContinueWithOnMainThread(task =>
+                    {
+                        if (task.IsCompleted)
+                        {
+                            DataSnapshot snapshot = task.Result;
+                            Debug.Log(snapshot.ChildrenCount.ToString());
+                            Debug.Log("Successful");
+                            if (snapshot.ChildrenCount == 0)
+                            {
+                                iterateNum = 1;
+                                Debug.Log("Empty Children, now starting from 1");
+                            }
+                            else
+                            {
+                                iterateNum = (int)snapshot.ChildrenCount;
+                                iterateNum = iterateNum + 1;
+                            }
+                        }
+                        else
+                        {
+                            Debug.Log("Unsuccessful");
+                        }
+                    });#1#
+            }
+        }
+    }*/
+
+
     public void submitQuestionnaire()
     {
         string sumNum = (Q1.value + Q2.value + Q3.value + Q4.value + Q5.value + Q6.value + Q7.value +

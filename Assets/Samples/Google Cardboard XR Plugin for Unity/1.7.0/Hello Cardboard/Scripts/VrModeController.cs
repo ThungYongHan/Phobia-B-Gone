@@ -75,7 +75,7 @@ public class VrModeController : MonoBehaviour
     /// </summary>
     public void Update()
     {
-        if (_isVrModeEnabled)
+        /*if (_isVrModeEnabled)
         {
             /*if (Api.IsCloseButtonPressed)
             {
@@ -85,17 +85,17 @@ public class VrModeController : MonoBehaviour
             if (Api.IsGearButtonPressed)
             {
                 Api.ScanDeviceParams();
-            }*/
+            }#1#
             Api.UpdateScreenParams();
         }
         else
         {
-            /*// TODO(b/171727815): Add a button to switch to VR mode.
+            /#1#/ TODO(b/171727815): Add a button to switch to VR mode.
             if (_isScreenTouched)
             {
                 EnterVR();
-            }*/
-        }
+            }#1#
+        }*/
     }
 
     /// <summary>

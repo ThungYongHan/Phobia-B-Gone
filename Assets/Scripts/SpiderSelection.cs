@@ -11,7 +11,7 @@ public class SpiderSelection : MonoBehaviour
     // Start is called before the first frame update
     public void NextSpider()
     {
-        Debug.Log("dasdd");
+        //Debug.Log("dasdd");
         spiders[selectedSpider].SetActive(false);
         selectedSpider = (selectedSpider + 1) % spiders.Length;
         spiders[selectedSpider].SetActive(true);
@@ -28,9 +28,8 @@ public class SpiderSelection : MonoBehaviour
         spiders[selectedSpider].SetActive(true);
     }
     
-    public void StartSession()
+    public void SetSpider()
     {
         PlayerPrefs.SetInt("selectedSpider", selectedSpider);
-        // SceneManager.LoadScene("DemoScene");
     }
 }

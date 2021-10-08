@@ -26,7 +26,7 @@ public class SpiderGameScript : MonoBehaviour
     // private Slider slider;
     // slider filling speed
     //public float FillSpeed = 5f;
-    private float targetProgress = 0;
+    // private float targetProgress = 0;
     public GameObject test;
     /*private BoxCollider OptionTest0 = null;
     private BoxCollider OptionTest1 = null;

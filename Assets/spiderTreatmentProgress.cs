@@ -23,11 +23,12 @@ public class spiderTreatmentProgress : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        FirebaseDatabase.DefaultInstance.SetPersistenceEnabled(false);
         reference = FirebaseDatabase.DefaultInstance.RootReference;
-        //spider = FirebaseDatabase.DefaultInstance.
         InitializeFirebase();
         LoadPatientSpiderTreatmentData();
         GetPatientData();
+        ComparePatientData();
     }
 
     // Update is called once per frame
@@ -35,6 +36,166 @@ public class spiderTreatmentProgress : MonoBehaviour
     {
     }
 
+    public void ComparePatientData()
+    {
+                reference.Child("Questionnaires").Child(user.UserId).Child("Spider").GetValueAsync().ContinueWithOnMainThread(task =>
+        {
+            if (task.IsCompleted)
+            {
+                
+                DataSnapshot snapshot = task.Result;
+                Debug.Log("Successful");
+                
+                int treatmentCount = (int)snapshot.ChildrenCount;
+                string strtreatmentCount = treatmentCount.ToString();
+                Debug.Log(treatmentCount);
+                string test1= snapshot.Child("1").Child("AnswerScore").Value.ToString();
+                string test2 = snapshot.Child(strtreatmentCount).Child("AnswerScore").Value.ToString();
+                int test1num = int.Parse(test1);
+                int test2num = int.Parse(test2);
+                int firstminuslast = test1num - test2num;
+                string strfirstminuslast = firstminuslast.ToString(); 
+                
+                if (treatmentCount == 1)
+                {
+                    SpeechText.text = "Welcome to Phobia-B-Gone! Answer the FSQ after exposure tasks and see your progress over-time!";
+                }
+                else if (firstminuslast > 0)
+                {
+                    SpeechText.text = "Well done! Your FSQ score has improved by " + strfirstminuslast  + " since you started!";
+                }
+                else if (firstminuslast < 0)
+                {
+                    SpeechText.text = "Your FSQ score has dropped by " + strfirstminuslast  + " since you started, please rest if needed";
+                }
+                else
+                {
+                    SpeechText.text = "Your current FSQ score is the same as your initial score, use the app as much as you want!";
+                }
+            }
+            else
+            {
+                Debug.Log("Unsuccessful");
+            }
+        });
+        
+        
+        
+    }
+    
+    /*public void ComparePatientData()
+    {
+        reference.Child("Questionnaires").Child(user.UserId).Child("Spider").ValueChanged += HandleValueChanged;
+
+        void HandleValueChanged(object sender, ValueChangedEventArgs args)
+        {
+            if (args.DatabaseError != null)
+            {
+                Debug.LogError(args.DatabaseError.Message);
+            }
+            else
+            {
+                Debug.Log(args.Snapshot.ChildrenCount);
+                int treatmentCount = (int)args.Snapshot.ChildrenCount;
+                string strtreatmentCount = treatmentCount.ToString();
+                Debug.Log(treatmentCount);
+                string test1= args.Snapshot.Child("1").Child("AnswerScore").Value.ToString();
+                string test2 = args.Snapshot.Child(strtreatmentCount).Child("AnswerScore").Value.ToString();
+                int test1num = int.Parse(test1);
+                int test2num = int.Parse(test2);
+                int firstminuslast = test1num - test2num;
+                string strfirstminuslast = firstminuslast.ToString(); 
+                
+                if (treatmentCount == 1)
+                {
+                    SpeechText.text = "Welcome to Phobia-B-Gone! Answer the FSQ after exposure tasks and see your progress over-time!";
+                }
+                else if (firstminuslast > 0)
+                {
+                    SpeechText.text = "Well done! Your FSQ score has improved by " + strfirstminuslast  + " since you started!";
+                }
+                else if (firstminuslast < 0)
+                {
+                    SpeechText.text = "Your FSQ score has dropped by " + strfirstminuslast  + " since you started, please rest if needed";
+                }
+                else
+                {
+                    SpeechText.text = "Your current FSQ score is the same as your initial score, use the app as much as you want!";
+                }
+                /*reference.Child("Questionnaires").Child(user.UserId).Child("Spider").GetValueAsync()
+                    .ContinueWithOnMainThread(task =>
+                    {
+                        if (task.IsCompleted)
+                        {
+                            DataSnapshot snapshot = task.Result;
+                            Debug.Log(snapshot.ChildrenCount.ToString());
+                            Debug.Log("Successful");
+                            if (snapshot.ChildrenCount == 0)
+                            {
+                                iterateNum = 1;
+                                Debug.Log("Empty Children, now starting from 1");
+                            }
+                            else
+                            {
+                                iterateNum = (int)snapshot.ChildrenCount;
+                                iterateNum = iterateNum + 1;
+                            }
+                        }
+                        else
+                        {
+                            Debug.Log("Unsuccessful");
+                        }
+                    });#1#
+            }
+        }
+        
+        reference.Child("Questionnaires").Child(user.UserId).Child("Spider").GetValueAsync().ContinueWithOnMainThread(task =>
+        {
+            if (task.IsCompleted)
+            {
+                DataSnapshot snapshot = task.Result;
+                Debug.Log("Successful");
+                
+                int treatmentCount = (int)snapshot.ChildrenCount;
+                string strtreatmentCount = treatmentCount.ToString();
+                Debug.Log(treatmentCount);
+                string test1= snapshot.Child("1").Child("AnswerScore").Value.ToString();
+                string test2 = snapshot.Child(strtreatmentCount).Child("AnswerScore").Value.ToString();
+                int test1num = int.Parse(test1);
+                int test2num = int.Parse(test2);
+                int firstminuslast = test1num - test2num;
+                string strfirstminuslast = firstminuslast.ToString(); 
+                
+                if (treatmentCount == 1)
+                {
+                    SpeechText.text = "Welcome to Phobia-B-Gone! Answer the FSQ after exposure tasks and see your progress over-time!";
+                }
+                else if (firstminuslast > 0)
+                {
+                    SpeechText.text = "Well done! Your FSQ score has improved by " + strfirstminuslast  + " since you started!";
+                }
+                else if (firstminuslast < 0)
+                {
+                    SpeechText.text = "Your FSQ score has dropped by " + strfirstminuslast  + " since you started, please rest if needed";
+                }
+                else
+                {
+                    SpeechText.text = "Your current FSQ score is the same as your initial score, use the app as much as you want!";
+                }
+            }
+            else
+            {
+                Debug.Log("Unsuccessful");
+            }
+        });
+        
+        
+        
+    }
+    */
+    
+    
+    
     public void LoadPatientSpiderTreatmentData()
     {
         reference.Child("Questionnaires").Child(user.UserId).Child("Spider").GetValueAsync().ContinueWithOnMainThread(task =>
@@ -47,21 +208,21 @@ public class spiderTreatmentProgress : MonoBehaviour
                 
                 int treatmentCount = (int)snapshot.ChildrenCount;
                 string strtreatmentCount = treatmentCount.ToString();
-                
-                string test1= snapshot.Child("1").Child("AnswerScore").Value.ToString();
+                Debug.Log(treatmentCount);
+                /*string test1= snapshot.Child("1").Child("AnswerScore").Value.ToString();
                 string test2 = snapshot.Child(strtreatmentCount).Child("AnswerScore").Value.ToString();
                 int test1num = int.Parse(test1);
                 int test2num = int.Parse(test2);
                 int firstminuslast = test1num - test2num;
-                string strfirstminuslast = firstminuslast.ToString(); 
+                string strfirstminuslast = firstminuslast.ToString(); */
                 
                 for (int i = 1; i <= treatmentCount; i++)
-                {
+                {   
                     TreatmentProgressText.text += snapshot.Child(i.ToString()).Child("AnswerDateTime").Value.ToString() + "                   " 
                         + snapshot.Child(i.ToString()).Child("AnswerScore").Value.ToString() + "\n" + "\n";
                 }
                 
-                if (treatmentCount == 1)
+                /*if (treatmentCount == 1)
                 {
                     SpeechText.text = "Welcome to Phobia-B-Gone! Answer the FSQ after exposure tasks and see your progress over-time!";
                 }
@@ -77,7 +238,7 @@ public class spiderTreatmentProgress : MonoBehaviour
                 else
                 {
                     SpeechText.text = "Your current FSQ score is the same as your initial score, use the app as much as you want!";
-                }
+                }*/
             }
             else
             {
@@ -135,6 +296,11 @@ public class spiderTreatmentProgress : MonoBehaviour
     public void BackToMenuButton()
     {
         SceneManager.LoadScene("SpiderPhobiaMenu");
+    }
+    
+    public void AnswerFSQButton()
+    {
+        SceneManager.LoadScene("FirstSpiderEval");
     }
     
     // Handle initialization of the necessary firebase modules:

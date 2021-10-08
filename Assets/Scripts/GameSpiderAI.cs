@@ -116,7 +116,7 @@ public class GameSpiderAI : MonoBehaviour
 
     IEnumerator Avoid()
     {
-        Debug.Log("testing");
+        // Debug.Log("testing");
         float avoidTime = Random.Range(0.1f, 3.0f);
             isAvoiding = true;
             animator.SetBool("rotate", true);

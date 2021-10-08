@@ -45,8 +45,32 @@ public class WanderSpiderAI : MonoBehaviour
         
         if (isAvoiding == true)
         {
-            transform.position += transform.forward * 0.0002f;
-            transform.Rotate(transform.up * 2.0f);
+            int random = Random.Range(0, 4);
+            if (random == 0)
+            {
+                transform.position += transform.forward * 0.0001f;
+                transform.Rotate(transform.up * 2f);
+            }
+            else if (random == 1)
+            {
+                transform.position += transform.forward * 0f;
+                transform.Rotate(transform.up * 1.0f);
+            }
+            else if (random == 2)
+            {
+                transform.position += transform.forward * 0.0003f;
+                transform.Rotate(transform.up * 2.5f);
+            }
+            else if (random == 3)
+            {
+                transform.position += transform.forward * 0.00015f;
+                transform.Rotate(transform.up * 1.5f);
+            }
+            /*else if (random == 2)
+            {
+                transform.position += transform.forward * 0f;
+                transform.Rotate(transform.up * 1.5f);
+            }*/
             //transform.Rotate(transform.up * rotSpeed);
             /*int rotate = Random.Range(1, 3);
             if (rotate == 1)
@@ -105,6 +129,7 @@ public class WanderSpiderAI : MonoBehaviour
         {
             Debug.Log("testcold");
             animator.SetBool("rotate", false);
+            StopCoroutine(Avoid());
         }
     }
 

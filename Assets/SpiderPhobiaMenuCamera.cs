@@ -31,30 +31,29 @@ public class SpiderPhobiaMenuCamera : MonoBehaviour
     };
     
     public GameObject lasthit = null;
-    public GameObject DoctorCanvas;
+    private GameObject DoctorCanvas;
     private const float _maxDistance = 10;
     private GameObject _gazedAtObject = null;
     public Image imgCircle;
     public float totalTime = 2;
     private bool gazeStatus;
-    public float gazeTimer;
+    private float gazeTimer;
     
-    public SpiderSelection scriptC;
-    public VrModeController scriptD;
-    public GameObject GazeOptionPanel;
-    public GameObject PhobiaSelectionMenuPanel;
-    public GameObject GazePrePanel;
-    public GameObject GamePrePanel;
+    private SpiderSelection spiderSelectionScript;
+    private GameObject GazeOptionPanel;
+    private GameObject ArachnophobiaSelectionMenuPanel;
+    private GameObject GazePrePanel;
+    private GameObject GamePrePanel;
     
-    public GameObject test;
-    public GameObject test2;
+    private GameObject test;
+    private GameObject test2;
     
     public int selectedGazeSize = 1;
     public int selectedGazeNum = 1;
 
     /*private BoxCollider NextSpider = null;
     private BoxCollider PreviousSpider = null;*/
-    private BoxCollider TreatmentProgress = null;
+    // private BoxCollider TreatmentProgress = null;
     /*private BoxCollider GazeSmall = null;
     private BoxCollider GazeMedium = null;
     private BoxCollider GazeLarge = null;*/
@@ -66,25 +65,25 @@ public class SpiderPhobiaMenuCamera : MonoBehaviour
     private Button GazeLarge;
     private ColorBlock GazeColorL;
 
-    public GameObject demo;
+    private GameObject demo;
     private Button GazeNum1;
     private ColorBlock GazeColor1;
     private Button GazeNum3;
     private ColorBlock GazeColor3;
     private Button GazeNum5;
     private ColorBlock GazeColor5;
-    public GameObject Doctor;
-    public TextMeshPro SpeechBubbleText;
+    private GameObject Doctor;
+    public TextMeshPro BubbleText;
 
-    public GameObject GazeDoctor;
-    public GameObject GameDoctor;
-    public TextMeshPro SpiderGazeFactsText;
-    public TextMeshPro SpiderGameFactsText;
-    public TextMeshPro GazeInstructionText;
-    public TextMeshPro GazeRelaxtionText;
+    private GameObject GazeDoctor;
+    private GameObject GameDoctor;
+    private TextMeshPro SpiderGazeFactsText;
+    private TextMeshPro SpiderGameFactsText;
+    private TextMeshPro GazeInstructionText;
+    private TextMeshPro GazeRelaxtionText;
     
-    public TextMeshPro GameInstructionText;
-    public TextMeshPro GameRelaxtionText;
+    private TextMeshPro GameInstructionText;
+    private TextMeshPro GameRelaxtionText;
 
     public Camera mainCamera;
     void Start()
@@ -105,19 +104,16 @@ public class SpiderPhobiaMenuCamera : MonoBehaviour
         GameRelaxtionText.enabled = false;
         
         Doctor = GameObject.Find("SpeechBubble");
-        SpeechBubbleText = Doctor.transform.GetChild(0).GetComponent<TextMeshPro>();
+        //SpeechBubbleText = Doctor.transform.GetChild(0).GetComponent<TextMeshPro>();
         GazeDoctor = GameObject.Find("SpiderGazeFacts");
         SpiderGazeFactsText = GazeDoctor.transform.GetChild(0).GetComponent<TextMeshPro>();
         
         GameDoctor = GameObject.Find("SpiderGameFacts");
         SpiderGameFactsText = GameDoctor.transform.GetChild(0).GetComponent<TextMeshPro>();
-        // SpeechBubbleText.text = ("I hate myself");
         
         test2 = GameObject.Find("Main Camera");
-        scriptD = test2.GetComponent<VrModeController>();
-
         test = GameObject.Find("Spiders");
-        scriptC = test.GetComponent<SpiderSelection>();
+        spiderSelectionScript = test.GetComponent<SpiderSelection>();
         
         /*NextSpider = GameObject.Find("NextSpider").GetComponent<BoxCollider>();
         PreviousSpider = GameObject.Find("PreviousSpider").GetComponent<BoxCollider>();
@@ -142,13 +138,12 @@ public class SpiderPhobiaMenuCamera : MonoBehaviour
         
         // then reference the gameobject's script
         GazeOptionPanel = GameObject.Find("GazeOptionPanel");
-        PhobiaSelectionMenuPanel = GameObject.Find("PhobiaSelectionMenuPanel");
+        ArachnophobiaSelectionMenuPanel = GameObject.Find("ArachnophobiaSelectionMenuPanel");
         GazePrePanel = GameObject.Find("GazePrePanel");
         GazePrePanel.SetActive(false);
         
         GamePrePanel = GameObject.Find("GamePrePanel");
         GamePrePanel.SetActive(false);
-        //  Debug.Log(GazeOptionPanel);
         GazeOptionPanel.SetActive(false);
     }
     
@@ -158,30 +153,31 @@ public class SpiderPhobiaMenuCamera : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit, _maxDistance))
         {
-            lasthit = hit.transform.gameObject;
+            // lasthit = hit.transform.gameObject;
             gazeTimer += Time.deltaTime;
             imgCircle.fillAmount = gazeTimer / totalTime;
-            _gazedAtObject = lasthit;
-            if (_gazedAtObject == lasthit)
+            // _gazedAtObject = lasthit;
+            _gazedAtObject = hit.transform.gameObject;
+            if (_gazedAtObject == hit.transform.gameObject)
             {
                 // talk about how you let them view instructions?
                 if (gazeTimer < totalTime)
                 {
                     if (_gazedAtObject.name == "GazeExposureButton")
                     { 
-                        SpeechBubbleText.text = ("Exposure Session Where You Stare At Spiders");
+                        BubbleText.text = ("Exposure Session Where You Stare At Spiders");
                     }
                     if (_gazedAtObject.name == "GamifiedExposureButton")
                     { 
-                        SpeechBubbleText.text = ("Exposure Session Where You Try To Find Spiders");
+                        BubbleText.text = ("Exposure Session Where You Try To Find Spiders");
                     }
                     if (_gazedAtObject.name == "TreatmentProgress")
                     { 
-                        SpeechBubbleText.text = ("View Your Overall Treatment Progress");
+                        BubbleText.text = ("View Your Overall Treatment Progress");
                     }
                     if (_gazedAtObject.name == "BackSceneButton")
                     {
-                        SpeechBubbleText.text = ("Go Back To Phobia Selection Menu");
+                        BubbleText.text = ("Go Back To Phobia Selection Menu");
                     }
                 }
 
@@ -245,14 +241,17 @@ public class SpiderPhobiaMenuCamera : MonoBehaviour
                     
                     if (_gazedAtObject.name == "GazeStart")
                     {
-                        scriptC.StartSession();
-                        SceneManager.LoadScene("SpiderExposureTaskScene");
+                        //spiderSelectionScript.StartSession();
+                        //SceneManager.LoadScene("SpiderExposureTaskScene");
+                        //SceneManager.LoadScene("GazeOptionPanel");
+                        GazePrePanel.SetActive(false);
+                        GazeOptionPanel.SetActive(true);
                         gazeTimer = 0;
                     }
 
                     if (_gazedAtObject.name == "GameStart")
                     {
-                        scriptC.StartSession();
+                        spiderSelectionScript.SetSpider();
                         SceneManager.LoadScene("SpiderBathroom");
                         gazeTimer = 0;
                     }
@@ -260,7 +259,7 @@ public class SpiderPhobiaMenuCamera : MonoBehaviour
                     if (_gazedAtObject.name == "GameBack")
                     {
                         GamePrePanel.SetActive(false);
-                        PhobiaSelectionMenuPanel.SetActive(true);
+                        ArachnophobiaSelectionMenuPanel.SetActive(true);
                         gazeTimer = 0;
                     }
                     
@@ -268,8 +267,8 @@ public class SpiderPhobiaMenuCamera : MonoBehaviour
                     {
                         //GazePrePanel.SetActive(true);
                         DoctorCanvas.SetActive(false);
-                        GazeOptionPanel.SetActive(true);
-                        PhobiaSelectionMenuPanel.SetActive(false);
+                        GazePrePanel.SetActive(true);
+                        ArachnophobiaSelectionMenuPanel.SetActive(false);
                         gazeTimer = 0;
                     }
                     
@@ -278,7 +277,7 @@ public class SpiderPhobiaMenuCamera : MonoBehaviour
                         //GazePrePanel.SetActive(true);
                         DoctorCanvas.SetActive(false);
                         GamePrePanel.SetActive(true);
-                        PhobiaSelectionMenuPanel.SetActive(false);
+                        ArachnophobiaSelectionMenuPanel.SetActive(false);
                         gazeTimer = 0;
                     }
                     
@@ -295,7 +294,7 @@ public class SpiderPhobiaMenuCamera : MonoBehaviour
                     if (_gazedAtObject.name == "NextSpider")
                     {
                         //NextSpider.enabled = false;
-                        scriptC.NextSpider();
+                        spiderSelectionScript.NextSpider();
                         // this code is genius and totally unexpected
                         // it works because when you reset the timer, the timer starts again from 0 and it will have to wait until it is >2 seconds,
                         // making it look seamless when gazing at the same thing for a long time where it will enable and disable automatically
@@ -305,7 +304,7 @@ public class SpiderPhobiaMenuCamera : MonoBehaviour
                     
                     if (_gazedAtObject.name == "PreviousSpider")
                     { 
-                        scriptC.PreviousSpider();
+                        spiderSelectionScript.PreviousSpider();
                         //PreviousSpider.enabled = false;
                         gazeTimer = 0;
                     }
@@ -394,10 +393,10 @@ public class SpiderPhobiaMenuCamera : MonoBehaviour
                     {
                         PlayerPrefs.SetInt("selectedGazeSize", selectedGazeSize);
                         PlayerPrefs.SetInt("selectedGazeNum", selectedGazeNum);
-                        
-                        
-                        GazePrePanel.SetActive(true);
-                        GazeOptionPanel.SetActive(false);
+                        spiderSelectionScript.SetSpider();
+                        SceneManager.LoadScene("SpiderExposureTaskScene");
+                        //GazePrePanel.SetActive(true);
+                        // GazeOptionPanel.SetActive(false);
                         //scriptC.StartSession();
                         gazeTimer = 0;
                     }
@@ -405,7 +404,7 @@ public class SpiderPhobiaMenuCamera : MonoBehaviour
                     if (_gazedAtObject.name == "GazeCancel")
                     {
                         GazeOptionPanel.SetActive(false);
-                        PhobiaSelectionMenuPanel.SetActive(true);
+                        ArachnophobiaSelectionMenuPanel.SetActive(true);
                         gazeTimer = 0;
                     }
                     

@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 
@@ -11,19 +12,21 @@ public class SpiderGazeExposure : MonoBehaviour
 {
     /*public Canvas myCanvas1;
     public Canvas myCanvas2;*/
-    public Canvas myCanvas3;
-
+    public TextMeshPro BubbleText;
+    public Canvas BackToMainMenuCanvas;
+    public Canvas ProgressCanvas;
+    public GameObject DoctorCanvas;
     public GameObject lasthit = null;
-    //private const float _maxDistance = 10;
+    private const float maxDistance = 10;
     private GameObject _gazedAtObject = null;
     public Image imgCircle;
     public float totalTime = 2;
-    [FormerlySerializedAs("gvrTimer")] public float gazeTimer;
+    public float gazeTimer;
     private GameObject parent;
-    private Slider slider;
+    public Slider slider;
     // slider filling speed
-    public float FillSpeed = 0.5f;
-    private float targetProgress = 0;
+    public float FillSpeed = 2f;
+    private float targetProgress = 100f;
     
     /*private BoxCollider OptionTest0 = null;
     private BoxCollider OptionTest1 = null;
@@ -35,8 +38,8 @@ public class SpiderGazeExposure : MonoBehaviour
     private BoxCollider CancelButton = null;
     private BoxCollider ConfirmButton = null;*/
     
-    private TMPro.TextMeshProUGUI numTest;
-    private TMPro.TextMeshProUGUI numTest2;
+    private TextMeshProUGUI numTest;
+    private TextMeshProUGUI numTest2;
     // private TextMeshPro testText;
     
     public GameObject test;
@@ -44,7 +47,7 @@ public class SpiderGazeExposure : MonoBehaviour
     //public JSONReadandWrite scriptB;
     public GameObject testObject;
 
-    private int chosenOption = 0;
+    // private int chosenOption = 0;
     
     /*private Button theButton0;
     private ColorBlock theColor0;
@@ -61,6 +64,7 @@ public class SpiderGazeExposure : MonoBehaviour
 
     private void Awake()
     {
+        BackToMainMenuCanvas.enabled = false;
         test = GameObject.Find("HiddenCanvas");
         test2 = GameObject.Find("HiddenCanvas");
         if (test != null)
@@ -69,7 +73,6 @@ public class SpiderGazeExposure : MonoBehaviour
             //scriptB = test.GetComponent<JSONReadandWrite>();
         }
         //scriptB.SaveToJson();
-
         /*theButton0 = GameObject.Find("OptionTest0").GetComponent<Button>();
         theColor0 = theButton0.colors;
         
@@ -121,14 +124,14 @@ public class SpiderGazeExposure : MonoBehaviour
         
         /*myCanvas1 = GameObject.Find("FormCanvas").GetComponent<Canvas>();
         myCanvas2 = GameObject.Find("HiddenCanvas").GetComponent<Canvas>();*/
-        myCanvas3 = GameObject.Find("ProgressCanvas").GetComponent<Canvas>();
+        ProgressCanvas = GameObject.Find("ProgressCanvas").GetComponent<Canvas>();
         
         /*myCanvas1.enabled = false;
         myCanvas2.enabled = false;
         */
         
         parent = GameObject.Find("ProgressCanvas");
-        slider = parent.transform.GetChild(0).GetComponent<Slider>();
+        // slider = parent.transform.GetChild(0).GetComponent<Slider>();
         // enable canvas in editor then disable canvas in awake in order to reference it
         //myCanvas = GameObject.Find("HiddenCanvas").GetComponent<Canvas>();
         //myCanvas.enabled = false;
@@ -138,21 +141,53 @@ public class SpiderGazeExposure : MonoBehaviour
     {
         var ray = new Ray(this.transform.position, this.transform.forward);
         RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, 10000))
+        if (Physics.Raycast(ray, out hit, maxDistance))
         {
-            lasthit = hit.transform.gameObject;
+            /*lasthit = hit.transform.gameObject;
+            gazeTimer += Time.deltaTime; 
+            _gazedAtObject = lasthit;*/ 
+            // this is important to not trigger raycast with non spider objects
+            
+            _gazedAtObject = hit.transform.gameObject;
             gazeTimer += Time.deltaTime;
-            _gazedAtObject = lasthit;
             if (sliderMax == false)
             {
-                //Debug.Log("checking");
                 InsectGazing();
                 //DisableCanvas1();
             }
             else
             {
-                // enable the hidden canvas
-                myCanvas3.enabled = false;
+                ProgressCanvas.enabled = false;
+                /*
+                imgCircle.fillAmount = gazeTimer / totalTime;
+                _gazedAtObject = lasthit;
+                if (_gazedAtObject.name == "BackToMainMenuButton")
+                {
+                    if (gazeTimer > totalTime)
+                    {
+                        if (_gazedAtObject.name == "BackToMainMenuButton")
+                        {
+                            SceneManager.LoadScene("SpiderPhobiaMenu");
+                        }
+                    }
+                }
+                else
+                {
+                    imgCircle.fillAmount = 0;
+                }*/
+                /*imgCircle.fillAmount = gazeTimer / totalTime;
+                _gazedAtObject = lasthit;
+                if (gazeTimer > totalTime)
+                {
+                    if (_gazedAtObject.name == "BackToMainMenuButton")
+                    {
+                        SceneManager.LoadScene("SpiderPhobiaMenu");
+                    }
+                }
+                else
+                {
+                    imgCircle.fillAmount = 0;
+                }*/
                 //FormGazing();
                 // this is crucial, need to set if(myCanvas1.enabled == false) so that enableCanvas1() is not called each frame, which previously
                 // would have disabled "Confirm" and "Select" buttons in
@@ -177,26 +212,71 @@ public class SpiderGazeExposure : MonoBehaviour
         {
             slider.value += FillSpeed * Time.deltaTime;
         }
-        // when the slider is fully filled
-        if (slider.value == 1.0f)
+        
+        if (slider.value < 5f)
         {
+            BubbleText.text = "Gaze at the spiders to fill the progress bar!";
+        }
+        if (slider.value > 15f)
+        {
+            BubbleText.text = "Keep it up!";
+        }
+        if (slider.value > 25f)
+        {
+            BubbleText.text = "Take it slow if you need to!";
+        }
+        if (slider.value > 35f)
+        {
+            BubbleText.text = "Spiders actually eat more insects than birds and bats combined!";
+        }
+        if (slider.value > 45f)
+        {
+            BubbleText.text = "By eating pests like fleas and mosquitoes, spiders can prevent the spread of disease!";
+        }
+        if (slider.value > 55f)
+        {
+            BubbleText.text = "You are doing great!";
+        }
+        if (slider.value > 65f)
+        {
+            BubbleText.text = "You can always exit the gaze exposure task!";
+        }
+        if (slider.value > 75f)
+        {
+            BubbleText.text = "You are progressing really well!";
+        }
+        if (slider.value > 85f)
+        {
+            BubbleText.text = "Almost there!";
+        }
+
+        // when the slider is fully filled
+        if (slider.value == 100.0f)
+        {
+            BackToMainMenuCanvas.enabled = true;
             sliderMax = true;
+            BubbleText.text = "The progress bar is fully filled! Well done!";
         }
         if (_gazedAtObject.name != "Plane" && _gazedAtObject.name != "table_2" && _gazedAtObject.name != "TableColliders")
         {
-            IncrementProgress(1.0f);
-            imgCircle.fillAmount = gazeTimer / totalTime;
-            if (gazeTimer > totalTime)
+            // IncrementProgress(2.0f);
+            IncrementProgress(50.0f);
+            // imgCircle.fillAmount = gazeTimer / totalTime;
+            /*if (gazeTimer > totalTime)
             {
+                if (_gazedAtObject.name == "BackToMainMenuButton")
+                {
+                    SceneManager.LoadScene("SpiderPhobiaMenu");
+                }
                 Debug.Log("You are looking at the spider!");
-            }
+            }*/
         }
         else
         {
             IncrementProgress(0.0f);
             _gazedAtObject = null;
             gazeTimer = 0;
-            imgCircle.fillAmount = 0;
+            // imgCircle.fillAmount = 0;
         }
     }
 

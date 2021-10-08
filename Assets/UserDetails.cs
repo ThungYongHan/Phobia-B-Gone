@@ -5,7 +5,7 @@ using UnityEngine;
 public class UserDetails
 {
     public string Username;
-    public string Password;
+    //public string Password;
     public string Email;
 }
 

@@ -1,3 +1,4 @@
+/*
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -16,7 +17,7 @@ public class JSONReadandWrite : MonoBehaviour
         public int EvalChoice;
         public string CurrentDate;
         public string CurrentTime;
-    }*/
+    }#1#
     // public int IdInput = 0;
     public string ScenarioInput;
     public int InsectRealismInput;
@@ -46,38 +47,38 @@ public class JSONReadandWrite : MonoBehaviour
         pat.patients = listOfPatients.ToArray();
 
         // This will be the new json
-        string newJsonString = JsonUtility.ToJson(pat);*/
+        string newJsonString = JsonUtility.ToJson(pat);#1#
         /*PatientData data = new PatientData();
         data.Id = IdInput;
         data.Scenario = ScenarioInput;
         data.EvalChoice = EvalInput;
         data.CurrentDate = DateInput;
-        data.CurrentTime = TimeInput;*/
+        data.CurrentTime = TimeInput;#1#
         /*patientInstance[1] = new PatientData();
         patientInstance[1].Id = IdInput;
         patientInstance[1].Scenario = ScenarioInput;
         patientInstance[1].EvalChoice = EvalInput;
         patientInstance[1].CurrentDate = DateInput;
-        patientInstance[1].CurrentTime = DateInput;*/
+        patientInstance[1].CurrentTime = DateInput;#1#
         /*patientInstance[1] = new PatientData();
         patientInstance[1].Id = IdInput + 1;
         patientInstance[1].Scenario = ScenarioInput;
         patientInstance[1].EvalChoice = EvalInput;
         patientInstance[1].CurrentDate = DateInput;
-        patientInstance[1].CurrentTime = DateInput;*/
+        patientInstance[1].CurrentTime = DateInput;#1#
         /*PatientCollection newF = new PatientCollection();
-        newF.*/
+        newF.#1#
         // get filepath
        // #if UNITY_EDITOR
        // string filePath = Application.dataPath + "/SpiderPatientDataFile.json";
         //#endif
         /*#if UNITY_EDITOR
          string filePath = Application.dataPath + "/SpiderTestPatientDataFile.json";
-        #endif*/
+        #endif#1#
         /*#if UNITY_ANDROID
             //string filePath2 = Application.persistentDataPath + "/SpiderTestPatientDataFile.json";
             string  filePath2 = Path.Combine(Application.persistentDataPath, "SpiderTestPatientDataFile.json");
-        #endif*/
+        #endif#1#
         //#if UNITY_ANDROID
        //string filePath = Application.persistentDataPath + "SpiderPatientDataFile.json";
         //#endif
@@ -101,7 +102,7 @@ public class JSONReadandWrite : MonoBehaviour
             newF.EvalChoice = 1;
             patientInstance[1].CurrentDate = DateInput;
             patientInstance[1].CurrentTime = DateInput;
-            */
+            #1#
             PatientCollection newPat = new PatientCollection();
             //newPat.username = "testingspider";
             
@@ -113,7 +114,7 @@ public class JSONReadandWrite : MonoBehaviour
             thisQ.Scenario = "question.question";
             thisQ.EvalChoice = 1;
             thisQ.CurrentDate = DateInput;
-            thisQ.CurrentTime = DateInput;*/
+            thisQ.CurrentTime = DateInput;#1#
             string parentData = JsonUtility.ToJson(newPat, true);
             File.WriteAllText(filePath, parentData);
         }
@@ -133,7 +134,7 @@ public class JSONReadandWrite : MonoBehaviour
             newF.EvalChoice = 1;
             patientInstance[1].CurrentDate = DateInput;
             patientInstance[1].CurrentTime = DateInput;
-            */
+            #1#
             PatientCollection newPat = new PatientCollection();
             //newPat.username = "testingspider";
             // create Json array (empty) this should only run once - move it to initialize 
@@ -144,7 +145,7 @@ public class JSONReadandWrite : MonoBehaviour
             thisQ.Scenario = "question.question";
             thisQ.EvalChoice = 1;
             thisQ.CurrentDate = DateInput;
-            thisQ.CurrentTime = DateInput;*/
+            thisQ.CurrentTime = DateInput;#1#
             string parentData = JsonUtility.ToJson(newPat, true);
             File.WriteAllText(filePath2, parentData);
         }
@@ -157,18 +158,18 @@ public class JSONReadandWrite : MonoBehaviour
          thisQ.CurrentDate = DateInput;
          thisQ.CurrentTime = DateInput;
          string parentData = JsonUtility.ToJson(thisQ, true);
-         File.WriteAllText(filePath, parentData);*/
+         File.WriteAllText(filePath, parentData);#1#
            /*Debug.Log("hello");
            PatientData thisQ = new PatientData();
            thisQ.Id = 1;
            thisQ.Scenario = "question.question";
            thisQ.EvalChoice = 1;
            thisQ.CurrentDate = DateInput;
-           thisQ.CurrentTime = DateInput;*/
+           thisQ.CurrentTime = DateInput;#1#
            /*QuestionSchema thisQ = new QuestionSchema();
            thisQ.questionNo = 1;
            thisQ.question = question.question;
-           thisQ.givenAnswer = answer;*/
+           thisQ.givenAnswer = answer;#1#
            // File.WriteAllText(Application.dataPath + "/PatientDataFile.json", json);
         //File.AppendAllText(Application.dataPath + "/PatientDataFile.json", playerToJson);
     }
@@ -246,7 +247,7 @@ public class JSONReadandWrite : MonoBehaviour
         // Debug.Log(patient[0].CurrentTime);
         // txt is a public string, so we save the CurrentTime of patient[0] into it
         /*if (0 < patient.Length)
-            txt = "nodatayet";*/
+            txt = "nodatayet";#1#
             //return txt;
              //txt = patient[0].CurrentTime;
             // Debug.Log(patient[0].CurrentTime);
@@ -274,7 +275,7 @@ public class JSONReadandWrite : MonoBehaviour
             /*PatientData data = JsonUtility.FromJson<PatientData>(json);
             IdInput = data.Id;
             ScenarioInput = data.Scenario;
-            EvalInput = data.EvalChoice;*/
+            EvalInput = data.EvalChoice;#1#
             //DateTimeInput = data.CurrentDateTime;
         #endif
            
@@ -303,3 +304,4 @@ public class JSONReadandWrite : MonoBehaviour
         
     }
 }
+*/
