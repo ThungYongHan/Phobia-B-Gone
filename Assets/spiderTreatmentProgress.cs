@@ -38,7 +38,7 @@ public class spiderTreatmentProgress : MonoBehaviour
 
     public void ComparePatientData()
     {
-                reference.Child("Questionnaires").Child(user.UserId).Child("Spider").GetValueAsync().ContinueWithOnMainThread(task =>
+        reference.Child("Questionnaires").Child(user.UserId).Child("Spider").GetValueAsync().ContinueWithOnMainThread(task =>
         {
             if (task.IsCompleted)
             {
@@ -215,13 +215,11 @@ public class spiderTreatmentProgress : MonoBehaviour
                 int test2num = int.Parse(test2);
                 int firstminuslast = test1num - test2num;
                 string strfirstminuslast = firstminuslast.ToString(); */
-                
                 for (int i = 1; i <= treatmentCount; i++)
                 {   
                     TreatmentProgressText.text += snapshot.Child(i.ToString()).Child("AnswerDateTime").Value.ToString() + "                   " 
                         + snapshot.Child(i.ToString()).Child("AnswerScore").Value.ToString() + "\n" + "\n";
                 }
-                
                 /*if (treatmentCount == 1)
                 {
                     SpeechText.text = "Welcome to Phobia-B-Gone! Answer the FSQ after exposure tasks and see your progress over-time!";
@@ -262,7 +260,6 @@ public class spiderTreatmentProgress : MonoBehaviour
                 Debug.Log("Unsuccessful");
             }
         });
-        
         /*FirebaseDatabase.DefaultInstance.GetReference("Questionnaires")
             .GetValueAsync().ContinueWithOnMainThread(task => {
                 if (task.IsFaulted) {

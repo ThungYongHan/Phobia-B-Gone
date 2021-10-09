@@ -283,7 +283,7 @@ public class SpiderPhobiaMenuCamera : MonoBehaviour
                     
                     if (_gazedAtObject.name == "BackSceneButton")
                     {
-                       SceneManager.LoadScene("2dphobiaselectmenu");
+                       SceneManager.LoadScene("PhobiaSelectMenu");
                     }
                     
                     if (_gazedAtObject.name == "TreatmentProgress")
