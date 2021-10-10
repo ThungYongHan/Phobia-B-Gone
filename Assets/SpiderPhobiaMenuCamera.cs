@@ -30,7 +30,7 @@ public class SpiderPhobiaMenuCamera : MonoBehaviour
         "Less than 0.5% of spider species are considered as potentially dangerous to humans."
     };
     
-    public GameObject lasthit = null;
+    //public GameObject lasthit = null;
     private GameObject DoctorCanvas;
     private const float _maxDistance = 10;
     private GameObject _gazedAtObject = null;

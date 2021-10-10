@@ -5,36 +5,6 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
-    path: Assets/BigFurniturePack/Demo/demo.unity
-    guid: 1d4ec92269d4f9e4a9419f03b6748af4
-  - enabled: 0
-    path: Assets/Scenes/testrotate.unity
-    guid: 3c01f2767657ab74dae225b7ae46059b
-  - enabled: 0
-    path: Assets/Scenes/testform.unity
-    guid: 076c8ff271386c34aab226672ca3758f
-  - enabled: 0
-    path: Assets/Scenes/openingtestsplash.unity
-    guid: 2d6ab5713ca9c6f4abc5dc0d9b5079e6
-  - enabled: 0
-    path: Assets/Scenes/gazescenetest.unity
-    guid: dd49aca29d56d0e408d748c8796c62d4
-  - enabled: 0
-    path: Assets/Scenes/warningsplash.unity
-    guid: 203827d802411204489744ef6eb1dd98
-  - enabled: 0
-    path: Assets/LowPolyInterior/Scenes/LowPolyInterior_Demo.unity
-    guid: be7da2d78e467814186fe24a4e542b91
-  - enabled: 0
-    path: 
-    guid: 00000000000000000000000000000000
-  - enabled: 0
-    path: Assets/Scenes/AuthSampleScene.unity
-    guid: 931cdd1fdb6b0e442b5903fdf664b287
-  - enabled: 0
-    path: Assets/Scenes/SampleScene.unity
-    guid: b0c6151a93cdd7c4d8e7bcc59101ffad
   - enabled: 1
     path: Assets/Scenes/LogInSignUp.unity
     guid: df3c8357a6f8a3b41ba3571f8cfd66b3
@@ -47,9 +17,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/SpiderPhobiaMenu.unity
     guid: dd7fa4f1c48883946b14cc63738fc4aa
-  - enabled: 0
-    path: Assets/SpiderTreatmentProgressVR.unity
-    guid: 1757201842f785e45a65bfdacf5e091c
   - enabled: 1
     path: Assets/Scenes/SpiderExposureTaskScene.unity
     guid: f3fe616c026b5db4cb7edc47d441a24a

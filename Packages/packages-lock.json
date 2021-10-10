@@ -10,24 +10,6 @@
       },
       "hash": "3d41af91480a8fc57eec843f33888cd00e8570f2"
     },
-    "com.unity.ads": {
-      "version": "3.4.5",
-      "depth": 0,
-      "source": "registry",
-      "dependencies": {
-        "com.unity.ugui": "1.0.0"
-      },
-      "url": "https://packages.unity.com"
-    },
-    "com.unity.analytics": {
-      "version": "3.3.5",
-      "depth": 0,
-      "source": "registry",
-      "dependencies": {
-        "com.unity.ugui": "1.0.0"
-      },
-      "url": "https://packages.unity.com"
-    },
     "com.unity.collab-proxy": {
       "version": "1.5.7",
       "depth": 0,
@@ -108,13 +90,6 @@
       "dependencies": {
         "com.unity.settings-manager": "1.0.2"
       },
-      "url": "https://packages.unity.com"
-    },
-    "com.unity.purchasing": {
-      "version": "2.0.6",
-      "depth": 0,
-      "source": "registry",
-      "dependencies": {},
       "url": "https://packages.unity.com"
     },
     "com.unity.settings-manager": {
