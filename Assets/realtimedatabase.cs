@@ -1,3 +1,4 @@
+/*
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -61,7 +62,7 @@ public class realtimedatabase : MonoBehaviour
                 Debug.Log("Unsuccessful");
             }
         });
-    }*/
+    }#1#
 
     public void Read_Data()
     {
@@ -83,3 +84,4 @@ public class realtimedatabase : MonoBehaviour
         });
     }
 }
+*/

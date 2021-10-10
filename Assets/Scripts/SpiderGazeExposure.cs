@@ -10,13 +10,16 @@ using UnityEngine.UI;
 
 public class SpiderGazeExposure : MonoBehaviour
 {
+    private int gazeVirtualTherapistToggle;
+    public GameObject CuteSpiderGaze, NormalSpiderGaze, RealisticSpiderGaze;
+
     /*public Canvas myCanvas1;
     public Canvas myCanvas2;*/
     public TextMeshPro BubbleText;
     public Canvas BackToMainMenuCanvas;
     public Canvas ProgressCanvas;
     public GameObject DoctorCanvas;
-    public GameObject lasthit = null;
+    //public GameObject lasthit = null;
     private const float maxDistance = 10;
     private GameObject _gazedAtObject = null;
     public Image imgCircle;
@@ -64,14 +67,24 @@ public class SpiderGazeExposure : MonoBehaviour
 
     private void Awake()
     {
+        gazeVirtualTherapistToggle = PlayerPrefs.GetInt("gazeVirtualTherapistToggle");
+        if (gazeVirtualTherapistToggle == 1)
+        {
+            DoctorCanvas.SetActive(true);
+        }
+        else
+        {
+            DoctorCanvas.SetActive(false);
+        }
+
         BackToMainMenuCanvas.enabled = false;
         test = GameObject.Find("HiddenCanvas");
         test2 = GameObject.Find("HiddenCanvas");
-        if (test != null)
+        /*if (test != null)
         {
             // then reference the gameobject's script
             //scriptB = test.GetComponent<JSONReadandWrite>();
-        }
+        }*/
         //scriptB.SaveToJson();
         /*theButton0 = GameObject.Find("OptionTest0").GetComponent<Button>();
         theColor0 = theButton0.colors;
@@ -131,6 +144,9 @@ public class SpiderGazeExposure : MonoBehaviour
         */
         
         parent = GameObject.Find("ProgressCanvas");
+        /*CuteSpiderGaze.SetActive(false);
+        NormalSpiderGaze.SetActive(false);
+        RealisticSpiderGaze.SetActive(false);*/
         // slider = parent.transform.GetChild(0).GetComponent<Slider>();
         // enable canvas in editor then disable canvas in awake in order to reference it
         //myCanvas = GameObject.Find("HiddenCanvas").GetComponent<Canvas>();
@@ -147,12 +163,18 @@ public class SpiderGazeExposure : MonoBehaviour
             gazeTimer += Time.deltaTime; 
             _gazedAtObject = lasthit;*/ 
             // this is important to not trigger raycast with non spider objects
-            
             _gazedAtObject = hit.transform.gameObject;
             gazeTimer += Time.deltaTime;
             if (sliderMax == false)
             {
                 InsectGazing();
+                if (gazeTimer > totalTime)
+                {
+                    if (_gazedAtObject.name == "Bed")
+                    {
+                        gazeTimer = 0;
+                    }
+                }
                 //DisableCanvas1();
             }
             else
@@ -217,29 +239,33 @@ public class SpiderGazeExposure : MonoBehaviour
         {
             BubbleText.text = "Gaze at the spiders to fill the progress bar!";
         }
-        if (slider.value > 15f)
+        if (slider.value > 10f)
         {
-            BubbleText.text = "Keep it up!";
+            BubbleText.text = "You can always exit the gaze exposure task by gazing at the bed at the back!";
         }
-        if (slider.value > 25f)
+        if (slider.value > 20f)
         {
             BubbleText.text = "Take it slow if you need to!";
         }
-        if (slider.value > 35f)
+        if (slider.value > 25f)
+        {
+            BubbleText.text = "Take deep breaths to calm yourself down if you are feeling distressed";
+        }
+        if (slider.value > 30f)
         {
             BubbleText.text = "Spiders actually eat more insects than birds and bats combined!";
         }
         if (slider.value > 45f)
         {
-            BubbleText.text = "By eating pests like fleas and mosquitoes, spiders can prevent the spread of disease!";
+            BubbleText.text = "You are doing great!";
         }
         if (slider.value > 55f)
         {
-            BubbleText.text = "You are doing great!";
+            BubbleText.text = "By eating pests like fleas and mosquitoes, spiders can prevent the spread of disease!";
         }
         if (slider.value > 65f)
         {
-            BubbleText.text = "You can always exit the gaze exposure task!";
+            BubbleText.text = "Keep it up!";
         }
         if (slider.value > 75f)
         {
@@ -257,7 +283,7 @@ public class SpiderGazeExposure : MonoBehaviour
             sliderMax = true;
             BubbleText.text = "The progress bar is fully filled! Well done!";
         }
-        if (_gazedAtObject.name != "Plane" && _gazedAtObject.name != "table_2" && _gazedAtObject.name != "TableColliders")
+        if (_gazedAtObject.name != "Plane" && _gazedAtObject.name != "table_2" && _gazedAtObject.name != "TableColliders" && _gazedAtObject.name != "Bed")
         {
             // IncrementProgress(2.0f);
             IncrementProgress(50.0f);

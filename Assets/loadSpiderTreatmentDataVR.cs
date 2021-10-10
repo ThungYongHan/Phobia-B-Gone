@@ -1,3 +1,4 @@
+/*
 using System.Collections;
 using System.Collections.Generic;
 using Firebase.Auth;
@@ -73,3 +74,4 @@ public class loadSpiderTreatmentDataVR : MonoBehaviour
         });
     }
 }
+*/

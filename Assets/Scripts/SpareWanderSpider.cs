@@ -1,3 +1,4 @@
+/*
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -36,7 +37,7 @@ public class SpareWanderSpider : MonoBehaviour
         if (isWalking == true)
         {
             transform.position += transform.forward * moveSpeed;
-        }*/
+        }#1#
         //collid = GetComponent<Collider>();
         //id = GetInstanceID();
     }
@@ -81,22 +82,22 @@ public class SpareWanderSpider : MonoBehaviour
             /*if (isWandering == false)
             {
                 StartCoroutine(Wander());
-            }*/
+            }#1#
 
             /*if (isRotatingRight == true)
             {
                 transform.Rotate(transform.up * rotSpeed);
-            }*/
+            }#1#
             
             /*if (isRotatingLeft == true)
             {
                 transform.Rotate(transform.up * -rotSpeed);
-            }*/
+            }#1#
 
             /*if (isWalking == true)
             {
                 transform.position += transform.forward * moveSpeed;
-            }*/
+            }#1#
  
         }
     }
@@ -135,7 +136,7 @@ public class SpareWanderSpider : MonoBehaviour
             Debug.Log("collide");
         }
 
-    }*/
+    }#1#
     
     IEnumerator Wander()
     {
@@ -143,7 +144,7 @@ public class SpareWanderSpider : MonoBehaviour
         int rotateWait = Random.Range(1,4);
         int rotateLorR = Random.Range(0, 3);
         int walkWait = Random.Range(1, 4);
-        int walkTime = Random.Range(1, 3);*/
+        int walkTime = Random.Range(1, 3);#1#
         float rotTime = Random.Range(0.1f,1.0f);
         float rotateWait = Random.Range(0.1f,0.3f);
         float rotateLorR = Random.Range(1, 3);
@@ -195,7 +196,7 @@ public class SpareWanderSpider : MonoBehaviour
         {
             transform.position += transform.forward * moveSpeed;
         }
-    }*/
+    }#1#
 
     /*private void OnCollisionEnter(Collision dataFromCollision)
     {
@@ -215,7 +216,7 @@ public class SpareWanderSpider : MonoBehaviour
         /*if (isRotatingLeft == true)
         {
             transform.Rotate(transform.right * -rotSpeed);
-        }#1#
+        }#2#
         /*if (isRotatingRight == true)
         {
             transform.Rotate(transform.up * rotSpeed);
@@ -224,14 +225,14 @@ public class SpareWanderSpider : MonoBehaviour
         if (isRotatingLeft == true)
         {
             transform.Rotate(transform.up * -rotSpeed);
-        }#1#
+        }#2#
 
         if (isWalking == true)
         {
             transform.position += transform.forward * moveSpeed;
         }
         
-        /*if (dataFromCollision.gameObject.GetInstanceID() != id)#1#
+        /*if (dataFromCollision.gameObject.GetInstanceID() != id)#2#
         if (dataFromCollision.gameObject.name == "2spider")
         {
             Debug.Log("HIT SPIDER");
@@ -256,5 +257,6 @@ public class SpareWanderSpider : MonoBehaviour
             }
         }
         
-    }*/
+    }#1#
 }
+*/

@@ -11,6 +11,7 @@ using UnityEngine.SceneManagement;
 
 public class spiderTreatmentProgress : MonoBehaviour
 {
+
     private int firstnum;
     private int lastnum;
     private int firstminuslast;
@@ -42,7 +43,6 @@ public class spiderTreatmentProgress : MonoBehaviour
         {
             if (task.IsCompleted)
             {
-                
                 DataSnapshot snapshot = task.Result;
                 Debug.Log("Successful");
                 

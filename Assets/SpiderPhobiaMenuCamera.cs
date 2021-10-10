@@ -32,7 +32,7 @@ public class SpiderPhobiaMenuCamera : MonoBehaviour
     
     //public GameObject lasthit = null;
     private GameObject DoctorCanvas;
-    private const float _maxDistance = 10;
+    private const float maxDistance = 10;
     private GameObject _gazedAtObject = null;
     public Image imgCircle;
     public float totalTime = 2;
@@ -50,14 +50,8 @@ public class SpiderPhobiaMenuCamera : MonoBehaviour
     
     public int selectedGazeSize = 1;
     public int selectedGazeNum = 1;
+    public int gazeVirtualTherapistToggle = 1;
 
-    /*private BoxCollider NextSpider = null;
-    private BoxCollider PreviousSpider = null;*/
-    // private BoxCollider TreatmentProgress = null;
-    /*private BoxCollider GazeSmall = null;
-    private BoxCollider GazeMedium = null;
-    private BoxCollider GazeLarge = null;*/
-    
     private Button GazeSmall;
     private ColorBlock GazeColorS;
     private Button GazeMedium;
@@ -82,24 +76,22 @@ public class SpiderPhobiaMenuCamera : MonoBehaviour
     private TextMeshPro GazeInstructionText;
     private TextMeshPro GazeRelaxtionText;
     
+    public Toggle GazeVirtualTherapistToggle;
     private TextMeshPro GameInstructionText;
     private TextMeshPro GameRelaxtionText;
 
     public Camera mainCamera;
     void Start()
     {
-        
         //InitializeFirebase();
         // cannot disable screen space camera canvas for some reason, so switching the code to call it as a gameobject and disabling it entirely
         DoctorCanvas = GameObject.Find("DoctorCanvas");
         
         GazeInstructionText = GameObject.Find("GazeInstructionText").GetComponent<TextMeshPro>();
-        Debug.Log(GazeInstructionText);
         GazeRelaxtionText = GameObject.Find("GazeRelaxationText").GetComponent<TextMeshPro>();
         GazeRelaxtionText.enabled = false;
         
         GameInstructionText = GameObject.Find("GameInstructionText").GetComponent<TextMeshPro>();
-        Debug.Log(GameInstructionText);
         GameRelaxtionText = GameObject.Find("GameRelaxationText").GetComponent<TextMeshPro>();
         GameRelaxtionText.enabled = false;
         
@@ -114,13 +106,6 @@ public class SpiderPhobiaMenuCamera : MonoBehaviour
         test2 = GameObject.Find("Main Camera");
         test = GameObject.Find("Spiders");
         spiderSelectionScript = test.GetComponent<SpiderSelection>();
-        
-        /*NextSpider = GameObject.Find("NextSpider").GetComponent<BoxCollider>();
-        PreviousSpider = GameObject.Find("PreviousSpider").GetComponent<BoxCollider>();
-        TreatmentProgress = GameObject.Find("TreatmentProgress").GetComponent<BoxCollider>();*/
-        /*GazeSmall = GameObject.Find("GazeSmall").GetComponent<BoxCollider>();
-        GazeMedium = GameObject.Find("GazeMedium").GetComponent<BoxCollider>();
-        GazeLarge = GameObject.Find("GazeLarge").GetComponent<BoxCollider>();*/
         
         GazeSmall = GameObject.Find("GazeSmall").GetComponent<Button>();
         GazeColorS = GazeSmall.colors;
@@ -145,13 +130,26 @@ public class SpiderPhobiaMenuCamera : MonoBehaviour
         GamePrePanel = GameObject.Find("GamePrePanel");
         GamePrePanel.SetActive(false);
         GazeOptionPanel.SetActive(false);
+
+
+        if (selectedGazeSize == 1)
+        {
+            GazeColorS.normalColor = Color.green;
+            GazeSmall.colors = GazeColorS;
+        }
+
+        if (selectedGazeNum == 1)
+        {
+            GazeColor1.normalColor = Color.green;
+            GazeNum1.colors = GazeColor1;
+        }
     }
     
     void FixedUpdate()
     { 
         var ray = new Ray(this.transform.position, this.transform.forward);
         RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, _maxDistance))
+        if (Physics.Raycast(ray, out hit, maxDistance))
         {
             // lasthit = hit.transform.gameObject;
             gazeTimer += Time.deltaTime;
@@ -393,8 +391,9 @@ public class SpiderPhobiaMenuCamera : MonoBehaviour
                     {
                         PlayerPrefs.SetInt("selectedGazeSize", selectedGazeSize);
                         PlayerPrefs.SetInt("selectedGazeNum", selectedGazeNum);
+                        PlayerPrefs.SetInt("gazeVirtualTherapistToggle", gazeVirtualTherapistToggle);
                         spiderSelectionScript.SetSpider();
-                        SceneManager.LoadScene("SpiderExposureTaskScene");
+                        SceneManager.LoadScene("SpiderGazeExposureTaskScene");
                         //GazePrePanel.SetActive(true);
                         // GazeOptionPanel.SetActive(false);
                         //scriptC.StartSession();
@@ -411,8 +410,24 @@ public class SpiderPhobiaMenuCamera : MonoBehaviour
                     if (_gazedAtObject.name == "GazeBack")
                     {
                         GazePrePanel.SetActive(false);
-                        GazeOptionPanel.SetActive(true);
+                        ArachnophobiaSelectionMenuPanel.SetActive(true);
+                        //GazeOptionPanel.SetActive(true);
                         //PhobiaSelectionMenuPanel.SetActive(true);
+                        gazeTimer = 0;
+                    }
+                    
+                    if (_gazedAtObject.name == "GazeVirtualTherapistToggle")
+                    {
+                        if (GazeVirtualTherapistToggle.isOn == true)
+                        {
+                            GazeVirtualTherapistToggle.isOn = false;
+                            gazeVirtualTherapistToggle = 0;
+                        }
+                        else if (GazeVirtualTherapistToggle.isOn == false)
+                        {
+                            GazeVirtualTherapistToggle.isOn = true;
+                            gazeVirtualTherapistToggle = 1;
+                        }
                         gazeTimer = 0;
                     }
                 }

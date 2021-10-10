@@ -1,3 +1,4 @@
+/*
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -58,12 +59,12 @@ public class formtestscript : MonoBehaviour
                 imgCircle.fillAmount = 0;
             }
 
-            /*//_gazedAtObject?.SendMessage("OnPointerExit");
+            /#1#/_gazedAtObject?.SendMessage("OnPointerExit");
                 //lasthit = hit.transform.gameObject;
                 //_gazedAtObject = lasthit;
                 //_gazedAtObject.SendMessage("OnPointerEnter")
                 //collision = hit.point;
-            //Debug.Log("test");*/
+            //Debug.Log("test");#1#
         }
         else
         {
@@ -83,7 +84,7 @@ public class formtestscript : MonoBehaviour
         if (gvrTimer > totalTime)
         {
             GVRClick.Invoke();
-        }*/
+        }#1#
         
         
     }
@@ -111,5 +112,6 @@ public class formtestscript : MonoBehaviour
         gvrStatus = false;
         gvrTimer = 0;
         imgCircle.fillAmount = 0;
-    }*/
+    }#1#
 }
+*/
