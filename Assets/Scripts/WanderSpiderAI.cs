@@ -16,7 +16,6 @@ public class WanderSpiderAI : MonoBehaviour
     private bool isWalking = false;
     
     private Animator animator;
-    // public Rigidbody rb;
     void Awake()
     {
         animator = GetComponent<Animator>();
@@ -48,21 +47,32 @@ public class WanderSpiderAI : MonoBehaviour
             int random = Random.Range(0, 4);
             if (random == 0)
             {
+                /*transform.Rotate(transform.up * 2f);
+                transform.position += transform.forward * 0.0001f;*/
+                
                 transform.position += transform.forward * 0.0001f;
                 transform.Rotate(transform.up * 2f);
             }
             else if (random == 1)
             {
+                /*transform.Rotate(transform.up * 1.0f);
+                transform.position += transform.forward * 0f;*/
+                
                 transform.position += transform.forward * 0f;
                 transform.Rotate(transform.up * 1.0f);
             }
             else if (random == 2)
             {
+                /*transform.Rotate(transform.up * 2.5f);
+                transform.position += transform.forward * 0.0003f;*/
+                
                 transform.position += transform.forward * 0.0003f;
                 transform.Rotate(transform.up * 2.5f);
             }
             else if (random == 3)
             {
+                /*transform.position += transform.forward * 0.00015f;
+                transform.Rotate(transform.up * 1.5f);*/
                 transform.position += transform.forward * 0.00015f;
                 transform.Rotate(transform.up * 1.5f);
             }
@@ -98,13 +108,7 @@ public class WanderSpiderAI : MonoBehaviour
     {
         Move();
     }
-
-    private void OnTriggerStay(Collider other)
-    {
-        isWalking = false;
-        StartCoroutine(Avoid());
-    }
-
+    
     private void OnCollisionEnter(Collision other)
     {
         if (other.gameObject.name != "table_2")
@@ -127,15 +131,28 @@ public class WanderSpiderAI : MonoBehaviour
     {
         if (other.gameObject.name != "table_2")
         {
-            Debug.Log("testcold");
+            //Debug.Log("testcold");
             animator.SetBool("rotate", false);
             StopCoroutine(Avoid());
         }
     }
-
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.name != "table_2")
+        { 
+            isWalking = false;
+            StartCoroutine(Avoid()); 
+        }
+    }
+    
+    private void OnTriggerStay(Collider other)
+    {
+        isWalking = false;
+        StartCoroutine(Avoid());
+    }
+    
     private void OnTriggerExit(Collider other)
     {
-        Debug.Log("test");
         animator.SetBool("rotate", false);
         StopCoroutine(Avoid());
     }

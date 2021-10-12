@@ -4,16 +4,16 @@ using UnityEngine;
 
 public class RotateSky : MonoBehaviour
 {
-    public float RotateSpeed = 1f;
-    private Material sky1;
+    public float SkyRotateSpeed = 1.23f;
+    private Material sky;
     void Start()
     { 
-        sky1 = gameObject.GetComponent<Skybox>().material;
+        sky = gameObject.GetComponent<Skybox>().material;
     }
     
     void Update()
     {
         //RenderSettings.skybox.SetFloat("_Rotation", Time.deltaTime * RotateSpeed);
-        sky1.SetFloat("_Rotation", Time.time * 1.23f);
+        sky.SetFloat("_Rotation", Time.time * SkyRotateSpeed);
     }
 }

@@ -12,31 +12,28 @@ public class LoadSpiderGame : MonoBehaviour
     public Transform spawnPoint5;
     public GameObject clone, clone2, clone3, clone4, clone5;
     public CapsuleCollider exampleCollider;
-    private int selectedGazeSize;
-    private int selectedGazeNum;
+    /*private int selectedGazeSize;
+    private int selectedGazeNum;*/
     private int selectedSpider;
     void Start()
     {
         selectedSpider = PlayerPrefs.GetInt("selectedSpider");
-        selectedGazeNum = PlayerPrefs.GetInt("selectedGazeNum");
-        selectedGazeSize = PlayerPrefs.GetInt("selectedGazeSize");
-        
-        Debug.Log(selectedGazeSize);
-        Debug.Log(selectedGazeNum);
+        /*selectedGazeNum = PlayerPrefs.GetInt("selectedGazeNum");
+        selectedGazeSize = PlayerPrefs.GetInt("selectedGazeSize");*/
 
         GameObject prefab = spiderPrefabs[selectedSpider];
         clone = Instantiate(prefab, spawnPoint.position, spawnPoint.rotation * Quaternion.Euler (0f, 270f, 0f));
         clone2 = Instantiate(prefab, spawnPoint2.position, spawnPoint2.rotation * Quaternion.Euler (0f, 90f, 0f));
-        clone3 = Instantiate(prefab, spawnPoint3.position, spawnPoint3.rotation * Quaternion.Euler (0f, 180f, 0f));
+        clone3 = Instantiate(prefab, spawnPoint3.position, spawnPoint3.rotation * Quaternion.Euler (0f, 270f, 0f));
         clone4 = Instantiate(prefab, spawnPoint4.position, spawnPoint4.rotation * Quaternion.Euler(0f, 270f, 0f));
-        clone5 = Instantiate(prefab, spawnPoint5.position, spawnPoint5.rotation * Quaternion.Euler(0f, 180f, 0f));
+        clone5 = Instantiate(prefab, spawnPoint5.position, spawnPoint5.rotation * Quaternion.Euler(0f, 45f, 0f));
+
         /*
         clone2 = Instantiate(prefab, spawnPoint2.position, spawnPoint2.rotation * Quaternion.Euler (0f, 180f, 0f));
         clone3 = Instantiate(prefab, spawnPoint3.position, spawnPoint3.rotation * Quaternion.Euler (0f, 180f, 0f));
         clone4 = Instantiate(prefab, spawnPoint4.position, spawnPoint4.rotation * Quaternion.Euler (0f, 180f, 0f));
         clone5 = Instantiate(prefab, spawnPoint5.position, spawnPoint5.rotation * Quaternion.Euler (0f, 180f, 0f));
         */
-
         /*if (selectedGazeNum == 1)
         {
             // clone = Instantiate(prefab, spawnPoint.position, Quaternion.identity);
@@ -74,12 +71,10 @@ public class LoadSpiderGame : MonoBehaviour
              exampleFunction(clone4);
              exampleFunction(clone5);
         }*/
-
         //GameObject clone2 = Instantiate(prefab, spawnPoint2.position, Quaternion.identity);
         /*GameObject clone3 = Instantiate(prefab, spawnPoint3.position, Quaternion.identity);
         GameObject clone4 = Instantiate(prefab, spawnPoint4.position, Quaternion.identity);
         GameObject clone5 = Instantiate(prefab, spawnPoint5.position, Quaternion.identity);*/
-
         // using function and parameter because just calling clone with end up with only the last clone recieving the changes
         /*exampleFunction(clone);
         exampleFunction(clone2);
@@ -114,38 +109,82 @@ public class LoadSpiderGame : MonoBehaviour
     
     public void spawnRandomLocation()
     {
-        int randSpawn = Random.Range(1, 6);
-        selectedSpider = PlayerPrefs.GetInt("selectedSpider");
-        // selectedGazeNum = PlayerPrefs.GetInt("selectedGazeNum");
-        //  selectedGazeSize = PlayerPrefs.GetInt("selectedGazeSize");
-        
-        //Debug.Log(selectedGazeSize);
-        //Debug.Log(selectedGazeNum);
-
+        int randSpawn = Random.Range(1, 3);
         GameObject prefab = spiderPrefabs[selectedSpider];
         switch(randSpawn)
         {
+            case 1: 
+                clone = Instantiate(prefab, spawnPoint.position, spawnPoint.rotation * Quaternion.Euler (0f, 310f, 0f));
+                clone2 = Instantiate(prefab, spawnPoint2.position, spawnPoint2.rotation * Quaternion.Euler (0f, 110f, 0f));                
+                clone3 = Instantiate(prefab, spawnPoint3.position, spawnPoint3.rotation * Quaternion.Euler (0f, 230f, 0f));
+                clone4 = Instantiate(prefab, spawnPoint4.position, spawnPoint4.rotation * Quaternion.Euler(0f, 240f, 0f));                
+                clone5 = Instantiate(prefab, spawnPoint5.position, spawnPoint5.rotation * Quaternion.Euler(0f, 0f, 0f));
+                break;
+            case 2:
+                clone = Instantiate(prefab, spawnPoint.position, spawnPoint.rotation * Quaternion.Euler (0f, 270f, 0f));
+                clone2 = Instantiate(prefab, spawnPoint2.position, spawnPoint2.rotation * Quaternion.Euler (0f, 90f, 0f));
+                clone3 = Instantiate(prefab, spawnPoint3.position, spawnPoint3.rotation * Quaternion.Euler (0f, 270f, 0f));
+                clone4 = Instantiate(prefab, spawnPoint4.position, spawnPoint4.rotation * Quaternion.Euler(0f, 270f, 0f));
+                clone5 = Instantiate(prefab, spawnPoint5.position, spawnPoint5.rotation * Quaternion.Euler(0f, 45f, 0f));
+            break;
+            case 3:
+                clone = Instantiate(prefab, spawnPoint.position, spawnPoint.rotation * Quaternion.Euler (0f, 290f, 0f));
+                clone2 = Instantiate(prefab, spawnPoint2.position, spawnPoint2.rotation * Quaternion.Euler (0f, 110f, 0f));                
+                clone3 = Instantiate(prefab, spawnPoint3.position, spawnPoint3.rotation * Quaternion.Euler (0f, 285f, 0f));
+                clone4 = Instantiate(prefab, spawnPoint4.position, spawnPoint4.rotation * Quaternion.Euler(0f, 240f, 0f));                
+                clone5 = Instantiate(prefab, spawnPoint5.position, spawnPoint5.rotation * Quaternion.Euler(0f, 15f, 0f));
+            break;
+        }
+        
+        /*switch(randSpawn)
+        {
             case 1:
-                clone = Instantiate(prefab, spawnPoint.position, spawnPoint.rotation * Quaternion.Euler (0f, 360, 0f));    
-                clone2 = Instantiate(prefab, spawnPoint2.position, spawnPoint2.rotation * Quaternion.Euler (0f, 180f, 0f));
+                clone = Instantiate(prefab, spawnPoint.position, spawnPoint.rotation * Quaternion.Euler (0f, 270f, 0f));    
                 break;
             case 2:
                 clone2 = Instantiate(prefab, spawnPoint2.position, spawnPoint2.rotation * Quaternion.Euler (0f, 90f, 0f));
-                clone3 = Instantiate(prefab, spawnPoint3.position, spawnPoint3.rotation * Quaternion.Euler (0f, 180f, 0f));
                 break;
             case 3:
                 clone3 = Instantiate(prefab, spawnPoint3.position, spawnPoint3.rotation * Quaternion.Euler (0f, 180f, 0f));
-                clone4 = Instantiate(prefab, spawnPoint4.position, spawnPoint4.rotation * Quaternion.Euler (0f, 180f, 0f));
                 break;
             case 4:
-                clone4 = Instantiate(prefab, spawnPoint4.position, spawnPoint4.rotation * Quaternion.Euler (0f, 180f, 0f));
-                clone5 = Instantiate(prefab, spawnPoint5.position, spawnPoint5.rotation * Quaternion.Euler(0f, 180f, 0f));
+                clone4 = Instantiate(prefab, spawnPoint4.position, spawnPoint4.rotation * Quaternion.Euler(0f, 270f, 0f));
                 break;
             case 5:
-                clone5 = Instantiate(prefab, spawnPoint5.position, spawnPoint5.rotation * Quaternion.Euler(0f, 180f, 0f));
-                clone = Instantiate(prefab, spawnPoint.position, spawnPoint.rotation * Quaternion.Euler (0f, 180f, 0f));
+                clone5 = Instantiate(prefab, spawnPoint5.position, spawnPoint5.rotation * Quaternion.Euler(0f, 90f, 0f));
                 break;
-        }        
+            /*case 6:
+                clone2 = Instantiate(prefab, spawnPoint5.position, spawnPoint5.rotation * Quaternion.Euler(0f, 360f, 0f));
+                break;
+            case 7:
+                clone = Instantiate(prefab, spawnPoint5.position, spawnPoint5.rotation * Quaternion.Euler(0f, 0f, 0f));
+                break;
+            case 8:
+                clone4 = Instantiate(prefab, spawnPoint5.position, spawnPoint5.rotation * Quaternion.Euler(0f, 180f, 0f));
+                break;
+            case 9:
+                clone2 = Instantiate(prefab, spawnPoint5.position, spawnPoint5.rotation * Quaternion.Euler(0f, 180f, 0f));
+                break;
+            case 10:
+                clone3 = Instantiate(prefab, spawnPoint5.position, spawnPoint5.rotation * Quaternion.Euler(0f, 0, 0f));
+                break;
+            case 11:
+                clone = Instantiate(prefab, spawnPoint5.position, spawnPoint5.rotation * Quaternion.Euler(0f, 90, 0f));
+                break;
+            case 12:
+                clone2 = Instantiate(prefab, spawnPoint5.position, spawnPoint5.rotation * Quaternion.Euler(0f, 0, 0f));
+                break;
+            case 13:
+                clone3 = Instantiate(prefab, spawnPoint5.position, spawnPoint5.rotation * Quaternion.Euler(0f, 360, 0f));
+                break;
+            case 14:
+                clone4 = Instantiate(prefab, spawnPoint5.position, spawnPoint5.rotation * Quaternion.Euler(0f, 360, 0f));
+                break;
+            case 15:
+                clone5 = Instantiate(prefab, spawnPoint5.position, spawnPoint5.rotation * Quaternion.Euler(0f, 360, 0f));
+                break;#1#
+            //clone5 = Instantiate(prefab, spawnPoint5.position, spawnPoint5.rotation * Quaternion.Euler (0f, 270f, 0f));
+        }   */ 
         /*clone = Instantiate(prefab, spawnPoint.position, spawnPoint.rotation * Quaternion.Euler (0f, 180f, 0f));
         
         clone2 = Instantiate(prefab, spawnPoint2.position, spawnPoint2.rotation * Quaternion.Euler (0f, 180f, 0f));
@@ -161,7 +200,6 @@ public class LoadSpiderGame : MonoBehaviour
         clone4 = Instantiate(prefab, spawnPoint4.position, spawnPoint4.rotation * Quaternion.Euler (0f, 180f, 0f));
         clone5 = Instantiate(prefab, spawnPoint5.position, spawnPoint5.rotation * Quaternion.Euler (0f, 180f, 0f));
         */
-
         /*if (selectedGazeNum == 1)
         {
             // clone = Instantiate(prefab, spawnPoint.position, Quaternion.identity);
@@ -199,12 +237,10 @@ public class LoadSpiderGame : MonoBehaviour
              exampleFunction(clone4);
              exampleFunction(clone5);
         }*/
-
         //GameObject clone2 = Instantiate(prefab, spawnPoint2.position, Quaternion.identity);
         /*GameObject clone3 = Instantiate(prefab, spawnPoint3.position, Quaternion.identity);
         GameObject clone4 = Instantiate(prefab, spawnPoint4.position, Quaternion.identity);
         GameObject clone5 = Instantiate(prefab, spawnPoint5.position, Quaternion.identity);*/
-
         // using function and parameter because just calling clone with end up with only the last clone recieving the changes
         /*exampleFunction(clone);
         exampleFunction(clone2);

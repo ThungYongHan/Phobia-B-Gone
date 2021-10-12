@@ -17,15 +17,30 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/SpiderPhobiaMenu.unity
     guid: dd7fa4f1c48883946b14cc63738fc4aa
-  - enabled: 1
-    path: Assets/Scenes/SpiderExposureTaskScene.unity
-    guid: f3fe616c026b5db4cb7edc47d441a24a
+  - enabled: 0
+    path: 
+    guid: 00000000000000000000000000000000
   - enabled: 1
     path: Assets/Scenes/SpiderBathroom.unity
     guid: 816a88178f8c7b845a02d0f9eb585896
   - enabled: 1
-    path: Assets/Scenes/TreatmentProgress2D.unity
+    path: Assets/Scenes/TreatmentProgressSpider.unity
     guid: 629a9ab9dcfe8b24db66c5b1e3d3cdb9
+  - enabled: 1
+    path: Assets/Scenes/CockroachGazeExposureTaskScene.unity
+    guid: 4a8f537d42368164f9bcd68919220604
+  - enabled: 1
+    path: Assets/Scenes/CockroachPhobiaMenu.unity
+    guid: 2eafc2d55ea9ee3448099c6fec037e40
+  - enabled: 1
+    path: Assets/Scenes/FirstCockroachEval.unity
+    guid: 7db242dddb5ed1f44a365ab9f21c8bcd
+  - enabled: 1
+    path: Assets/Scenes/SpiderGazeExposureTaskScene.unity
+    guid: 0b78b8ea44e8c6c4a9a8d81fa7d2bdea
+  - enabled: 1
+    path: Assets/Scenes/TreatmentProgressCockroach.unity
+    guid: 95e52ba39fa27bb4a8c1b39490a44aa0
   m_configObjects:
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: bed178fbbf08b174aa2ddb29f7610f5b, type: 2}
     xr.sdk.mock-hmd.settings: {fileID: 11400000, guid: 8a104db0b9c87564d8f717ea89a38da9, type: 2}

@@ -10,20 +10,28 @@ using UnityEngine.UI;
 
 public class SpiderGazeExposure : MonoBehaviour
 {
-    private int gazeVirtualTherapistToggle;
+    private int gazeVirtualTherapist;
     public GameObject CuteSpiderGaze, NormalSpiderGaze, RealisticSpiderGaze;
-
+    public Collider ExitSpiderGazeButton;
+    public Collider ExitSpiderGazeCancelButton;
+    
+    public Collider BackToMainMenuButton;
+    public Collider RetryGazeSessionButton;
+    public Collider PillowCollider;
+    public Canvas ExitSpiderGazeCanvas;
+    public Canvas BackToMainMenuCanvas;
+    
     /*public Canvas myCanvas1;
     public Canvas myCanvas2;*/
     public TextMeshPro BubbleText;
-    public Canvas BackToMainMenuCanvas;
+    
     public Canvas ProgressCanvas;
     public GameObject DoctorCanvas;
     //public GameObject lasthit = null;
     private const float maxDistance = 10;
-    private GameObject _gazedAtObject = null;
+    private GameObject gazedAtObject = null;
     public Image imgCircle;
-    public float totalTime = 2;
+    public float totalTime = 2.5f;
     public float gazeTimer;
     private GameObject parent;
     public Slider slider;
@@ -67,8 +75,17 @@ public class SpiderGazeExposure : MonoBehaviour
 
     private void Awake()
     {
-        gazeVirtualTherapistToggle = PlayerPrefs.GetInt("gazeVirtualTherapistToggle");
-        if (gazeVirtualTherapistToggle == 1)
+        BackToMainMenuButton.enabled = false;
+        RetryGazeSessionButton.enabled = false;
+        
+        ExitSpiderGazeCanvas.enabled = false;
+        ExitSpiderGazeButton.enabled = false;
+        ExitSpiderGazeCancelButton.enabled = false;
+        BackToMainMenuCanvas.enabled = false;
+        
+        
+        gazeVirtualTherapist = PlayerPrefs.GetInt("gazeVirtualTherapist");
+        if (gazeVirtualTherapist == 1)
         {
             DoctorCanvas.SetActive(true);
         }
@@ -77,7 +94,7 @@ public class SpiderGazeExposure : MonoBehaviour
             DoctorCanvas.SetActive(false);
         }
 
-        BackToMainMenuCanvas.enabled = false;
+        
         test = GameObject.Find("HiddenCanvas");
         test2 = GameObject.Find("HiddenCanvas");
         /*if (test != null)
@@ -153,7 +170,7 @@ public class SpiderGazeExposure : MonoBehaviour
         //myCanvas.enabled = false;
     }
     
-    void Update()
+    void FixedUpdate()
     {
         var ray = new Ray(this.transform.position, this.transform.forward);
         RaycastHit hit;
@@ -163,23 +180,23 @@ public class SpiderGazeExposure : MonoBehaviour
             gazeTimer += Time.deltaTime; 
             _gazedAtObject = lasthit;*/ 
             // this is important to not trigger raycast with non spider objects
-            _gazedAtObject = hit.transform.gameObject;
+            gazedAtObject = hit.transform.gameObject;
+            Debug.Log(gazedAtObject);
             gazeTimer += Time.deltaTime;
+            // this is to bypass the triggering gazetimer adding when looking at the tablecolliders (messing with the retry menu)
+            if (gazedAtObject.name == "table_2")
+            {
+                gazeTimer = 0;
+            }
             if (sliderMax == false)
             {
                 InsectGazing();
-                if (gazeTimer > totalTime)
-                {
-                    if (_gazedAtObject.name == "Bed")
-                    {
-                        gazeTimer = 0;
-                    }
-                }
                 //DisableCanvas1();
             }
             else
             {
                 ProgressCanvas.enabled = false;
+                CompletedMenuGazing();
                 /*
                 imgCircle.fillAmount = gazeTimer / totalTime;
                 _gazedAtObject = lasthit;
@@ -222,7 +239,7 @@ public class SpiderGazeExposure : MonoBehaviour
         }
         else
         {
-            _gazedAtObject = null;
+            gazedAtObject = null;
             gazeTimer = 0;
             imgCircle.fillAmount = 0;
         }
@@ -241,7 +258,7 @@ public class SpiderGazeExposure : MonoBehaviour
         }
         if (slider.value > 10f)
         {
-            BubbleText.text = "You can always exit the gaze exposure task by gazing at the bed at the back!";
+            BubbleText.text = "You can exit the gaze exposure task by gazing at the square pillow on the bed at the back!";
         }
         if (slider.value > 20f)
         {
@@ -281,9 +298,43 @@ public class SpiderGazeExposure : MonoBehaviour
         {
             BackToMainMenuCanvas.enabled = true;
             sliderMax = true;
-            BubbleText.text = "The progress bar is fully filled! Well done!";
+            BubbleText.text = "The progress bar is fully filled! You have completed the gaze exposure session!";
         }
-        if (_gazedAtObject.name != "Plane" && _gazedAtObject.name != "table_2" && _gazedAtObject.name != "TableColliders" && _gazedAtObject.name != "Bed")
+        if (gazedAtObject.name == "PillowCollider")
+        {
+            imgCircle.fillAmount = gazeTimer / totalTime;
+            if (gazeTimer > totalTime)
+            {
+                ExitSpiderGazeCanvas.enabled = true;
+                ExitSpiderGazeButton.enabled = true;
+                ExitSpiderGazeCancelButton.enabled = true;
+                PillowCollider.enabled = false; 
+                gazeTimer = 0;
+            }
+        }
+        if (gazedAtObject.name == "ExitSpiderGazeCancelButton")
+        {
+            imgCircle.fillAmount = gazeTimer / totalTime;
+            if (gazeTimer > totalTime)
+            {
+                ExitSpiderGazeCanvas.enabled = false;
+                ExitSpiderGazeButton.enabled = false;
+                ExitSpiderGazeCancelButton.enabled = false;
+                PillowCollider.enabled = true; 
+                gazeTimer = 0;
+            }
+        }
+        if (gazedAtObject.name == "ExitSpiderGazeButton")
+        {
+            imgCircle.fillAmount = gazeTimer / totalTime;
+            if (gazeTimer > totalTime)
+            {
+                SceneManager.LoadScene("SpiderPhobiaMenu");
+                gazeTimer = 0;
+            }
+        }
+        if (gazedAtObject.name != "Plane" && gazedAtObject.name != "table_2" && 
+            gazedAtObject.name != "PillowCollider" && gazedAtObject.name != "ExitSpiderGazeButton" && gazedAtObject.name != "ExitSpiderGazeCancelButton" )
         {
             // IncrementProgress(2.0f);
             IncrementProgress(50.0f);
@@ -300,10 +351,49 @@ public class SpiderGazeExposure : MonoBehaviour
         else
         {
             IncrementProgress(0.0f);
-            _gazedAtObject = null;
-            gazeTimer = 0;
+            gazedAtObject = null;
+            //gazeTimer = 0;
             // imgCircle.fillAmount = 0;
         }
+    }
+    
+    private void CompletedMenuGazing()
+    {
+        ExitSpiderGazeCanvas.enabled = false;
+        ExitSpiderGazeButton.enabled = false;
+        ExitSpiderGazeCancelButton.enabled = false;
+        
+        BackToMainMenuButton.enabled = true;
+        RetryGazeSessionButton.enabled = true;
+        if (gazedAtObject.name == "BackToMainMenuButton" )
+        {
+            imgCircle.fillAmount = gazeTimer / totalTime;
+            if (gazeTimer > totalTime)
+            {
+                SceneManager.LoadScene("SpiderPhobiaMenu");
+                gazeTimer = 0;
+            }
+        }
+        else if (gazedAtObject.name == "RetryGazeSessionButton")
+        {
+            imgCircle.fillAmount = gazeTimer / totalTime;
+            if (gazeTimer > totalTime)
+            {
+                SceneManager.LoadScene("SpiderGazeExposureTaskScene");
+                gazeTimer = 0;
+            }
+        }
+        else
+        {
+            imgCircle.fillAmount = 0;
+            gazedAtObject = null;
+        }
+        /*if (gazedAtObject.name == "table_02")
+        {
+            imgCircle.fillAmount = 0;
+            gazedAtObject = null;
+            gazeTimer = 0;
+        }*/
     }
 
     /*private void FormGazing()
