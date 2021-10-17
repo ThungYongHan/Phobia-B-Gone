@@ -6,9 +6,9 @@ using Random = UnityEngine.Random;
 
 public class WanderSpiderAI : MonoBehaviour
 {
-    public float moveSpeed = 0.004f;
-    //public float moveSpeed = 0.002f;
-    public float rotSpeed = 0.6f;
+    //public float moveSpeed = 0.004f;
+    public float moveSpeed = 0.002f;
+    public float rotSpeed = 0.5f;
     private bool isWandering = false;
     private bool isRotatingLeft = false;
     private bool isRotatingRight = false;

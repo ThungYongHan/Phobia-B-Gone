@@ -8,7 +8,6 @@ public class SpiderSelection : MonoBehaviour
     public GameObject[] spiders;
     public int selectedSpider = 0;
     
-    // Start is called before the first frame update
     public void NextSpider()
     {
         spiders[selectedSpider].SetActive(false);

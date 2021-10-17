@@ -286,9 +286,16 @@ public class spiderTreatmentProgress : MonoBehaviour
         SceneManager.LoadScene("SpiderPhobiaMenu");
     }
     
+    public void quitApp()
+    {
+        Application.Quit();
+        UnityEditor.EditorApplication.isPlaying = false;
+    }
+    
+    
     public void AnswerFSQButton()
     {
-        SceneManager.LoadScene("FirstSpiderEval");
+        SceneManager.LoadScene("TreatSpiderEval");
     }
     
     // Handle initialization of the necessary firebase modules:

@@ -18,21 +18,20 @@ public class CockroachPhobiaMenuCamera : MonoBehaviour
     Firebase.Auth.FirebaseAuth auth;
     Firebase.Auth.FirebaseUser user;
     DatabaseReference reference;
+    
+    public AudioSource GameBGM;
+    public AudioSource GazeBGM;
+    public AudioSource audioSource;
+    
+    
     private string[] cockroachFacts =
     {
-        "Cockroaches eat more insects than birds and bats combined.",
-        "For its weight, Cockroaches web silk is stronger and tougher than steel.",
-        "Some species of jumping Cockroaches can see light spectrums that humans cannot.",
-        "Cockroaches are nearsighted.",
-        "Cockroaches have pale blue blood.",
-        "Cockroaches do not have muscles, but instead move their legs by shifting internal body fluid.",
-        "Cockroaches help control insect populations such as flies and caterpillars.",
-        "By eating pests like fleas and mosquitoes, Cockroaches can prevent the spread of disease.",
-        "Most tarantula species pose no threat to humans.",
-        "Less than 0.5% of Cockroaches species are considered as potentially dangerous to humans."
+        "Fossil evidence shows that cockroaches originated more than 300 million years ago.",
+        "Cockroaches can hold their breath for 40 minutes, and can survive underwater for 30 minutes.",
+        "Cockroaches can live for a week without its head.",
+        "There are more than 4000 cockroach species around the world.",
     };
     
-    //public GameObject lasthit = null;
     private GameObject DoctorCanvas;
     private const float maxDistance = 10;
     private GameObject _gazedAtObject = null;
@@ -57,8 +56,13 @@ public class CockroachPhobiaMenuCamera : MonoBehaviour
     public int gazeVirtualTherapist = 1;
     public int gameVirtualTherapist = 1;
 
+    public int gameBGM = 0;
+    public int gazeBGM = 0;
+    
     public Toggle GazeVirtualTherapistToggle;
     public Toggle GameVirtualTherapistToggle;
+    public Toggle GameBGMToggle;
+    public Toggle GazeBGMToggle;
     
     private Button GazeSmall;
     private ColorBlock GazeColorS;
@@ -87,7 +91,6 @@ public class CockroachPhobiaMenuCamera : MonoBehaviour
     private TextMeshPro GameInstructionText;
     private TextMeshPro GameRelaxtionText;
 
-    public Camera mainCamera;
     void Start()
     {
         FirebaseDatabase.DefaultInstance.SetPersistenceEnabled(false);
@@ -144,6 +147,16 @@ public class CockroachPhobiaMenuCamera : MonoBehaviour
             GazeColor1.normalColor = Color.green;
             GazeNum1.colors = GazeColor1;
         }
+        
+        if (gameBGM == 0)
+        {
+            GameBGMToggle.isOn = false;
+        }
+        
+        if (gazeBGM == 0)
+        {
+            GazeBGMToggle.isOn = false;
+        }
     }
     
     void FixedUpdate()
@@ -181,17 +194,22 @@ public class CockroachPhobiaMenuCamera : MonoBehaviour
                     {
                         BubbleText.text = ("Select Desired Cockroach Model For Exposure Tasks");
                     }
+                    if (_gazedAtObject.name == "SignOutAndQuitButton")
+                    {
+                        BubbleText.text = ("Sign Out And Quit Phobia-B-Gone After Answering the FCQ");
+                    }
                 }
 
                 if (gazeTimer > totalTime)
                 {
+                    gazeTimer = 0;
+                    audioSource.Play();
                     if (_gazedAtObject.name == "RandomCockroachGazeFactsDoctor ")
                     {
                         Random rand = new Random();
                         int factsNum = rand.Next(0, cockroachFacts.Length);
                         Debug.Log(cockroachFacts.Length);
                         CockroachGazeFactsText.text = cockroachFacts[factsNum];
-                        gazeTimer = 0;
                     }
                     
                     if (_gazedAtObject.name == "RandomCockroachGameFactsDoctor")
@@ -200,75 +218,67 @@ public class CockroachPhobiaMenuCamera : MonoBehaviour
                         int factsNum = rand.Next(0, cockroachFacts.Length);
                         Debug.Log(cockroachFacts.Length);
                         CockroachGameFactsText.text = cockroachFacts[factsNum];
-                        gazeTimer = 0;
                     }
                     
                     if (_gazedAtObject.name == "NextGazeSlide")
                     {
                         GazeInstructionText.enabled = false;
                         GazeRelaxtionText.enabled = true;
-                        gazeTimer = 0;
                     }
                     
                     if (_gazedAtObject.name == "PreviousGazeSlide")
                     {
                         GazeInstructionText.enabled = true;
                         GazeRelaxtionText.enabled = false;
-                        gazeTimer = 0;
                     }
                     
                     if (_gazedAtObject.name == "NextGameSlide")
                     {
                         GameInstructionText.enabled = false;
                         GameRelaxtionText.enabled = true;
-                        gazeTimer = 0;
                     }
                     
                     if (_gazedAtObject.name == "PreviousGameSlide")
                     {
                         GameInstructionText.enabled = true;
                         GameRelaxtionText.enabled = false;
-                        gazeTimer = 0;
                     }
                     
                     if (_gazedAtObject.name == "GazeStart")
                     {
                         GazePrePanel.SetActive(false);
                         GazeOptionPanel.SetActive(true);
-                        gazeTimer = 0;
                     }
 
                     if (_gazedAtObject.name == "GameStart")
                     {
                         GameOptionPanel.SetActive(true);
                         GamePrePanel.SetActive(false);
-
-                        gazeTimer = 0;
                     }
                     
                     if (_gazedAtObject.name == "GameSelect")
                     {
-                        PlayerPrefs.SetInt("gameVirtualTherapist", gameVirtualTherapist);
+                        PlayerPrefs.SetInt("cockroachgameVirtualTherapist", gameVirtualTherapist);
+                        PlayerPrefs.SetInt("cockroachgameBGM", gameBGM);
                         cockroachSelectionScript.SetCockroach();
                         SceneManager.LoadScene("SpiderBathroom");
-                        gazeTimer = 0;
                     }
                                  
                     if (_gazedAtObject.name == "GameCancel")
                     {
+                        GameBGM.Stop();
+                        gameBGM = 0;
+                        GameBGMToggle.isOn = false;
                         GameOptionPanel.SetActive(false);
                         DoctorCanvas.SetActive(true);
                         KatsaridaphobiaSelectionMenuPanel.SetActive(true);
-                        gazeTimer = 0;
                     }
                     
                     if (_gazedAtObject.name == "GameBack")
                     {
                         DoctorCanvas.SetActive(true);
                         GamePrePanel.SetActive(false);
-                        
                         KatsaridaphobiaSelectionMenuPanel.SetActive(true);
-                        gazeTimer = 0;
                     }
                     
                     if (_gazedAtObject.name == "GazeExposureButton")
@@ -276,7 +286,6 @@ public class CockroachPhobiaMenuCamera : MonoBehaviour
                         DoctorCanvas.SetActive(false);
                         GazePrePanel.SetActive(true);
                         KatsaridaphobiaSelectionMenuPanel.SetActive(false);
-                        gazeTimer = 0;
                     }
                     
                     if (_gazedAtObject.name == "GamifiedExposureButton")
@@ -284,7 +293,6 @@ public class CockroachPhobiaMenuCamera : MonoBehaviour
                         DoctorCanvas.SetActive(false);
                         GamePrePanel.SetActive(true);
                         KatsaridaphobiaSelectionMenuPanel.SetActive(false);
-                        gazeTimer = 0;
                     }
                     
                     if (_gazedAtObject.name == "BackSceneButton")
@@ -300,13 +308,11 @@ public class CockroachPhobiaMenuCamera : MonoBehaviour
                     if (_gazedAtObject.name == "NextCockroach")
                     {
                         cockroachSelectionScript.NextCockroach();
-                        gazeTimer = 0;
                     }
                     
                     if (_gazedAtObject.name == "PreviousCockroach")
                     { 
                         cockroachSelectionScript.PreviousCockroach();
-                        gazeTimer = 0;
                     }
 
                     if (_gazedAtObject.name == "GazeSmall")
@@ -377,20 +383,22 @@ public class CockroachPhobiaMenuCamera : MonoBehaviour
                     
                     if (_gazedAtObject.name == "GazeSelect")
                     {
-                        PlayerPrefs.SetInt("selectedGazeSize", selectedGazeSize);
-                        PlayerPrefs.SetInt("selectedGazeNum", selectedGazeNum);
-                        PlayerPrefs.SetInt("gazeVirtualTherapist", gazeVirtualTherapist);
+                        PlayerPrefs.SetInt("cockroachgazeBGM", gazeBGM);
+                        PlayerPrefs.SetInt("cockroachselectedGazeSize", selectedGazeSize);
+                        PlayerPrefs.SetInt("cockroachselectedGazeNum", selectedGazeNum);
+                        PlayerPrefs.SetInt("cockroachgazeVirtualTherapist", gazeVirtualTherapist);
                         cockroachSelectionScript.SetCockroach();
                         SceneManager.LoadScene("CockroachGazeExposureTaskScene");
-                        gazeTimer = 0;
                     }
                     
                     if (_gazedAtObject.name == "GazeCancel")
                     {   
+                        GazeBGM.Stop();
+                        gazeBGM = 0;
+                        GazeBGMToggle.isOn = false;
                         DoctorCanvas.SetActive(true);
                         GazeOptionPanel.SetActive(false);
                         KatsaridaphobiaSelectionMenuPanel.SetActive(true);
-                        gazeTimer = 0;
                     }
                     
                     if (_gazedAtObject.name == "GazeBack")
@@ -398,13 +406,11 @@ public class CockroachPhobiaMenuCamera : MonoBehaviour
                         DoctorCanvas.SetActive(true);
                         GazePrePanel.SetActive(false);
                         KatsaridaphobiaSelectionMenuPanel.SetActive(true);
-
-                        gazeTimer = 0;
                     }
                     
                     if (_gazedAtObject.name == "GazeVirtualTherapistToggle")
                     {
-                        if (GazeVirtualTherapistToggle.isOn == true)
+                        if (GazeVirtualTherapistToggle.isOn)
                         {
                             GazeVirtualTherapistToggle.isOn = false;
                             gazeVirtualTherapist = 0;
@@ -414,12 +420,11 @@ public class CockroachPhobiaMenuCamera : MonoBehaviour
                             GazeVirtualTherapistToggle.isOn = true;
                             gazeVirtualTherapist = 1;
                         }
-                        gazeTimer = 0;
                     }
                     
                     if (_gazedAtObject.name == "GameVirtualTherapistToggle")
                     {
-                        if (GameVirtualTherapistToggle.isOn == true)
+                        if (GameVirtualTherapistToggle.isOn)
                         {
                             GameVirtualTherapistToggle.isOn = false;
                             gameVirtualTherapist = 0;
@@ -429,13 +434,52 @@ public class CockroachPhobiaMenuCamera : MonoBehaviour
                             GameVirtualTherapistToggle.isOn = true;
                             gameVirtualTherapist = 1;
                         }
-                        gazeTimer = 0;
+                    }
+                    
+                    if (_gazedAtObject.name == "SignOutAndQuitButton")
+                    {
+                        SceneManager.LoadScene("SignOutCockroachEval");
+                    }
+                    
+                    if (_gazedAtObject.name == "GameBGMToggle")
+                    {
+                        if (GameBGMToggle.isOn)
+                        {
+                            GameBGM.Stop();
+                            GameBGMToggle.isOn = false;
+                            gameBGM = 0;
+                        }
+                        else 
+                        {
+                            GameBGMToggle.isOn = true;
+                            GameBGM.volume = 0.3f;
+                            GameBGM.Play();
+                            gameBGM = 1;
+                        }
+                    }
+                    
+                    if (_gazedAtObject.name == "GazeBGMToggle")
+                    {
+                        if (GazeBGMToggle.isOn)
+                        {
+                            GazeBGM.Stop();
+                            GazeBGMToggle.isOn = false;
+                            gazeBGM = 0;
+                        }
+                        else 
+                        {
+                            GazeBGMToggle.isOn = true;
+                            GazeBGM.volume = 0.3f;
+                            GazeBGM.Play();
+                            gazeBGM = 1;
+                        }
                     }
                 }
             }
             else
             {
                 imgCircle.fillAmount = 0;
+                gazeTimer = 0;
             }
         }
         else

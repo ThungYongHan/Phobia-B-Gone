@@ -10,8 +10,11 @@ using UnityEngine.UI;
 
 public class CockroachGazeExposure : MonoBehaviour
 {
+    public AudioSource progressBarFilledAudio, audioSource, GazeBGM;
+    
+    
     private int gazeVirtualTherapist;
-    public GameObject CuteCockroachGaze, RealisticCockroachGaze;
+
     public Collider ExitCockroachGazeButton;
     public Collider ExitCockroachGazeCancelButton;
     
@@ -19,12 +22,13 @@ public class CockroachGazeExposure : MonoBehaviour
     public Collider RetryGazeSessionButton;
     public Collider PillowCollider;
     public Canvas ExitCockroachGazeCanvas;
+    public Canvas BackToMainMenuCanvas;
 
     public TextMeshPro BubbleText;
-    public Canvas BackToMainMenuCanvas;
+    
     public Canvas ProgressCanvas;
     public GameObject DoctorCanvas;
-    //public GameObject lasthit = null;
+    
     private const float maxDistance = 10;
     private GameObject gazedAtObject = null;
     public Image imgCircle;
@@ -34,26 +38,29 @@ public class CockroachGazeExposure : MonoBehaviour
     public Slider slider;
     // slider filling speed
     public float FillSpeed = 2f;
-    private float targetProgress = 100f;
     
     private TextMeshProUGUI numTest;
     private TextMeshProUGUI numTest2;
     
-    public GameObject test;
-    public GameObject test2;
+    private int gazeBGM;
 
-    public GameObject testObject;
     public bool sliderMax = false;
 
     private void Awake()
     {
+        gazeBGM = PlayerPrefs.GetInt("cockroachgazeBGM");
+        if (gazeBGM == 1)
+        {
+            GazeBGM.volume = 1f;
+            GazeBGM.Play();
+        }
         BackToMainMenuButton.enabled = false;
         RetryGazeSessionButton.enabled = false;
         
         ExitCockroachGazeCanvas.enabled = false;
         ExitCockroachGazeButton.enabled = false;
         ExitCockroachGazeCancelButton.enabled = false;
-        gazeVirtualTherapist = PlayerPrefs.GetInt("gazeVirtualTherapist");
+        gazeVirtualTherapist = PlayerPrefs.GetInt("cockroachgazeVirtualTherapist");
         if (gazeVirtualTherapist == 1)
         {
             DoctorCanvas.SetActive(true);
@@ -64,8 +71,6 @@ public class CockroachGazeExposure : MonoBehaviour
         }
 
         BackToMainMenuCanvas.enabled = false;
-        test = GameObject.Find("HiddenCanvas");
-        test2 = GameObject.Find("HiddenCanvas");
         ProgressCanvas = GameObject.Find("ProgressCanvas").GetComponent<Canvas>();
         parent = GameObject.Find("ProgressCanvas");
     }
@@ -104,11 +109,6 @@ public class CockroachGazeExposure : MonoBehaviour
 
     private void InsectGazing()
     {
-        if (slider.value < targetProgress)
-        {
-            slider.value += FillSpeed * Time.deltaTime;
-        }
-        
         if (slider.value < 5f)
         {
             BubbleText.text = "Gaze at the spiders to fill the progress bar!";
@@ -153,6 +153,8 @@ public class CockroachGazeExposure : MonoBehaviour
         // when the slider is fully filled
         if (slider.value == 100.0f)
         {
+            progressBarFilledAudio.volume = 0.4f;
+            progressBarFilledAudio.Play();
             BackToMainMenuCanvas.enabled = true;
             sliderMax = true;
             BubbleText.text = "The progress bar is fully filled! You have completed the gaze exposure session!";
@@ -162,6 +164,7 @@ public class CockroachGazeExposure : MonoBehaviour
             imgCircle.fillAmount = gazeTimer / totalTime;
             if (gazeTimer > totalTime)
             {
+                audioSource.Play();
                 ExitCockroachGazeCanvas.enabled = true;
                 ExitCockroachGazeButton.enabled = true;
                 ExitCockroachGazeCancelButton.enabled = true;
@@ -174,6 +177,7 @@ public class CockroachGazeExposure : MonoBehaviour
             imgCircle.fillAmount = gazeTimer / totalTime;
             if (gazeTimer > totalTime)
             {
+                audioSource.Play();
                 ExitCockroachGazeCanvas.enabled = false;
                 ExitCockroachGazeButton.enabled = false;
                 ExitCockroachGazeCancelButton.enabled = false;
@@ -193,11 +197,10 @@ public class CockroachGazeExposure : MonoBehaviour
         if (gazedAtObject.name != "Plane" && gazedAtObject.name != "table_2" && 
             gazedAtObject.name != "PillowCollider" && gazedAtObject.name != "ExitCockroachGazeButton" && gazedAtObject.name != "ExitCockroachGazeCancelButton" )
         {
-            IncrementProgress(50.0f);
+            slider.value += FillSpeed * Time.deltaTime;
         }
         else
         {
-            IncrementProgress(0.0f);
             gazedAtObject = null;
         }
     }
@@ -235,10 +238,4 @@ public class CockroachGazeExposure : MonoBehaviour
         }
 
     }
-    
-    private void IncrementProgress(float newProgress)
-    {
-        targetProgress = slider.value + newProgress;
-    }
-    
 }

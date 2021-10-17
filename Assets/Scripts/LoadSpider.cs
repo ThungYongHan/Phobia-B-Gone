@@ -11,27 +11,96 @@ public class LoadSpider : MonoBehaviour
     public Transform spawnPoint4;
     public Transform spawnPoint5;
     public GameObject clone, clone2, clone3, clone4, clone5;
-    public CapsuleCollider exampleCollider;
-    private int selectedGazeSize;
-    private int selectedGazeNum;
-    private int selectedSpider;
-    void Start()
+    // public CapsuleCollider main0Collider, blocker0Collider;
+    // public CapsuleCollider main1Collider, blocker1Collider;
+    // public CapsuleCollider main2Collider, blocker2Collider;
+    public int selectedGazeSize;
+    public int selectedGazeNum;
+    public int selectedSpider;
+    void Awake()
     {
         selectedSpider = PlayerPrefs.GetInt("selectedSpider");
-        selectedGazeNum = PlayerPrefs.GetInt("selectedGazeNum");
-        selectedGazeSize = PlayerPrefs.GetInt("selectedGazeSize");
+        selectedGazeNum = PlayerPrefs.GetInt("spiderselectedGazeNum");
+        selectedGazeSize = PlayerPrefs.GetInt("spiderselectedGazeSize");
         
         /*Debug.Log(selectedGazeSize);
         Debug.Log(selectedGazeNum);*/
 
         GameObject prefab = spiderPrefabs[selectedSpider];
+        // 1 spider
         if (selectedGazeNum == 1)
         {
-            // clone = Instantiate(prefab, spawnPoint.position, Quaternion.identity);
+            /*// clone = Instantiate(prefab, spawnPoint.position, Quaternion.identity);
             // to make the spider spawn and walk towards the player (post rotation)
-            clone = Instantiate(prefab, spawnPoint.position, spawnPoint.rotation * Quaternion.Euler(0f, 180f, 0f));
-            selectSpiderSizeFunction(clone);
+            // clone = Instantiate(prefab, spawnPoint.position, spawnPoint.rotation * Quaternion.Euler(0f, 180f, 0f));
+            // selectSpiderSizeFunction(clone);*/
+            // size s
+            if (selectedGazeSize == 1)
+            {
+                clone = Instantiate(prefab, spawnPoint.position, spawnPoint.rotation * Quaternion.Euler(0f, 180f, 0f));
+                selectSpiderSizeFunction(clone);
+            }
+            
+            // size m
+            if (selectedGazeSize == 2)
+            {
+                // cartoon spider (1 - m)
+                if (selectedSpider == 0)
+                {
+                    clone = Instantiate(prefab, spawnPoint.position, spawnPoint.rotation * Quaternion.Euler(0f, 180f, 0f));
+                    selectSpiderSizeFunction(clone);
+                    clone.GetComponent<CapsuleCollider>().center = new Vector3(0f, 0.19f, 0f);
+                    clone.transform.GetChild(3).GetComponent<CapsuleCollider>().center = new Vector3(0f, 0.19f, 0f);
+                }
+                // normal spider (1 - m)
+                if (selectedSpider == 1)
+                {
+                    clone = Instantiate(prefab, spawnPoint.position, spawnPoint.rotation * Quaternion.Euler(0f, 180f, 0f));
+                    selectSpiderSizeFunction(clone);
+                    clone.GetComponent<CapsuleCollider>().center = new Vector3(0f, 2.5f, 0f);
+                    clone.transform.GetChild(2).GetComponent<CapsuleCollider>().center = new Vector3(0f, 2.5f, 0f);
+                }
+                // realistic spider (1 - m)
+                if (selectedSpider == 2)
+                {
+                    clone = Instantiate(prefab, spawnPoint.position, spawnPoint.rotation * Quaternion.Euler(0f, 180f, 0f));
+                    selectSpiderSizeFunction(clone);
+                    clone.GetComponent<CapsuleCollider>().center = new Vector3(0f, 1.27f, 0f);
+                    clone.transform.GetChild(2).GetComponent<CapsuleCollider>().center = new Vector3(0f, 1.27f, 0f);
+                }
+            }
+            
+            // size l
+            if (selectedGazeSize == 3)
+            {
+                // cartoon spider (1 - l)
+                if (selectedSpider == 0)
+                {
+                    clone = Instantiate(prefab, spawnPoint.position, spawnPoint.rotation * Quaternion.Euler(0f, 180f, 0f));
+                    selectSpiderSizeFunction(clone);
+                    clone.GetComponent<CapsuleCollider>().center = new Vector3(0f, 0.21f, 0f);
+                    clone.transform.GetChild(3).GetComponent<CapsuleCollider>().center = new Vector3(0f, 0.21f, 0f);
+                }
+                // normal spider (1 - l)
+                if (selectedSpider == 1)
+                {
+                    clone = Instantiate(prefab, spawnPoint.position, spawnPoint.rotation * Quaternion.Euler(0f, 180f, 0f));
+                    selectSpiderSizeFunction(clone);
+                    clone.GetComponent<CapsuleCollider>().center = new Vector3(0f, 2.7f, 0f);
+                    clone.transform.GetChild(2).GetComponent<CapsuleCollider>().center = new Vector3(0f, 2.7f, 0f);
+                }
+                // realistic spider (1 - l)
+                if (selectedSpider == 2)
+                {
+                    clone = Instantiate(prefab, spawnPoint.position, spawnPoint.rotation * Quaternion.Euler(0f, 180f, 0f));
+                    selectSpiderSizeFunction(clone);
+                    clone.GetComponent<CapsuleCollider>().center = new Vector3(0f, 1.29f, 0f);
+                    clone.transform.GetChild(2).GetComponent<CapsuleCollider>().center = new Vector3(0f, 1.29f, 0f);
+                }
+            }
         }
+        
+        //3 spiders
         if (selectedGazeNum == 3)
         {
              /*clone = Instantiate(prefab, spawnPoint.position, Quaternion.identity);
@@ -43,99 +112,506 @@ public class LoadSpider : MonoBehaviour
             selectSpiderSizeFunction(clone);
             selectSpiderSizeFunction(clone2);
             selectSpiderSizeFunction(clone3);*/
-            if (selectedSpider == 0)
+            //main0Collider.center = new Vector3(0f, 0.145f, 0f);
+
+            //size s
+            if (selectedGazeSize == 1)
             {
-                clone = Instantiate(prefab, spawnPoint.position, spawnPoint.rotation * Quaternion.Euler (0f, 180f, 0f));
-                clone2 = Instantiate(prefab, spawnPoint2.position, spawnPoint2.rotation * Quaternion.Euler (0f, 180f, 0f));
-                clone3 = Instantiate(prefab, spawnPoint3.position, spawnPoint3.rotation * Quaternion.Euler (0f, 180f, 0f));
-                selectSpiderSizeFunction(clone);
-                selectSpiderSizeFunction(clone2);
-                selectSpiderSizeFunction(clone3);
-                clone.GetComponent<CapsuleCollider>().center = new Vector3(0f, 0.21f, 0f);
-                clone2.GetComponent<CapsuleCollider>().center = new Vector3(0f, 0.21f, 0f);
-                clone3.GetComponent<CapsuleCollider>().center = new Vector3(0f, 0.21f, 0f);
+                // cartoon spider (3 - s)
+                if (selectedSpider == 0)
+                {
+                    clone = Instantiate(prefab, spawnPoint.position, spawnPoint.rotation * Quaternion.Euler (0f, 180f, 0f));
+                    clone2 = Instantiate(prefab, spawnPoint2.position, spawnPoint2.rotation * Quaternion.Euler (0f, 180f, 0f));
+                    clone3 = Instantiate(prefab, spawnPoint3.position, spawnPoint3.rotation * Quaternion.Euler (0f, 180f, 0f));
+                
+                    selectSpiderSizeFunction(clone);
+                    selectSpiderSizeFunction(clone2);
+                    selectSpiderSizeFunction(clone3);
+                
+                    clone.GetComponent<CapsuleCollider>().center = new Vector3(0f, 0.145f, 0f);
+                    clone2.GetComponent<CapsuleCollider>().center = new Vector3(0f, 0.145f, 0f);
+                    clone3.GetComponent<CapsuleCollider>().center = new Vector3(0f, 0.145f, 0f);
+                
+                    clone.transform.GetChild(3).GetComponent<CapsuleCollider>().center = new Vector3(0f, 0.145f, 0f);
+                    clone2.transform.GetChild(3).GetComponent<CapsuleCollider>().center = new Vector3(0f, 0.145f, 0f);
+                    clone3.transform.GetChild(3).GetComponent<CapsuleCollider>().center = new Vector3(0f, 0.145f, 0f);
+                }
+                // normal spider (3 - s)
+                if (selectedSpider == 1)
+                {
+                    clone = Instantiate(prefab, spawnPoint.position, spawnPoint.rotation * Quaternion.Euler (0f, 180f, 0f));
+                    clone2 = Instantiate(prefab, spawnPoint2.position, spawnPoint2.rotation * Quaternion.Euler (0f, 180f, 0f));
+                    clone3 = Instantiate(prefab, spawnPoint3.position, spawnPoint3.rotation * Quaternion.Euler (0f, 180f, 0f));
+                
+                    selectSpiderSizeFunction(clone);
+                    selectSpiderSizeFunction(clone2);
+                    selectSpiderSizeFunction(clone3);
+                
+                    clone.GetComponent<CapsuleCollider>().center = new Vector3(0f, 2.2f, 0f);
+                    clone2.GetComponent<CapsuleCollider>().center = new Vector3(0f, 2.2f, 0f);
+                    clone3.GetComponent<CapsuleCollider>().center = new Vector3(0f, 2.2f, 0f);
+                
+                    clone.transform.GetChild(2).GetComponent<CapsuleCollider>().center = new Vector3(0f, 2.2f, 0f);
+                    clone2.transform.GetChild(2).GetComponent<CapsuleCollider>().center = new Vector3(0f, 2.2f, 0f);
+                    clone3.transform.GetChild(2).GetComponent<CapsuleCollider>().center = new Vector3(0f, 2.2f, 0f);
+                }
+                // realistic spider (3 - s)
+                if (selectedSpider == 2)
+                {
+                    clone = Instantiate(prefab, spawnPoint.position, spawnPoint.rotation * Quaternion.Euler (0f, 180f, 0f));
+                    clone2 = Instantiate(prefab, spawnPoint2.position, spawnPoint2.rotation * Quaternion.Euler (0f, 180f, 0f));
+                    clone3 = Instantiate(prefab, spawnPoint3.position, spawnPoint3.rotation * Quaternion.Euler (0f, 180f, 0f));
+                
+                    selectSpiderSizeFunction(clone);
+                    selectSpiderSizeFunction(clone2);
+                    selectSpiderSizeFunction(clone3);
+                
+                    clone.GetComponent<CapsuleCollider>().center = new Vector3(0f, 1f, 0f);
+                    clone2.GetComponent<CapsuleCollider>().center = new Vector3(0f, 1f, 0f);
+                    clone3.GetComponent<CapsuleCollider>().center = new Vector3(0f, 1f, 0f);
+                
+                    clone.transform.GetChild(2).GetComponent<CapsuleCollider>().center = new Vector3(0f, 1f, 0f);
+                    clone2.transform.GetChild(2).GetComponent<CapsuleCollider>().center = new Vector3(0f, 1f, 0f);
+                    clone3.transform.GetChild(2).GetComponent<CapsuleCollider>().center = new Vector3(0f, 1f, 0f);
+                }
             }
             
-            if (selectedSpider == 1)
+            // size m
+            if (selectedGazeSize == 2)
             {
-                clone = Instantiate(prefab, spawnPoint.position, spawnPoint.rotation * Quaternion.Euler (0f, 180f, 0f));
-                clone2 = Instantiate(prefab, spawnPoint2.position, spawnPoint2.rotation * Quaternion.Euler (0f, 180f, 0f));
-                clone3 = Instantiate(prefab, spawnPoint3.position, spawnPoint3.rotation * Quaternion.Euler (0f, 180f, 0f));
-                selectSpiderSizeFunction(clone);
-                selectSpiderSizeFunction(clone2);
-                selectSpiderSizeFunction(clone3);
-                clone.GetComponent<CapsuleCollider>().center = new Vector3(0f, 2.2f, 0f);
-                clone2.GetComponent<CapsuleCollider>().center = new Vector3(0f, 2.2f, 0f);
-                clone3.GetComponent<CapsuleCollider>().center = new Vector3(0f, 2.2f, 0f);
+                // cartoon spider (3 - m)
+                if (selectedSpider == 0)
+                {
+                    clone = Instantiate(prefab, spawnPoint.position, spawnPoint.rotation * Quaternion.Euler (0f, 180f, 0f));
+                    clone2 = Instantiate(prefab, spawnPoint2.position, spawnPoint2.rotation * Quaternion.Euler (0f, 180f, 0f));
+                    clone3 = Instantiate(prefab, spawnPoint3.position, spawnPoint3.rotation * Quaternion.Euler (0f, 180f, 0f));
+                
+                    selectSpiderSizeFunction(clone);
+                    selectSpiderSizeFunction(clone2);
+                    selectSpiderSizeFunction(clone3);
+                
+                    clone.GetComponent<CapsuleCollider>().center = new Vector3(0f, 0.1699f, 0f);
+                    clone2.GetComponent<CapsuleCollider>().center = new Vector3(0f, 0.1699f, 0f);
+                    clone3.GetComponent<CapsuleCollider>().center = new Vector3(0f, 0.1699f, 0f);
+                
+                    clone.transform.GetChild(3).GetComponent<CapsuleCollider>().center = new Vector3(0f, 0.1699f, 0f);
+                    clone2.transform.GetChild(3).GetComponent<CapsuleCollider>().center = new Vector3(0f, 0.1699f, 0f);
+                    clone3.transform.GetChild(3).GetComponent<CapsuleCollider>().center = new Vector3(0f, 0.1699f, 0f);
+                }
+                // normal spider (3 - m)
+                if (selectedSpider == 1)
+                {
+                    clone = Instantiate(prefab, spawnPoint.position, spawnPoint.rotation * Quaternion.Euler (0f, 180f, 0f));
+                    clone2 = Instantiate(prefab, spawnPoint2.position, spawnPoint2.rotation * Quaternion.Euler (0f, 180f, 0f));
+                    clone3 = Instantiate(prefab, spawnPoint3.position, spawnPoint3.rotation * Quaternion.Euler (0f, 180f, 0f));
+                
+                    selectSpiderSizeFunction(clone);
+                    selectSpiderSizeFunction(clone2);
+                    selectSpiderSizeFunction(clone3);
+                
+                    clone.GetComponent<CapsuleCollider>().center = new Vector3(0f, 2.3f, 0f);
+                    clone2.GetComponent<CapsuleCollider>().center = new Vector3(0f, 2.3f, 0f);
+                    clone3.GetComponent<CapsuleCollider>().center = new Vector3(0f, 2.3f, 0f);
+                
+                    clone.transform.GetChild(2).GetComponent<CapsuleCollider>().center = new Vector3(0f, 2.3f, 0f);
+                    clone2.transform.GetChild(2).GetComponent<CapsuleCollider>().center = new Vector3(0f, 2.3f, 0f);
+                    clone3.transform.GetChild(2).GetComponent<CapsuleCollider>().center = new Vector3(0f, 2.3f, 0f);
+                }
+                // realistic spider (3 - m)
+                if (selectedSpider == 2)
+                {
+                    clone = Instantiate(prefab, spawnPoint.position, spawnPoint.rotation * Quaternion.Euler (0f, 180f, 0f));
+                    clone2 = Instantiate(prefab, spawnPoint2.position, spawnPoint2.rotation * Quaternion.Euler (0f, 180f, 0f));
+                    clone3 = Instantiate(prefab, spawnPoint3.position, spawnPoint3.rotation * Quaternion.Euler (0f, 180f, 0f));
+                
+                    selectSpiderSizeFunction(clone);
+                    selectSpiderSizeFunction(clone2);
+                    selectSpiderSizeFunction(clone3);
+                
+                    clone.GetComponent<CapsuleCollider>().center = new Vector3(0f, 1.2f, 0f);
+                    clone2.GetComponent<CapsuleCollider>().center = new Vector3(0f, 1.2f, 0f);
+                    clone3.GetComponent<CapsuleCollider>().center = new Vector3(0f, 1.2f, 0f);
+                
+                    clone.transform.GetChild(2).GetComponent<CapsuleCollider>().center = new Vector3(0f, 1.2f, 0f);
+                    clone2.transform.GetChild(2).GetComponent<CapsuleCollider>().center = new Vector3(0f, 1.2f, 0f);
+                    clone3.transform.GetChild(2).GetComponent<CapsuleCollider>().center = new Vector3(0f, 1.2f, 0f);
+                }
             }
             
-            if (selectedSpider == 2)
+            // size l
+            if (selectedGazeSize == 3)
             {
-                clone = Instantiate(prefab, spawnPoint.position, spawnPoint.rotation * Quaternion.Euler (0f, 180f, 0f));
-                clone2 = Instantiate(prefab, spawnPoint2.position, spawnPoint2.rotation * Quaternion.Euler (0f, 180f, 0f));
-                clone3 = Instantiate(prefab, spawnPoint3.position, spawnPoint3.rotation * Quaternion.Euler (0f, 180f, 0f));
-                selectSpiderSizeFunction(clone);
-                selectSpiderSizeFunction(clone2);
-                selectSpiderSizeFunction(clone3);
-                clone.GetComponent<CapsuleCollider>().center = new Vector3(0f, 1f, 0f);
-                clone2.GetComponent<CapsuleCollider>().center = new Vector3(0f, 1f, 0f);
-                clone3.GetComponent<CapsuleCollider>().center = new Vector3(0f, 1f, 0f);
+                // cartoon spider (3 - l)
+                if (selectedSpider == 0)
+                {
+                    clone = Instantiate(prefab, spawnPoint.position, spawnPoint.rotation * Quaternion.Euler (0f, 180f, 0f));
+                    clone2 = Instantiate(prefab, spawnPoint2.position, spawnPoint2.rotation * Quaternion.Euler (0f, 180f, 0f));
+                    clone3 = Instantiate(prefab, spawnPoint3.position, spawnPoint3.rotation * Quaternion.Euler (0f, 180f, 0f));
+                
+                    selectSpiderSizeFunction(clone);
+                    selectSpiderSizeFunction(clone2);
+                    selectSpiderSizeFunction(clone3);
+                
+                    clone.GetComponent<CapsuleCollider>().center = new Vector3(0f, 0.2f, 0f);
+                    clone2.GetComponent<CapsuleCollider>().center = new Vector3(0f, 0.2f, 0f);
+                    clone3.GetComponent<CapsuleCollider>().center = new Vector3(0f, 0.2f, 0f);
+                
+                    clone.transform.GetChild(3).GetComponent<CapsuleCollider>().center = new Vector3(0f, 0.2f, 0f);
+                    clone2.transform.GetChild(3).GetComponent<CapsuleCollider>().center = new Vector3(0f, 0.2f, 0f);
+                    clone3.transform.GetChild(3).GetComponent<CapsuleCollider>().center = new Vector3(0f, 0.2f, 0f);
+                }
+                // normal spider (3 - l)
+                if (selectedSpider == 1)
+                {
+                    clone = Instantiate(prefab, spawnPoint.position, spawnPoint.rotation * Quaternion.Euler (0f, 180f, 0f));
+                    clone2 = Instantiate(prefab, spawnPoint2.position, spawnPoint2.rotation * Quaternion.Euler (0f, 180f, 0f));
+                    clone3 = Instantiate(prefab, spawnPoint3.position, spawnPoint3.rotation * Quaternion.Euler (0f, 180f, 0f));
+                
+                    selectSpiderSizeFunction(clone);
+                    selectSpiderSizeFunction(clone2);
+                    selectSpiderSizeFunction(clone3);
+                
+                    clone.GetComponent<CapsuleCollider>().center = new Vector3(0f, 2.55f, 0f);
+                    clone2.GetComponent<CapsuleCollider>().center = new Vector3(0f, 2.55f, 0f);
+                    clone3.GetComponent<CapsuleCollider>().center = new Vector3(0f, 2.55f, 0f);
+                
+                    clone.transform.GetChild(2).GetComponent<CapsuleCollider>().center = new Vector3(0f, 2.55f, 0f);
+                    clone2.transform.GetChild(2).GetComponent<CapsuleCollider>().center = new Vector3(0f, 2.55f, 0f);
+                    clone3.transform.GetChild(2).GetComponent<CapsuleCollider>().center = new Vector3(0f, 2.55f, 0f);
+                }
+                // realistic spider (3 - l)
+                if (selectedSpider == 2)
+                {
+                    clone = Instantiate(prefab, spawnPoint.position, spawnPoint.rotation * Quaternion.Euler (0f, 180f, 0f));
+                    clone2 = Instantiate(prefab, spawnPoint2.position, spawnPoint2.rotation * Quaternion.Euler (0f, 180f, 0f));
+                    clone3 = Instantiate(prefab, spawnPoint3.position, spawnPoint3.rotation * Quaternion.Euler (0f, 180f, 0f));
+                
+                    selectSpiderSizeFunction(clone);
+                    selectSpiderSizeFunction(clone2);
+                    selectSpiderSizeFunction(clone3);
+                
+                    clone.GetComponent<CapsuleCollider>().center = new Vector3(0f, 1.28f, 0f);
+                    clone2.GetComponent<CapsuleCollider>().center = new Vector3(0f, 1.28f, 0f);
+                    clone3.GetComponent<CapsuleCollider>().center = new Vector3(0f, 1.28f, 0f);
+                
+                    clone.transform.GetChild(2).GetComponent<CapsuleCollider>().center = new Vector3(0f, 1.28f, 0f);
+                    clone2.transform.GetChild(2).GetComponent<CapsuleCollider>().center = new Vector3(0f, 1.28f, 0f);
+                    clone3.transform.GetChild(2).GetComponent<CapsuleCollider>().center = new Vector3(0f, 1.28f, 0f);
+                }
             }
         }
+        
+        //5 spiders
         if (selectedGazeNum == 5)
         {
-             /*clone = Instantiate(prefab, spawnPoint.position, Quaternion.identity);
-             clone2 = Instantiate(prefab, spawnPoint2.position, Quaternion.identity);
-             clone3 = Instantiate(prefab, spawnPoint3.position, Quaternion.identity);
-             clone4 = Instantiate(prefab, spawnPoint4.position, Quaternion.identity);
-             clone5 = Instantiate(prefab, spawnPoint5.position, Quaternion.identity);*/
-             clone = Instantiate(prefab, spawnPoint.position, spawnPoint.rotation * Quaternion.Euler (0f, 180f, 0f));
-             clone2 = Instantiate(prefab, spawnPoint2.position, spawnPoint2.rotation * Quaternion.Euler (0f, 180f, 0f));
-             clone3 = Instantiate(prefab, spawnPoint3.position, spawnPoint3.rotation * Quaternion.Euler (0f, 180f, 0f));
-             clone4 = Instantiate(prefab, spawnPoint4.position, spawnPoint4.rotation * Quaternion.Euler (0f, 180f, 0f));
-             clone5 = Instantiate(prefab, spawnPoint5.position, spawnPoint5.rotation * Quaternion.Euler (0f, 180f, 0f));
-             selectSpiderSizeFunction(clone);
-             selectSpiderSizeFunction(clone2);
-             selectSpiderSizeFunction(clone3);
-             selectSpiderSizeFunction(clone4);
-             selectSpiderSizeFunction(clone5);
+            // size s 
+            if (selectedGazeSize == 1)
+            {
+                // cartoon spider (5 - s)
+                if (selectedSpider == 0)
+               {
+                   clone = Instantiate(prefab, spawnPoint.position, spawnPoint.rotation * Quaternion.Euler (0f, 180f, 0f));
+                   clone2 = Instantiate(prefab, spawnPoint2.position, spawnPoint2.rotation * Quaternion.Euler (0f, 270f, 0f));
+                   clone3 = Instantiate(prefab, spawnPoint3.position, spawnPoint3.rotation * Quaternion.Euler (0f, 180f, 0f));
+                   clone4 = Instantiate(prefab, spawnPoint4.position, spawnPoint4.rotation * Quaternion.Euler (0f, 180f, 0f));
+                   clone5 = Instantiate(prefab, spawnPoint5.position, spawnPoint5.rotation * Quaternion.Euler (0f, 180f, 0f));
+
+                   selectSpiderSizeFunction(clone);
+                   selectSpiderSizeFunction(clone2);
+                   selectSpiderSizeFunction(clone3);
+                   selectSpiderSizeFunction(clone4);
+                   selectSpiderSizeFunction(clone5);
+                
+                   clone.GetComponent<CapsuleCollider>().center = new Vector3(0f, 0.1099f, 0f);
+                   clone2.GetComponent<CapsuleCollider>().center = new Vector3(0f, 0.1099f, 0f);
+                   clone3.GetComponent<CapsuleCollider>().center = new Vector3(0f, 0.1099f, 0f);
+                   clone4.GetComponent<CapsuleCollider>().center = new Vector3(0f, 0.1099f, 0f);
+                   clone5.GetComponent<CapsuleCollider>().center = new Vector3(0f, 0.1099f, 0f);
+                
+                   clone.transform.GetChild(3).GetComponent<CapsuleCollider>().center = new Vector3(0f, 0.1099f, 0f);
+                   clone2.transform.GetChild(3).GetComponent<CapsuleCollider>().center = new Vector3(0f, 0.1099f, 0f);
+                   clone3.transform.GetChild(3).GetComponent<CapsuleCollider>().center = new Vector3(0f, 0.1099f, 0f);
+                   clone4.transform.GetChild(3).GetComponent<CapsuleCollider>().center = new Vector3(0f, 0.1099f, 0f);
+                   clone5.transform.GetChild(3).GetComponent<CapsuleCollider>().center = new Vector3(0f, 0.1099f, 0f);
+               } 
+                // normal spider (5 - s)
+                if (selectedSpider == 1)
+                {
+                    clone = Instantiate(prefab, spawnPoint.position, spawnPoint.rotation * Quaternion.Euler (0f, 180f, 0f));
+                    clone2 = Instantiate(prefab, spawnPoint2.position, spawnPoint2.rotation * Quaternion.Euler (0f, 270f, 0f));
+                    clone3 = Instantiate(prefab, spawnPoint3.position, spawnPoint3.rotation * Quaternion.Euler (0f, 180f, 0f));
+                    clone4 = Instantiate(prefab, spawnPoint4.position, spawnPoint4.rotation * Quaternion.Euler (0f, 180f, 0f));
+                    clone5 = Instantiate(prefab, spawnPoint5.position, spawnPoint5.rotation * Quaternion.Euler (0f, 180f, 0f));
+
+                    selectSpiderSizeFunction(clone);
+                    selectSpiderSizeFunction(clone2);
+                    selectSpiderSizeFunction(clone3);
+                    selectSpiderSizeFunction(clone4);
+                    selectSpiderSizeFunction(clone5);
+                
+                    clone.GetComponent<CapsuleCollider>().center = new Vector3(0f, 1.8f, 0f);
+                    clone2.GetComponent<CapsuleCollider>().center = new Vector3(0f, 1.8f, 0f);
+                    clone3.GetComponent<CapsuleCollider>().center = new Vector3(0f, 1.8f, 0f);
+                    clone4.GetComponent<CapsuleCollider>().center = new Vector3(0f, 1.8f, 0f);
+                    clone5.GetComponent<CapsuleCollider>().center = new Vector3(0f, 1.8f, 0f);
+                
+                    clone.transform.GetChild(2).GetComponent<CapsuleCollider>().center = new Vector3(0f, 1.8f, 0f);
+                    clone2.transform.GetChild(2).GetComponent<CapsuleCollider>().center = new Vector3(0f, 1.8f, 0f);
+                    clone3.transform.GetChild(2).GetComponent<CapsuleCollider>().center = new Vector3(0f, 1.8f, 0f);
+                    clone4.transform.GetChild(2).GetComponent<CapsuleCollider>().center = new Vector3(0f, 1.8f, 0f);
+                    clone5.transform.GetChild(2).GetComponent<CapsuleCollider>().center = new Vector3(0f, 1.8f, 0f);
+                }
+                // realistic spider (5 - s)
+                if (selectedSpider == 2)
+                {
+                    clone = Instantiate(prefab, spawnPoint.position, spawnPoint.rotation * Quaternion.Euler (0f, 180f, 0f));
+                    clone2 = Instantiate(prefab, spawnPoint2.position, spawnPoint2.rotation * Quaternion.Euler (0f, 270f, 0f));
+                    clone3 = Instantiate(prefab, spawnPoint3.position, spawnPoint3.rotation * Quaternion.Euler (0f, 180f, 0f));
+                    clone4 = Instantiate(prefab, spawnPoint4.position, spawnPoint4.rotation * Quaternion.Euler (0f, 180f, 0f));
+                    clone5 = Instantiate(prefab, spawnPoint5.position, spawnPoint5.rotation * Quaternion.Euler (0f, 180f, 0f));
+                
+                    selectSpiderSizeFunction(clone);
+                    selectSpiderSizeFunction(clone2);
+                    selectSpiderSizeFunction(clone3);
+                    selectSpiderSizeFunction(clone4);
+                    selectSpiderSizeFunction(clone5);
+                
+                    clone.GetComponent<CapsuleCollider>().center = new Vector3(0f, 0.9f, 0f);
+                    clone2.GetComponent<CapsuleCollider>().center = new Vector3(0f, 0.9f, 0f);
+                    clone3.GetComponent<CapsuleCollider>().center = new Vector3(0f, 0.9f, 0f);
+                    clone4.GetComponent<CapsuleCollider>().center = new Vector3(0f, 0.9f, 0f);
+                    clone5.GetComponent<CapsuleCollider>().center = new Vector3(0f, 0.9f, 0f);
+                
+                    clone.transform.GetChild(2).GetComponent<CapsuleCollider>().center = new Vector3(0f, 0.9f, 0f);
+                    clone2.transform.GetChild(2).GetComponent<CapsuleCollider>().center = new Vector3(0f, 0.9f, 0f);
+                    clone3.transform.GetChild(2).GetComponent<CapsuleCollider>().center = new Vector3(0f, 0.9f, 0f);
+                    clone4.transform.GetChild(2).GetComponent<CapsuleCollider>().center = new Vector3(0f, 0.9f, 0f);
+                    clone5.transform.GetChild(2).GetComponent<CapsuleCollider>().center = new Vector3(0f, 0.9f, 0f);
+                }
+            }
+            
+            // size m
+            if (selectedGazeSize == 2)
+            {
+                // cartoon spider (5 - m)
+                if (selectedSpider == 0)
+               {
+                   clone = Instantiate(prefab, spawnPoint.position, spawnPoint.rotation * Quaternion.Euler (0f, 180f, 0f));
+                   clone2 = Instantiate(prefab, spawnPoint2.position, spawnPoint2.rotation * Quaternion.Euler (0f, 270f, 0f));
+                   clone3 = Instantiate(prefab, spawnPoint3.position, spawnPoint3.rotation * Quaternion.Euler (0f, 180f, 0f));
+                   clone4 = Instantiate(prefab, spawnPoint4.position, spawnPoint4.rotation * Quaternion.Euler (0f, 180f, 0f));
+                   clone5 = Instantiate(prefab, spawnPoint5.position, spawnPoint5.rotation * Quaternion.Euler (0f, 180f, 0f));
+
+                   selectSpiderSizeFunction(clone);
+                   selectSpiderSizeFunction(clone2);
+                   selectSpiderSizeFunction(clone3);
+                   selectSpiderSizeFunction(clone4);
+                   selectSpiderSizeFunction(clone5);
+                
+                   clone.GetComponent<CapsuleCollider>().center = new Vector3(0f, 0.15f, 0f);
+                   clone2.GetComponent<CapsuleCollider>().center = new Vector3(0f, 0.15f, 0f);
+                   clone3.GetComponent<CapsuleCollider>().center = new Vector3(0f, 0.15f, 0f);
+                   clone4.GetComponent<CapsuleCollider>().center = new Vector3(0f, 0.15f, 0f);
+                   clone5.GetComponent<CapsuleCollider>().center = new Vector3(0f, 0.15f, 0f);
+                
+                   clone.transform.GetChild(3).GetComponent<CapsuleCollider>().center = new Vector3(0f, 0.15f, 0f);
+                   clone2.transform.GetChild(3).GetComponent<CapsuleCollider>().center = new Vector3(0f, 0.15f, 0f);
+                   clone3.transform.GetChild(3).GetComponent<CapsuleCollider>().center = new Vector3(0f, 0.15f, 0f);
+                   clone4.transform.GetChild(3).GetComponent<CapsuleCollider>().center = new Vector3(0f, 0.15f, 0f);
+                   clone5.transform.GetChild(3).GetComponent<CapsuleCollider>().center = new Vector3(0f, 0.15f, 0f);
+               } 
+                // normal spider (5 - m)
+                if (selectedSpider == 1)
+                {
+                    clone = Instantiate(prefab, spawnPoint.position, spawnPoint.rotation * Quaternion.Euler (0f, 180f, 0f));
+                    clone2 = Instantiate(prefab, spawnPoint2.position, spawnPoint2.rotation * Quaternion.Euler (0f, 270f, 0f));
+                    clone3 = Instantiate(prefab, spawnPoint3.position, spawnPoint3.rotation * Quaternion.Euler (0f, 180f, 0f));
+                    clone4 = Instantiate(prefab, spawnPoint4.position, spawnPoint4.rotation * Quaternion.Euler (0f, 180f, 0f));
+                    clone5 = Instantiate(prefab, spawnPoint5.position, spawnPoint5.rotation * Quaternion.Euler (0f, 180f, 0f));
+
+                    selectSpiderSizeFunction(clone);
+                    selectSpiderSizeFunction(clone2);
+                    selectSpiderSizeFunction(clone3);
+                    selectSpiderSizeFunction(clone4);
+                    selectSpiderSizeFunction(clone5);
+                
+                    clone.GetComponent<CapsuleCollider>().center = new Vector3(0f, 2.15f, 0f);
+                    clone2.GetComponent<CapsuleCollider>().center = new Vector3(0f, 2.15f, 0f);
+                    clone3.GetComponent<CapsuleCollider>().center = new Vector3(0f, 2.15f, 0f);
+                    clone4.GetComponent<CapsuleCollider>().center = new Vector3(0f, 2.15f, 0f);
+                    clone5.GetComponent<CapsuleCollider>().center = new Vector3(0f, 2.15f, 0f);
+                
+                    clone.transform.GetChild(2).GetComponent<CapsuleCollider>().center = new Vector3(0f, 2.15f, 0f);
+                    clone2.transform.GetChild(2).GetComponent<CapsuleCollider>().center = new Vector3(0f, 2.15f, 0f);
+                    clone3.transform.GetChild(2).GetComponent<CapsuleCollider>().center = new Vector3(0f, 2.15f, 0f);
+                    clone4.transform.GetChild(2).GetComponent<CapsuleCollider>().center = new Vector3(0f, 2.15f, 0f);
+                    clone5.transform.GetChild(2).GetComponent<CapsuleCollider>().center = new Vector3(0f, 2.15f, 0f);
+                }
+                // realistic spider (5 - m)
+                if (selectedSpider == 2)
+                {
+                    clone = Instantiate(prefab, spawnPoint.position, spawnPoint.rotation * Quaternion.Euler (0f, 180f, 0f));
+                    clone2 = Instantiate(prefab, spawnPoint2.position, spawnPoint2.rotation * Quaternion.Euler (0f, 270f, 0f));
+                    clone3 = Instantiate(prefab, spawnPoint3.position, spawnPoint3.rotation * Quaternion.Euler (0f, 180f, 0f));
+                    clone4 = Instantiate(prefab, spawnPoint4.position, spawnPoint4.rotation * Quaternion.Euler (0f, 180f, 0f));
+                    clone5 = Instantiate(prefab, spawnPoint5.position, spawnPoint5.rotation * Quaternion.Euler (0f, 180f, 0f));
+                
+                    selectSpiderSizeFunction(clone);
+                    selectSpiderSizeFunction(clone2);
+                    selectSpiderSizeFunction(clone3);
+                    selectSpiderSizeFunction(clone4);
+                    selectSpiderSizeFunction(clone5);
+                
+                    clone.GetComponent<CapsuleCollider>().center = new Vector3(0f, 1.1f, 0f);
+                    clone2.GetComponent<CapsuleCollider>().center = new Vector3(0f, 1.1f, 0f);
+                    clone3.GetComponent<CapsuleCollider>().center = new Vector3(0f, 1.1f, 0f);
+                    clone4.GetComponent<CapsuleCollider>().center = new Vector3(0f, 1.1f, 0f);
+                    clone5.GetComponent<CapsuleCollider>().center = new Vector3(0f, 1.1f, 0f);
+                
+                    clone.transform.GetChild(2).GetComponent<CapsuleCollider>().center = new Vector3(0f, 1.1f, 0f);
+                    clone2.transform.GetChild(2).GetComponent<CapsuleCollider>().center = new Vector3(0f, 1.1f, 0f);
+                    clone3.transform.GetChild(2).GetComponent<CapsuleCollider>().center = new Vector3(0f, 1.1f, 0f);
+                    clone4.transform.GetChild(2).GetComponent<CapsuleCollider>().center = new Vector3(0f, 1.1f, 0f);
+                    clone5.transform.GetChild(2).GetComponent<CapsuleCollider>().center = new Vector3(0f, 1.1f, 0f);
+                }
+            }
+            
+            // size l
+            if (selectedGazeSize == 3)
+            {
+                // cartoon spider (5 - l)
+                if (selectedSpider == 0)
+               {
+                   clone = Instantiate(prefab, spawnPoint.position, spawnPoint.rotation * Quaternion.Euler (0f, 180f, 0f));
+                   clone2 = Instantiate(prefab, spawnPoint2.position, spawnPoint2.rotation * Quaternion.Euler (0f, 270f, 0f));
+                   //clone2 = Instantiate(prefab, spawnPoint2.position, spawnPoint2.rotation * Quaternion.Euler (0f, 180f, 0f));
+                   clone3 = Instantiate(prefab, spawnPoint3.position, spawnPoint3.rotation * Quaternion.Euler (0f, 180f, 0f));
+                   clone4 = Instantiate(prefab, spawnPoint4.position, spawnPoint4.rotation * Quaternion.Euler (0f, 180f, 0f));
+                   clone5 = Instantiate(prefab, spawnPoint5.position, spawnPoint5.rotation * Quaternion.Euler (0f, 180f, 0f));
+
+                   selectSpiderSizeFunction(clone);
+                   selectSpiderSizeFunction(clone2);
+                   selectSpiderSizeFunction(clone3);
+                   selectSpiderSizeFunction(clone4);
+                   selectSpiderSizeFunction(clone5);
+                
+                   clone.GetComponent<CapsuleCollider>().center = new Vector3(0f, 0.18f, 0f);
+                   clone2.GetComponent<CapsuleCollider>().center = new Vector3(0f, 0.18f, 0f);
+                   clone3.GetComponent<CapsuleCollider>().center = new Vector3(0f, 0.18f, 0f);
+                   clone4.GetComponent<CapsuleCollider>().center = new Vector3(0f, 0.18f, 0f);
+                   clone5.GetComponent<CapsuleCollider>().center = new Vector3(0f, 0.18f, 0f);
+                
+                   clone.transform.GetChild(3).GetComponent<CapsuleCollider>().center = new Vector3(0f, 0.18f, 0f);
+                   clone2.transform.GetChild(3).GetComponent<CapsuleCollider>().center = new Vector3(0f, 0.18f, 0f);
+                   clone3.transform.GetChild(3).GetComponent<CapsuleCollider>().center = new Vector3(0f, 0.18f, 0f);
+                   clone4.transform.GetChild(3).GetComponent<CapsuleCollider>().center = new Vector3(0f, 0.18f, 0f);
+                   clone5.transform.GetChild(3).GetComponent<CapsuleCollider>().center = new Vector3(0f, 0.18f, 0f);
+               } 
+                // normal spider (5 - l)
+                if (selectedSpider == 1)
+                {
+                    clone = Instantiate(prefab, spawnPoint.position, spawnPoint.rotation * Quaternion.Euler (0f, 180f, 0f));
+                    clone2 = Instantiate(prefab, spawnPoint2.position, spawnPoint2.rotation * Quaternion.Euler (0f, 270f, 0f));
+                    clone3 = Instantiate(prefab, spawnPoint3.position, spawnPoint3.rotation * Quaternion.Euler (0f, 180f, 0f));
+                    clone4 = Instantiate(prefab, spawnPoint4.position, spawnPoint4.rotation * Quaternion.Euler (0f, 180f, 0f));
+                    clone5 = Instantiate(prefab, spawnPoint5.position, spawnPoint5.rotation * Quaternion.Euler (0f, 180f, 0f));
+
+                    selectSpiderSizeFunction(clone);
+                    selectSpiderSizeFunction(clone2);
+                    selectSpiderSizeFunction(clone3);
+                    selectSpiderSizeFunction(clone4);
+                    selectSpiderSizeFunction(clone5);
+                
+                    clone.GetComponent<CapsuleCollider>().center = new Vector3(0f, 2.4f, 0f);
+                    clone2.GetComponent<CapsuleCollider>().center = new Vector3(0f, 2.4f, 0f);
+                    clone3.GetComponent<CapsuleCollider>().center = new Vector3(0f, 2.4f, 0f);
+                    clone4.GetComponent<CapsuleCollider>().center = new Vector3(0f, 2.4f, 0f);
+                    clone5.GetComponent<CapsuleCollider>().center = new Vector3(0f, 2.4f, 0f);
+                
+                    clone.transform.GetChild(2).GetComponent<CapsuleCollider>().center = new Vector3(0f, 2.4f, 0f);
+                    clone2.transform.GetChild(2).GetComponent<CapsuleCollider>().center = new Vector3(0f, 2.4f, 0f);
+                    clone3.transform.GetChild(2).GetComponent<CapsuleCollider>().center = new Vector3(0f, 2.4f, 0f);
+                    clone4.transform.GetChild(2).GetComponent<CapsuleCollider>().center = new Vector3(0f, 2.4f, 0f);
+                    clone5.transform.GetChild(2).GetComponent<CapsuleCollider>().center = new Vector3(0f, 2.4f, 0f);
+                }
+                // realistic spider (5 - l)
+                if (selectedSpider == 2)
+                {
+                    clone = Instantiate(prefab, spawnPoint.position, spawnPoint.rotation * Quaternion.Euler (0f, 180f, 0f));
+                    clone2 = Instantiate(prefab, spawnPoint2.position, spawnPoint2.rotation * Quaternion.Euler (0f, 270f, 0f));
+                    clone3 = Instantiate(prefab, spawnPoint3.position, spawnPoint3.rotation * Quaternion.Euler (0f, 180f, 0f));
+                    clone4 = Instantiate(prefab, spawnPoint4.position, spawnPoint4.rotation * Quaternion.Euler (0f, 180f, 0f));
+                    clone5 = Instantiate(prefab, spawnPoint5.position, spawnPoint5.rotation * Quaternion.Euler (0f, 180f, 0f));
+                
+                    selectSpiderSizeFunction(clone);
+                    selectSpiderSizeFunction(clone2);
+                    selectSpiderSizeFunction(clone3);
+                    selectSpiderSizeFunction(clone4);
+                    selectSpiderSizeFunction(clone5);
+                
+                    clone.GetComponent<CapsuleCollider>().center = new Vector3(0f, 1.25f, 0f);
+                    clone2.GetComponent<CapsuleCollider>().center = new Vector3(0f, 1.25f, 0f);
+                    clone3.GetComponent<CapsuleCollider>().center = new Vector3(0f, 1.25f, 0f);
+                    clone4.GetComponent<CapsuleCollider>().center = new Vector3(0f, 1.25f, 0f);
+                    clone5.GetComponent<CapsuleCollider>().center = new Vector3(0f, 1.25f, 0f);
+                
+                    clone.transform.GetChild(2).GetComponent<CapsuleCollider>().center = new Vector3(0f, 1.25f, 0f);
+                    clone2.transform.GetChild(2).GetComponent<CapsuleCollider>().center = new Vector3(0f, 1.25f, 0f);
+                    clone3.transform.GetChild(2).GetComponent<CapsuleCollider>().center = new Vector3(0f, 1.25f, 0f);
+                    clone4.transform.GetChild(2).GetComponent<CapsuleCollider>().center = new Vector3(0f, 1.25f, 0f);
+                    clone5.transform.GetChild(2).GetComponent<CapsuleCollider>().center = new Vector3(0f, 1.25f, 0f);
+                }
+            }
         }
-        
-        //GameObject clone2 = Instantiate(prefab, spawnPoint2.position, Quaternion.identity);
-        /*GameObject clone3 = Instantiate(prefab, spawnPoint3.position, Quaternion.identity);
-        GameObject clone4 = Instantiate(prefab, spawnPoint4.position, Quaternion.identity);
-        GameObject clone5 = Instantiate(prefab, spawnPoint5.position, Quaternion.identity);*/
-        
-        // using function and parameter because just calling clone with end up with only the last clone recieving the changes
-        /*exampleFunction(clone);
-        exampleFunction(clone2);
-        exampleFunction(clone3);
-        exampleFunction(clone4);
-        exampleFunction(clone5);*/
-        /*int selectedGazeSize = PlayerPrefs.GetInt("selectedGazeSize");
-        if (selectedGazeSize == 1)
-        {
-            // change clone gameobject scale using code (using multiply as different assets have different scales)
-            Vector3 newScale = clone.transform.localScale;
-            newScale *= 1f;
-            clone.transform.localScale = newScale;
-            //Debug.Log(clone.transform.localScale);
-            // clone.transform.localScale = new Vector3(0.02f, 0.02f, 0.02f);
-        }
-        if (selectedGazeSize == 2)
-        {
-            // clone.transform.localScale = new Vector3(0.04f, 0.04f, 0.04f);
-            Vector3 newScale = clone.transform.localScale;
-            newScale *= 2f;
-            clone.transform.localScale = newScale;
-        }
-        if (selectedGazeSize == 3)
-        {
-            // clone.transform.localScale = new Vector3(0.06f, 0.06f, 0.06f);
-            Vector3 newScale = clone.transform.localScale;
-            newScale *= 3f;
-            clone.transform.localScale = newScale;
-        }*/
+        // /*clone = Instantiate(prefab, spawnPoint.position, Quaternion.identity);
+        // clone2 = Instantiate(prefab, spawnPoint2.position, Quaternion.identity);
+        // clone3 = Instantiate(prefab, spawnPoint3.position, Quaternion.identity);
+        // clone4 = Instantiate(prefab, spawnPoint4.position, Quaternion.identity);
+        // clone5 = Instantiate(prefab, spawnPoint5.position, Quaternion.identity);*/
+        // // clone = Instantiate(prefab, spawnPoint.position, spawnPoint.rotation * Quaternion.Euler (0f, 180f, 0f));
+        // // clone2 = Instantiate(prefab, spawnPoint2.position, spawnPoint2.rotation * Quaternion.Euler (0f, 180f, 0f));
+        // // clone3 = Instantiate(prefab, spawnPoint3.position, spawnPoint3.rotation * Quaternion.Euler (0f, 180f, 0f));
+        // // clone4 = Instantiate(prefab, spawnPoint4.position, spawnPoint4.rotation * Quaternion.Euler (0f, 180f, 0f));
+        // // clone5 = Instantiate(prefab, spawnPoint5.position, spawnPoint5.rotation * Quaternion.Euler (0f, 180f, 0f));
+        // // selectSpiderSizeFunction(clone);
+        // // selectSpiderSizeFunction(clone2);
+        // // selectSpiderSizeFunction(clone3);
+        // // selectSpiderSizeFunction(clone4);
+        // // selectSpiderSizeFunction(clone5);
+        // //GameObject clone2 = Instantiate(prefab, spawnPoint2.position, Quaternion.identity);
+        // /*GameObject clone3 = Instantiate(prefab, spawnPoint3.position, Quaternion.identity);
+        // GameObject clone4 = Instantiate(prefab, spawnPoint4.position, Quaternion.identity);
+        // GameObject clone5 = Instantiate(prefab, spawnPoint5.position, Quaternion.identity);*/
+        // // using function and parameter because just calling clone with end up with only the last clone recieving the changes
+        // /*exampleFunction(clone);
+        // exampleFunction(clone2);
+        // exampleFunction(clone3);
+        // exampleFunction(clone4);
+        // exampleFunction(clone5);*/
+        // /*int selectedGazeSize = PlayerPrefs.GetInt("selectedGazeSize");
+        // if (selectedGazeSize == 1)
+        // {
+        //     // change clone gameobject scale using code (using multiply as different assets have different scales)
+        //     Vector3 newScale = clone.transform.localScale;
+        //     newScale *= 1f;
+        //     clone.transform.localScale = newScale;
+        //     //Debug.Log(clone.transform.localScale);
+        //     // clone.transform.localScale = new Vector3(0.02f, 0.02f, 0.02f);
+        // }
+        // if (selectedGazeSize == 2)
+        // {
+        //     // clone.transform.localScale = new Vector3(0.04f, 0.04f, 0.04f);
+        //     Vector3 newScale = clone.transform.localScale;
+        //     newScale *= 2f;
+        //     clone.transform.localScale = newScale;
+        // }
+        // if (selectedGazeSize == 3)
+        // {
+        //     // clone.transform.localScale = new Vector3(0.06f, 0.06f, 0.06f);
+        //     Vector3 newScale = clone.transform.localScale;
+        //     newScale *= 3f;
+        //     clone.transform.localScale = newScale;
+        // }*/
     }
     
     public void selectSpiderSizeFunction(GameObject spiderExample)
@@ -166,12 +642,10 @@ public class LoadSpider : MonoBehaviour
         
         if (selectedGazeSize == 3)
         {
-            // clone.transform.localScale = new Vector3(0.06f, 0.06f, 0.06f);
-            // get spider scale in the scene?
+            /*get spider scale in the scene?*/
             Vector3 newScale = spiderExample.transform.localScale;
             newScale *= 3f;
             spiderExample.transform.localScale = newScale;
-            
         }
     }
     /*public void example(GameObject spider1)

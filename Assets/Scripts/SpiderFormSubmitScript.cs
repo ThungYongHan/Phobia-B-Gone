@@ -24,10 +24,8 @@ public class SpiderFormSubmitScript : MonoBehaviour
         
         InitializeFirebase();
         CountPatientSpiderData();
-        /*Invoke("InitializeFirebase",0.1f);
-        Invoke("CountPatientSpiderData",0.2f);*/
-        //auth = FirebaseAuth.DefaultInstance;
     }
+    
     Questionnaire questionnaire = new Questionnaire();
     
     public void CountPatientSpiderData()
@@ -113,7 +111,7 @@ public class SpiderFormSubmitScript : MonoBehaviour
     }*/
 
 
-    public void submitQuestionnaire()
+    public void submitFirstFSQ()
     {
         string sumNum = (Q1.value + Q2.value + Q3.value + Q4.value + Q5.value + Q6.value + Q7.value +
                          Q8.value + Q9.value + Q10.value + Q11.value + Q12.value + Q13.value + Q14.value +
@@ -150,8 +148,73 @@ public class SpiderFormSubmitScript : MonoBehaviour
         });
         SceneManager.LoadScene("SpiderPhobiaMenu");
     }
+
+    public void submitTreatmentFSQ()
+    {
+        string sumNum = (Q1.value + Q2.value + Q3.value + Q4.value + Q5.value + Q6.value + Q7.value +
+                         Q8.value + Q9.value + Q10.value + Q11.value + Q12.value + Q13.value + Q14.value +
+                         Q15.value + Q16.value + Q17.value + Q18.value).ToString();
+        
+        string currentdatetime = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss");
+        questionnaire.AnswerDateTime = currentdatetime;
+        questionnaire.AnswerScore = sumNum;
+        string json = JsonUtility.ToJson(questionnaire);
+
+        Debug.Log(currentdatetime);
+        var user = auth.CurrentUser;
+        reference.Child("Questionnaires").Child(user.UserId).Child("Spider").Child(iterateNum.ToString()).SetRawJsonValueAsync(json).ContinueWith(task => 
+        {
+            if (task.IsCompleted)
+            {
+                Debug.Log("Successfully added data to Firebase"); 
+            }
+            else
+            {
+                Debug.Log("Unsuccessful");
+            }
+        });
+        SceneManager.LoadScene("TreatmentProgressSpider");
+    }
     
-    // Handle initialization of the necessary firebase modules:
+    public void quitApp()
+    {
+        Application.Quit();
+        UnityEditor.EditorApplication.isPlaying = false;
+    }
+    
+    public void backFSQ()
+    {
+        SceneManager.LoadScene("TreatmentProgressSpider");
+    }
+    
+    public void signOutSubmit()
+    {
+        string sumNum = (Q1.value + Q2.value + Q3.value + Q4.value + Q5.value + Q6.value + Q7.value +
+                         Q8.value + Q9.value + Q10.value + Q11.value + Q12.value + Q13.value + Q14.value +
+                         Q15.value + Q16.value + Q17.value + Q18.value).ToString();
+        
+        string currentdatetime = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss");
+        questionnaire.AnswerDateTime = currentdatetime;
+        questionnaire.AnswerScore = sumNum;
+        string json = JsonUtility.ToJson(questionnaire);
+        
+        Debug.Log(currentdatetime);
+        var user = auth.CurrentUser;
+        reference.Child("Questionnaires").Child(user.UserId).Child("Spider").Child(iterateNum.ToString()).SetRawJsonValueAsync(json).ContinueWith(task => 
+        {
+            if (task.IsCompleted)
+            {
+                Debug.Log("Successfully added data to Firebase"); 
+            }
+            else
+            {
+                Debug.Log("Unsuccessful");
+            }
+        });
+        SceneManager.LoadScene("SignOutTreatmentProgressSpider");
+    }
+    
+    
     void InitializeFirebase() {
         Debug.Log("Setting up Firebase Auth");
         auth = Firebase.Auth.FirebaseAuth.DefaultInstance;
@@ -159,7 +222,6 @@ public class SpiderFormSubmitScript : MonoBehaviour
         AuthStateChanged(this, null);
     }
 
-// Track state changes of the auth object.
     void AuthStateChanged(object sender, System.EventArgs eventArgs) {
         if (auth.CurrentUser != user) {
             bool signedIn = user != auth.CurrentUser && auth.CurrentUser != null;
@@ -177,7 +239,4 @@ public class SpiderFormSubmitScript : MonoBehaviour
         auth.StateChanged -= AuthStateChanged;
         auth = null;
     }
-
-
-
 }

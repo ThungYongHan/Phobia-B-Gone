@@ -11,15 +11,11 @@ public class LoadSpiderGame : MonoBehaviour
     public Transform spawnPoint4;
     public Transform spawnPoint5;
     public GameObject clone, clone2, clone3, clone4, clone5;
-    public CapsuleCollider exampleCollider;
-    /*private int selectedGazeSize;
-    private int selectedGazeNum;*/
+
     private int selectedSpider;
     void Start()
     {
         selectedSpider = PlayerPrefs.GetInt("selectedSpider");
-        /*selectedGazeNum = PlayerPrefs.GetInt("selectedGazeNum");
-        selectedGazeSize = PlayerPrefs.GetInt("selectedGazeSize");*/
 
         GameObject prefab = spiderPrefabs[selectedSpider];
         clone = Instantiate(prefab, spawnPoint.position, spawnPoint.rotation * Quaternion.Euler (0f, 270f, 0f));

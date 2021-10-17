@@ -12,9 +12,7 @@ using UnityEngine.XR.Management;
 public class FirebaseUserManager : MonoBehaviour
 {
     DatabaseReference reference;
-
-    //public VrModeController scriptB;
-    //public string message;
+    
     public Text signuperrormessage;
     public Text loginerrormessage;
     public GameObject LogInErrorMessagePanel;
@@ -35,13 +33,7 @@ public class FirebaseUserManager : MonoBehaviour
         LogInErrorMessagePanel.SetActive(false);
         SignUpErrorMessagePanel.SetActive(false);
         auth = FirebaseAuth.DefaultInstance;
-        // signuperrormessage = GameObject.Find("signuperrormessage").GetComponent<UnityEngine.UI.Text>();
-        // loginerrormessage = GameObject.Find("loginerrormessage").GetComponent<UnityEngine.UI.Text>();
-        //XRGeneralSettings.Instance.Manager.InitializeLoader();
-        //XRGeneralSettings.Instance.Manager.DeinitializeLoader();
-        //SignUpCanvas = GameObject.Find("SignUpCanvas").GetComponent<Canvas>();
         SignUpCanvas.enabled = false;
-        //LogInCanvas = GameObject.Find("LogInCanvas").GetComponent<Canvas>();
     }
     
     UserDetails user = new UserDetails();
@@ -60,16 +52,20 @@ public class FirebaseUserManager : MonoBehaviour
 
     public void signup()
     {
-        string checktext = signupusername.text;
-        if (signuppassword.text != signuppasswordconfirm.text)
+        if (string.IsNullOrWhiteSpace(signupemail.text))
         {
             SignUpErrorMessagePanel.SetActive(true);
-            signuperrormessage.text = "Passwords do not match!";
+            signuperrormessage.text = "Please input an email address!";
         }
-        else if (string.IsNullOrEmpty(checktext))
+        else if (string.IsNullOrWhiteSpace(signupusername.text))
         {
             SignUpErrorMessagePanel.SetActive(true);
             signuperrormessage.text = "Please input a username!";
+        }
+        else if (signuppassword.text != signuppasswordconfirm.text)
+        {
+            SignUpErrorMessagePanel.SetActive(true);
+            signuperrormessage.text = "Passwords do not match!";
         }
         else
         {
@@ -87,7 +83,6 @@ public class FirebaseUserManager : MonoBehaviour
                     if (signuptask.Exception != null)
                     {
                         SignUpErrorMessagePanel.SetActive(true);
-                        //message = "Login failed";
                         FirebaseException firebaseEx = signuptask.Exception.GetBaseException() as FirebaseException;
                         
                         AuthError errorCode = (AuthError)firebaseEx.ErrorCode;
@@ -96,11 +91,14 @@ public class FirebaseUserManager : MonoBehaviour
                             case AuthError.MissingEmail:
                                 signuperrormessage.text  = "Missing Email";
                                 break;
+                            case AuthError.InvalidEmail:
+                                signuperrormessage.text  = "Invalid Email";
+                                break;
                             case AuthError.MissingPassword:
                                 signuperrormessage.text  = "Missing Password";
                                 break;
-                            case AuthError.InvalidEmail:
-                                signuperrormessage.text  = "Invalid Email";
+                            case AuthError.WeakPassword:
+                                signuperrormessage.text  = "Chosen Password is too weak!";
                                 break;
                             case AuthError.EmailAlreadyInUse:
                                 signuperrormessage.text  = "Email is already in use!";
@@ -112,17 +110,13 @@ public class FirebaseUserManager : MonoBehaviour
                 
                 FirebaseUser newuser = signuptask.Result;
                 Debug.LogFormat("Firebase user is created successfully :{0} ({1})", newuser.DisplayName, newuser.UserId);
-                signuperrormessage.text = "The user has signed up successfully";
-                
                 user.Username = signupusername.text;
-                //user.Password = signuppassword.text;
                 user.Email = signupemail.text;
                 string json = JsonUtility.ToJson(user);
                 reference.Child("User").Child(newuser.UserId).SetRawJsonValueAsync(json).ContinueWithOnMainThread(task => 
                 {
                     if (task.IsCompleted)
                     {
-                        // reference.Child("Sessions").SetRawJsonValueAsync(json);
                         Debug.Log("Successfully added new user data to Firebase");
                         switchToLogIn();
                     }
@@ -151,10 +145,14 @@ public class FirebaseUserManager : MonoBehaviour
                 if (logintask.Exception != null)
                 {
                     LogInErrorMessagePanel.SetActive(true);
-                    //message = "Login failed";
                     FirebaseException firebaseEx = logintask.Exception.GetBaseException() as FirebaseException;
                     AuthError errorCode = (AuthError)firebaseEx.ErrorCode;
-
+                    if (string.IsNullOrWhiteSpace(loginemail.text) && string.IsNullOrWhiteSpace(loginpassword.text))
+                    {
+                        loginerrormessage.text  = "Missing Email and Password!";
+                        return;
+                    }
+                    
                     switch (errorCode)
                     {
                         case AuthError.MissingEmail:
@@ -173,13 +171,12 @@ public class FirebaseUserManager : MonoBehaviour
                             loginerrormessage.text  = "Account does not exist";
                             break;
                     }
-
                     return;
                 }
             }
             FirebaseUser returnuser = logintask.Result;
             Debug.LogFormat("Firebase user is logged in  successfully :{0} ({1})", returnuser.DisplayName, returnuser.UserId);
-            loginerrormessage.text = "The user is logged in successfully";
+            // loginerrormessage.text = "The user is logged in successfully";
             SceneManager.LoadScene("PhobiaSelectMenu");
         });
     }

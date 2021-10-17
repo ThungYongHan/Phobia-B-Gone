@@ -54,7 +54,7 @@ public class CockroachFormSubmitScript : MonoBehaviour
 
     }
 
-    public void submitQuestionnaire()
+    public void submitFirstFCQ()
     {
         string sumNum = (Q1.value + Q2.value + Q3.value + Q4.value + Q5.value + Q6.value + Q7.value +
                          Q8.value + Q9.value + Q10.value + Q11.value + Q12.value + Q13.value + Q14.value +
@@ -64,9 +64,7 @@ public class CockroachFormSubmitScript : MonoBehaviour
         questionnaire.AnswerDateTime = currentdatetime;
         questionnaire.AnswerScore = sumNum;
         string json = JsonUtility.ToJson(questionnaire);
-        //string currentdatetime = DateTime.Now.ToString("yyyy’-‘MM’-‘dd’T’HH’:’mm’:’ss");
-        //questionnaire.AnswerDateTime = currentdatetime;
-        
+
         Debug.Log(currentdatetime);
         var user = auth.CurrentUser;
         reference.Child("Questionnaires").Child(user.UserId).Child("Cockroach").Child(iterateNum.ToString()).SetRawJsonValueAsync(json).ContinueWith(task => 
@@ -83,7 +81,71 @@ public class CockroachFormSubmitScript : MonoBehaviour
         SceneManager.LoadScene("CockroachPhobiaMenu");
     }
     
-    // Handle initialization of the necessary firebase modules:
+    public void submitTreatmentFCQ()
+    {
+        string sumNum = (Q1.value + Q2.value + Q3.value + Q4.value + Q5.value + Q6.value + Q7.value +
+                         Q8.value + Q9.value + Q10.value + Q11.value + Q12.value + Q13.value + Q14.value +
+                         Q15.value + Q16.value + Q17.value + Q18.value).ToString();
+        
+        string currentdatetime = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss");
+        questionnaire.AnswerDateTime = currentdatetime;
+        questionnaire.AnswerScore = sumNum;
+        string json = JsonUtility.ToJson(questionnaire);
+
+        Debug.Log(currentdatetime);
+        var user = auth.CurrentUser;
+        reference.Child("Questionnaires").Child(user.UserId).Child("Cockroach").Child(iterateNum.ToString()).SetRawJsonValueAsync(json).ContinueWith(task => 
+        {
+            if (task.IsCompleted)
+            {
+                Debug.Log("Successfully added data to Firebase"); 
+            }
+            else
+            {
+                Debug.Log("Unsuccessful");
+            }
+        });
+        SceneManager.LoadScene("TreatmentProgressCockroach");
+    }
+    
+    public void quitApp()
+    {
+        Application.Quit();
+        UnityEditor.EditorApplication.isPlaying = false;
+    }
+    
+    public void signOutSubmit()
+    {
+        string sumNum = (Q1.value + Q2.value + Q3.value + Q4.value + Q5.value + Q6.value + Q7.value +
+                         Q8.value + Q9.value + Q10.value + Q11.value + Q12.value + Q13.value + Q14.value +
+                         Q15.value + Q16.value + Q17.value + Q18.value).ToString();
+        
+        string currentdatetime = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss");
+        questionnaire.AnswerDateTime = currentdatetime;
+        questionnaire.AnswerScore = sumNum;
+        string json = JsonUtility.ToJson(questionnaire);
+        
+        Debug.Log(currentdatetime);
+        var user = auth.CurrentUser;
+        reference.Child("Questionnaires").Child(user.UserId).Child("Cockroach").Child(iterateNum.ToString()).SetRawJsonValueAsync(json).ContinueWith(task => 
+        {
+            if (task.IsCompleted)
+            {
+                Debug.Log("Successfully added data to Firebase"); 
+            }
+            else
+            {
+                Debug.Log("Unsuccessful");
+            }
+        });
+        SceneManager.LoadScene("SignOutTreatmentProgressCockroach");
+    }
+    
+    public void backFCQ()
+    {
+        SceneManager.LoadScene("TreatmentProgressCockroach");
+    }
+    
     void InitializeFirebase() {
         Debug.Log("Setting up Firebase Auth");
         auth = Firebase.Auth.FirebaseAuth.DefaultInstance;
@@ -91,7 +153,6 @@ public class CockroachFormSubmitScript : MonoBehaviour
         AuthStateChanged(this, null);
     }
 
-// Track state changes of the auth object.
     void AuthStateChanged(object sender, System.EventArgs eventArgs) {
         if (auth.CurrentUser != user) {
             bool signedIn = user != auth.CurrentUser && auth.CurrentUser != null;

@@ -121,12 +121,17 @@ public class cockroachTreatmentProgress : MonoBehaviour
         SceneManager.LoadScene("CockroachPhobiaMenu");
     }
     
-    public void AnswerFCQButton()
+    public void quitApp()
     {
-        SceneManager.LoadScene("FirstCockroachEval");
+        Application.Quit();
+        UnityEditor.EditorApplication.isPlaying = false;
     }
     
-    // Handle initialization of the necessary firebase modules:
+    public void AnswerFCQButton()
+    {
+        SceneManager.LoadScene("TreatCockroachEval");
+    }
+    
     void InitializeFirebase() {
         Debug.Log("Setting up Firebase Auth");
         auth = Firebase.Auth.FirebaseAuth.DefaultInstance;
@@ -134,7 +139,6 @@ public class cockroachTreatmentProgress : MonoBehaviour
         AuthStateChanged(this, null);
     }
 
-// Track state changes of the auth object.
     void AuthStateChanged(object sender, System.EventArgs eventArgs) {
         if (auth.CurrentUser != user) {
             bool signedIn = user != auth.CurrentUser && auth.CurrentUser != null;

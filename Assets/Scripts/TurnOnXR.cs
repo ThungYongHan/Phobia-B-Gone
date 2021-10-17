@@ -7,14 +7,14 @@ using Google.XR.Cardboard;
 public class TurnOnXR : MonoBehaviour
 {
     public VrModeController turnOnVR;
-    public DeviceOrientation orientation; 
+    //public DeviceOrientation orientation; 
     public GameObject VrModeController;
     
     // Start is called before the first frame update
     //turnOnVR = test.GetComponent<VrModeController>();
     void Start()
     {
-        Screen.orientation = ScreenOrientation.LandscapeLeft;
+        //Screen.orientation = ScreenOrientation.LandscapeLeft;
         /*Screen.orientation = ScreenOrientation.LandscapeLeft;
         orientation = Input.deviceOrientation;
         Debug.Log(orientation.ToString());

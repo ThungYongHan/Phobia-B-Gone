@@ -10,8 +10,9 @@ using UnityEngine.UI;
 
 public class SpiderGazeExposure : MonoBehaviour
 {
+    public AudioSource progressBarFilledAudio, audioSource, GazeBGM;
     private int gazeVirtualTherapist;
-    public GameObject CuteSpiderGaze, NormalSpiderGaze, RealisticSpiderGaze;
+
     public Collider ExitSpiderGazeButton;
     public Collider ExitSpiderGazeCancelButton;
     
@@ -21,24 +22,21 @@ public class SpiderGazeExposure : MonoBehaviour
     public Canvas ExitSpiderGazeCanvas;
     public Canvas BackToMainMenuCanvas;
     
-    /*public Canvas myCanvas1;
-    public Canvas myCanvas2;*/
     public TextMeshPro BubbleText;
     
     public Canvas ProgressCanvas;
     public GameObject DoctorCanvas;
-    //public GameObject lasthit = null;
+    
     private const float maxDistance = 10;
     private GameObject gazedAtObject = null;
     public Image imgCircle;
     public float totalTime = 2.5f;
     public float gazeTimer;
-    private GameObject parent;
     public Slider slider;
     // slider filling speed
     public float FillSpeed = 2f;
-    private float targetProgress = 100f;
-    
+
+    private int gazeBGM;
     /*private BoxCollider OptionTest0 = null;
     private BoxCollider OptionTest1 = null;
     private BoxCollider OptionTest2 = null;
@@ -51,30 +49,20 @@ public class SpiderGazeExposure : MonoBehaviour
     
     private TextMeshProUGUI numTest;
     private TextMeshProUGUI numTest2;
-    // private TextMeshPro testText;
     
-    public GameObject test;
-    public GameObject test2;
     //public JSONReadandWrite scriptB;
-    public GameObject testObject;
-
-    // private int chosenOption = 0;
     
-    /*private Button theButton0;
-    private ColorBlock theColor0;
-    private Button theButton1;
-    private ColorBlock theColor1;
-    private Button theButton2;
-    private ColorBlock theColor2;
-    private Button theButton3;
-    private ColorBlock theColor3;
-    private Button theButton4;
-    private ColorBlock theColor4;*/
-
     public bool sliderMax = false;
 
     private void Awake()
     {
+        gazeBGM = PlayerPrefs.GetInt("spidergazeBGM");
+        if (gazeBGM == 1)
+        {
+            GazeBGM.volume = 1f;
+            GazeBGM.Play();
+        }
+        
         BackToMainMenuButton.enabled = false;
         RetryGazeSessionButton.enabled = false;
         
@@ -83,8 +71,7 @@ public class SpiderGazeExposure : MonoBehaviour
         ExitSpiderGazeCancelButton.enabled = false;
         BackToMainMenuCanvas.enabled = false;
         
-        
-        gazeVirtualTherapist = PlayerPrefs.GetInt("gazeVirtualTherapist");
+        gazeVirtualTherapist = PlayerPrefs.GetInt("spidergazeVirtualTherapist");
         if (gazeVirtualTherapist == 1)
         {
             DoctorCanvas.SetActive(true);
@@ -93,77 +80,18 @@ public class SpiderGazeExposure : MonoBehaviour
         {
             DoctorCanvas.SetActive(false);
         }
-
         
-        test = GameObject.Find("HiddenCanvas");
-        test2 = GameObject.Find("HiddenCanvas");
+        ProgressCanvas = GameObject.Find("ProgressCanvas").GetComponent<Canvas>();
+        
         /*if (test != null)
         {
             // then reference the gameobject's script
             //scriptB = test.GetComponent<JSONReadandWrite>();
         }*/
         //scriptB.SaveToJson();
-        /*theButton0 = GameObject.Find("OptionTest0").GetComponent<Button>();
-        theColor0 = theButton0.colors;
-        
-        theButton1 = GameObject.Find("OptionTest1").GetComponent<Button>();
-        theColor1 = theButton1.colors;
-        
-        theButton2 = GameObject.Find("OptionTest2").GetComponent<Button>();
-        theColor2 = theButton2.colors;
-        
-        theButton3 = GameObject.Find("OptionTest3").GetComponent<Button>();
-        theColor3 = theButton3.colors;
-        
-        theButton4 = GameObject.Find("OptionTest4").GetComponent<Button>();
-        theColor4 = theButton4.colors;
-        
-        if (GameObject.Find("OptionTest0") != null)
-        {
-            OptionTest0 = GameObject.Find("OptionTest0").GetComponent<BoxCollider>();
-        }
-        if (GameObject.Find("OptionTest1") != null)
-        {
-            OptionTest1 = GameObject.Find("OptionTest1").GetComponent<BoxCollider>();
-        }
-        if (GameObject.Find("OptionTest2") != null)
-        {
-            OptionTest2 = GameObject.Find("OptionTest2").GetComponent<BoxCollider>();
-        }
-        if (GameObject.Find("OptionTest3") != null)
-        {
-            OptionTest3 = GameObject.Find("OptionTest3").GetComponent<BoxCollider>();
-        }
-        if (GameObject.Find("OptionTest4") != null)
-        {
-            OptionTest4 = GameObject.Find("OptionTest4").GetComponent<BoxCollider>();
-        }
-        SelectButton = GameObject.Find("SelectButton").GetComponent<BoxCollider>();
-
-        CancelButton = GameObject.Find("CancelButton").GetComponent<BoxCollider>();
-        ConfirmButton = GameObject.Find("ConfirmButton").GetComponent<BoxCollider>();*/
+       
         // set HiddenCanvas Button's Collider to false at the start to prevent "ghost" box colliders
-        /*OptionTest0.enabled = false;
-        OptionTest1.enabled = false;
-        OptionTest2.enabled = false;
-        OptionTest3.enabled = false;
-        OptionTest4.enabled = false;
-        SelectButton.enabled = false;
-        CancelButton.enabled = false;
-        ConfirmButton.enabled = false;*/
-        
-        /*myCanvas1 = GameObject.Find("FormCanvas").GetComponent<Canvas>();
-        myCanvas2 = GameObject.Find("HiddenCanvas").GetComponent<Canvas>();*/
-        ProgressCanvas = GameObject.Find("ProgressCanvas").GetComponent<Canvas>();
-        
-        /*myCanvas1.enabled = false;
-        myCanvas2.enabled = false;
-        */
-        
-        parent = GameObject.Find("ProgressCanvas");
-        /*CuteSpiderGaze.SetActive(false);
-        NormalSpiderGaze.SetActive(false);
-        RealisticSpiderGaze.SetActive(false);*/
+
         // slider = parent.transform.GetChild(0).GetComponent<Slider>();
         // enable canvas in editor then disable canvas in awake in order to reference it
         //myCanvas = GameObject.Find("HiddenCanvas").GetComponent<Canvas>();
@@ -181,7 +109,6 @@ public class SpiderGazeExposure : MonoBehaviour
             _gazedAtObject = lasthit;*/ 
             // this is important to not trigger raycast with non spider objects
             gazedAtObject = hit.transform.gameObject;
-            Debug.Log(gazedAtObject);
             gazeTimer += Time.deltaTime;
             // this is to bypass the triggering gazetimer adding when looking at the tablecolliders (messing with the retry menu)
             if (gazedAtObject.name == "table_2")
@@ -191,7 +118,6 @@ public class SpiderGazeExposure : MonoBehaviour
             if (sliderMax == false)
             {
                 InsectGazing();
-                //DisableCanvas1();
             }
             else
             {
@@ -247,11 +173,6 @@ public class SpiderGazeExposure : MonoBehaviour
 
     private void InsectGazing()
     {
-        if (slider.value < targetProgress)
-        {
-            slider.value += FillSpeed * Time.deltaTime;
-        }
-        
         if (slider.value < 5f)
         {
             BubbleText.text = "Gaze at the spiders to fill the progress bar!";
@@ -296,6 +217,8 @@ public class SpiderGazeExposure : MonoBehaviour
         // when the slider is fully filled
         if (slider.value == 100.0f)
         {
+            progressBarFilledAudio.volume = 0.4f;
+            progressBarFilledAudio.Play();
             BackToMainMenuCanvas.enabled = true;
             sliderMax = true;
             BubbleText.text = "The progress bar is fully filled! You have completed the gaze exposure session!";
@@ -305,6 +228,7 @@ public class SpiderGazeExposure : MonoBehaviour
             imgCircle.fillAmount = gazeTimer / totalTime;
             if (gazeTimer > totalTime)
             {
+                audioSource.Play();
                 ExitSpiderGazeCanvas.enabled = true;
                 ExitSpiderGazeButton.enabled = true;
                 ExitSpiderGazeCancelButton.enabled = true;
@@ -317,6 +241,7 @@ public class SpiderGazeExposure : MonoBehaviour
             imgCircle.fillAmount = gazeTimer / totalTime;
             if (gazeTimer > totalTime)
             {
+                audioSource.Play();
                 ExitSpiderGazeCanvas.enabled = false;
                 ExitSpiderGazeButton.enabled = false;
                 ExitSpiderGazeCancelButton.enabled = false;
@@ -329,6 +254,7 @@ public class SpiderGazeExposure : MonoBehaviour
             imgCircle.fillAmount = gazeTimer / totalTime;
             if (gazeTimer > totalTime)
             {
+                audioSource.Play();
                 SceneManager.LoadScene("SpiderPhobiaMenu");
                 gazeTimer = 0;
             }
@@ -336,24 +262,11 @@ public class SpiderGazeExposure : MonoBehaviour
         if (gazedAtObject.name != "Plane" && gazedAtObject.name != "table_2" && 
             gazedAtObject.name != "PillowCollider" && gazedAtObject.name != "ExitSpiderGazeButton" && gazedAtObject.name != "ExitSpiderGazeCancelButton" )
         {
-            // IncrementProgress(2.0f);
-            IncrementProgress(50.0f);
-            // imgCircle.fillAmount = gazeTimer / totalTime;
-            /*if (gazeTimer > totalTime)
-            {
-                if (_gazedAtObject.name == "BackToMainMenuButton")
-                {
-                    SceneManager.LoadScene("SpiderPhobiaMenu");
-                }
-                Debug.Log("You are looking at the spider!");
-            }*/
+            slider.value += FillSpeed * Time.deltaTime;
         }
         else
         {
-            IncrementProgress(0.0f);
             gazedAtObject = null;
-            //gazeTimer = 0;
-            // imgCircle.fillAmount = 0;
         }
     }
     
@@ -365,11 +278,12 @@ public class SpiderGazeExposure : MonoBehaviour
         
         BackToMainMenuButton.enabled = true;
         RetryGazeSessionButton.enabled = true;
-        if (gazedAtObject.name == "BackToMainMenuButton" )
+        if (gazedAtObject.name == "BackToMainMenuButton")
         {
             imgCircle.fillAmount = gazeTimer / totalTime;
             if (gazeTimer > totalTime)
             {
+                audioSource.Play();
                 SceneManager.LoadScene("SpiderPhobiaMenu");
                 gazeTimer = 0;
             }
@@ -379,6 +293,7 @@ public class SpiderGazeExposure : MonoBehaviour
             imgCircle.fillAmount = gazeTimer / totalTime;
             if (gazeTimer > totalTime)
             {
+                audioSource.Play();
                 SceneManager.LoadScene("SpiderGazeExposureTaskScene");
                 gazeTimer = 0;
             }
@@ -388,219 +303,5 @@ public class SpiderGazeExposure : MonoBehaviour
             imgCircle.fillAmount = 0;
             gazedAtObject = null;
         }
-        /*if (gazedAtObject.name == "table_02")
-        {
-            imgCircle.fillAmount = 0;
-            gazedAtObject = null;
-            gazeTimer = 0;
-        }*/
     }
-
-    /*private void FormGazing()
-    {
-        if (_gazedAtObject.name != "Plane" && _gazedAtObject.name != "table_2" &&
-            _gazedAtObject.name != "TableColliders" && _gazedAtObject.name != "capsulespiderworking1" && _gazedAtObject.name != "capsulespiderworking2" && _gazedAtObject.name != "capsulespiderworking3" )
-        {
-            imgCircle.fillAmount = gazeTimer / totalTime;
-            if (_gazedAtObject == lasthit)
-            {
-                if (gazeTimer > totalTime)
-                {
-                    if (_gazedAtObject.name == "ConfirmButton")
-                    {
-                        Debug.Log("confirm");
-                        if (test != null)
-                        {
-                            // passing data to JSONReadandWrite
-                            //PlayerPrefs.GetInt loads the PlayerPrefs data stored into the key
-                            // if == 0 then it is the first item in the array (cartoon spider)
-                            // if == 1 then it is the second item in the array (normal spider)
-                            if (PlayerPrefs.GetInt("selectedSpider") == 0)
-                            {
-                                Debug.Log("testing0");
-                                // realism input 1 for cartoon spider(array 0) because realism should start from 1
-                                scriptB.Saving("testscenario", 1, chosenOption);
-                            }
-                            if (PlayerPrefs.GetInt("selectedSpider") == 1)
-                            {
-                                Debug.Log("testing1");
-                                scriptB.Saving("testscenario", 2, chosenOption);
-                            }
-                            //Debug.Log("disable");
-                            DisableCanvas2();
-                        }
-                        else
-                        {
-                            Debug.Log("alert");
-                        }
-                    }
-
-                    if (_gazedAtObject.name == "CancelButton")
-                    {
-                        DisableCanvas2();
-                    }
-
-                    if (_gazedAtObject.name == "SelectButton")
-                    {
-                        Debug.Log("select");
-                        // get 4th child of hidden canvas (which is a TextMeshProUGUI component)
-                        if (test2 != null)
-                        {
-                            Debug.Log(test2);
-                            numTest = test2.transform.GetChild(1).GetComponent<TextMeshProUGUI>();
-                            numTest2 = test2.transform.GetChild(4).GetComponent<TextMeshProUGUI>();
-
-                            Debug.Log(numTest);
-                            // change the text of the TMP text ui object
-                            // numTest.text = "Your Chosen Option is " + chosenOption.ToString();
-                            scriptB.LoadFromJson();
-                            numTest.text = scriptB.LoadFromJson();
-                            numTest2.text = chosenOption.ToString();
-                        }
-                        EnableCanvas2();
-                    }
-
-                    if (_gazedAtObject.name == "OptionTest0")
-                    {
-                        theColor0.normalColor = Color.green;
-                        theButton0.colors = theColor0;
-                        theColor1.normalColor = Color.white;
-                        theButton1.colors = theColor1;
-                        theColor2.normalColor = Color.white;
-                        theButton2.colors = theColor2;
-                        theColor3.normalColor = Color.white;
-                        theButton3.colors = theColor3;
-                        theColor4.normalColor = Color.white;
-                        theButton4.colors = theColor4;
-                        chosenOption = 0;
-                    }
-
-                    if (_gazedAtObject.name == "OptionTest1")
-                    {
-                        theColor0.normalColor = Color.white;
-                        theButton0.colors = theColor0;
-                        theColor1.normalColor = Color.green;
-                        theButton1.colors = theColor1;
-                        theColor2.normalColor = Color.white;
-                        theButton2.colors = theColor2;
-                        theColor3.normalColor = Color.white;
-                        theButton3.colors = theColor3;
-                        theColor4.normalColor = Color.white;
-                        theButton4.colors = theColor4;
-                        chosenOption = 1;
-                    }
-
-                    if (_gazedAtObject.name == "OptionTest2")
-                    {
-                        theColor0.normalColor = Color.white;
-                        theButton0.colors = theColor0;
-                        theColor1.normalColor = Color.white;
-                        theButton1.colors = theColor1;
-                        theColor2.normalColor = Color.green;
-                        theButton2.colors = theColor2;
-                        theColor3.normalColor = Color.white;
-                        theButton3.colors = theColor3;
-                        theColor4.normalColor = Color.white;
-                        theButton4.colors = theColor4;
-                        chosenOption = 2;
-                    }
-
-                    if (_gazedAtObject.name == "OptionTest3")
-                    {
-                        theColor0.normalColor = Color.white;
-                        theButton0.colors = theColor0;
-                        theColor1.normalColor = Color.white;
-                        theButton1.colors = theColor1;
-                        theColor2.normalColor = Color.white;
-                        theButton2.colors = theColor2;
-                        theColor3.normalColor = Color.green;
-                        theButton3.colors = theColor3;
-                        theColor4.normalColor = Color.white;
-                        theButton4.colors = theColor4;
-                        chosenOption = 3;
-                    }
-
-                    if (_gazedAtObject.name == "OptionTest4")
-                    {
-                        theColor0.normalColor = Color.white;
-                        theButton0.colors = theColor0;
-                        theColor1.normalColor = Color.white;
-                        theButton1.colors = theColor1;
-                        theColor2.normalColor = Color.white;
-                        theButton2.colors = theColor2;
-                        theColor3.normalColor = Color.white;
-                        theButton3.colors = theColor3;
-                        theColor4.normalColor = Color.green;
-                        theButton4.colors = theColor4;
-                        chosenOption = 4;
-                    }
-                }
-            }
-        }
-        else
-        {
-            _gazedAtObject = null;
-            gazeTimer = 0;
-            imgCircle.fillAmount = 0;
-        }
-    }*/
-
-    private void IncrementProgress(float newProgress)
-    {
-        targetProgress = slider.value + newProgress;
-    }
-
-    /*private void EnableCanvas1()
-    {
-        /*myCanvas1.enabled = true;
-        OptionTest0.enabled = true;
-        OptionTest1.enabled = true;
-        OptionTest2.enabled = true;
-        OptionTest3.enabled = true;
-        OptionTest4.enabled = true;
-        SelectButton.enabled = true;
-        CancelButton.enabled = false;
-        ConfirmButton.enabled = false;#1#
-    }
-
-    private void DisableCanvas1()
-    {
-        //bulkBoxColliderGet();
-        /*myCanvas1.enabled = false;
-        OptionTest0.enabled = false;
-        OptionTest1.enabled = false;
-        OptionTest2.enabled = false;
-        OptionTest3.enabled = false;
-        OptionTest4.enabled = false;
-        SelectButton.enabled = false;
-        CancelButton.enabled = false;
-        ConfirmButton.enabled = false;#1#
-    }
-
-    /*private void EnableCanvas2()
-    {
-        //bulkBoxColliderGet();
-        myCanvas2.enabled = true;
-        CancelButton.enabled = true;
-        ConfirmButton.enabled = true;
-        OptionTest0.enabled = false;
-        OptionTest1.enabled = false;
-        OptionTest2.enabled = false;
-        OptionTest3.enabled = false;
-        OptionTest4.enabled = false;
-        SelectButton.enabled = false;
-    }
-
-    private void DisableCanvas2()
-    {
-        myCanvas2.enabled = false;
-        CancelButton.enabled = false;
-        ConfirmButton.enabled = false;
-        OptionTest0.enabled = true;
-        OptionTest1.enabled = true;
-        OptionTest2.enabled = true;
-        OptionTest3.enabled = true;
-        OptionTest4.enabled = true;
-        SelectButton.enabled = true;
-    }#1#*/
 }
