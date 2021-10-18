@@ -7,7 +7,7 @@ using Random = UnityEngine.Random;
 public class GameSpiderAI : MonoBehaviour
 {
     //0.01 GOOD MOVESPEED
-    public float moveSpeed = 0.004f;
+    public float moveSpeed = 0.006f;
     //public float moveSpeed = 0.002f;
     public float rotSpeed = 0.6f;
     private bool isWandering = false;

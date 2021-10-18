@@ -12,7 +12,7 @@ public class SpiderGameScript : MonoBehaviour
 {
     public float timeRemaining = 90;
     public TextMeshPro timerText;
-
+    public int gameOverPlayOnce = 0;
     public int gameComplete = 0;
     private int gameVirtualTherapist;
     private int gameBGM;
@@ -98,10 +98,16 @@ public class SpiderGameScript : MonoBehaviour
         if (timeRemaining <= 0)
         {
             GameBGM.Stop();
-            gameOverAudio.Play();
+            if (gameOverPlayOnce == 0)
+            {
+                gameOverAudio.Play();
+                gameOverPlayOnce += 1;
+            }
+            
             GameOverCanvas.enabled = true;
             GameOverBackToMainMenuButton.enabled = true;
             GameOverRetryGameSessionButton.enabled = true;
+            BubbleText.text = "Don't sweat it! You can always try again!";
         }
         
         if (gameComplete == 0)
@@ -134,72 +140,76 @@ public class SpiderGameScript : MonoBehaviour
             
             if (_gazedAtObject.name == "CuteSpiderGame(Clone)" || _gazedAtObject.name == "NormalSpiderGame(Clone)" || _gazedAtObject.name == "RealisticSpiderGame(Clone)")
             {
-                if (scoreNum > 0){
-                    
-                    imgCircle.fillAmount = gazeTimer / totalTime;
-                    if (gazeTimer > totalTime)
+                if (timeRemaining > 0)
+                {
+                    if (scoreNum > 0)
                     {
-                        Debug.Log("You are looking at the spider!");
-                        scoreNum -= 1;
-                        ScoreText.text = (scoreNum).ToString();
-                        // this only destroys the gameobject that I am looking at, not the other gameobjects with the same name
-                        Destroy(_gazedAtObject);
-                        spiderCatchFX.pitch = startingPitch;
-                        startingPitch += 0.015f;
-                        spiderCatchFX.Play();
-                        if (scoreNum == 26 || scoreNum == 22 || scoreNum == 17 || scoreNum == 12 || scoreNum == 8  || scoreNum == 4) 
+                        imgCircle.fillAmount = gazeTimer / totalTime;
+                        if (gazeTimer > totalTime)
                         {
-                            loadSpiderGame.spawnRandomLocation();
-                        }
-                        
-                        if (scoreNum <= 26)
-                        {
-                            BubbleText.text =
-                                "You can exit the gamified exposure task by gazing at the pink lamp on the wall!";
-                        }
-                        
-                        if (scoreNum <= 22)
-                        {
-                            BubbleText.text =
-                                "Just so you know, we will not harm these spiders but will release them outside after this session!";
-                        }
-                        
-                        if (scoreNum <= 16)
-                        {
-                            BubbleText.text =
-                                "By eating pests like fleas and mosquitoes, spiders can prevent the spread of disease!";
-                        }
-                        
-                        if (scoreNum <= 12)
-                        {
-                            BubbleText.text =
-                                "Keep it up!";
-                        }
+                            Debug.Log("You are looking at the spider!");
+                            scoreNum -= 1;
+                            ScoreText.text = (scoreNum).ToString();
+                            // this only destroys the gameobject that I am looking at, not the other gameobjects with the same name
+                            Destroy(_gazedAtObject);
+                            spiderCatchFX.pitch = startingPitch;
+                            startingPitch += 0.015f;
+                            spiderCatchFX.Play();
+                            if (scoreNum == 26 || scoreNum == 22 || scoreNum == 17 || scoreNum == 12 || scoreNum == 8 ||
+                                scoreNum == 4)
+                            {
+                                loadSpiderGame.spawnRandomLocation();
+                            }
 
-                        if (scoreNum <= 10)
-                        {
-                            BubbleText.text =
-                                "Spiders actually eat more insects than birds and bats combined!";
-                        }
-                        
-                        if (scoreNum <= 8)
-                        {
-                            BubbleText.text =
-                                "You are doing great!";
-                        }
-                        
-                        if (scoreNum <= 4)
-                        {
-                            BubbleText.text =
-                                "You are almost there!";
-                        }
-                        
-                        if (scoreNum == 0)
-                        {
-                            GameBGM.Stop();
-                            spiders0Audio.Play();
-                            gameComplete = 1;
-                            BubbleText.text = "Well done! Thanks for catching the spiders!";
+                            if (scoreNum <= 26)
+                            {
+                                BubbleText.text =
+                                    "You can exit the gamified exposure task by gazing at the pink lamp on the wall!";
+                            }
+
+                            if (scoreNum <= 22)
+                            {
+                                BubbleText.text =
+                                    "Just so you know, we will not harm these spiders but will release them outside after this session!";
+                            }
+
+                            if (scoreNum <= 16)
+                            {
+                                BubbleText.text =
+                                    "By eating pests like fleas and mosquitoes, spiders can prevent the spread of disease!";
+                            }
+
+                            if (scoreNum <= 12)
+                            {
+                                BubbleText.text =
+                                    "Keep it up!";
+                            }
+
+                            if (scoreNum <= 10)
+                            {
+                                BubbleText.text =
+                                    "Spiders actually eat more insects than birds and bats combined!";
+                            }
+
+                            if (scoreNum <= 8)
+                            {
+                                BubbleText.text =
+                                    "You are doing great!";
+                            }
+
+                            if (scoreNum <= 4)
+                            {
+                                BubbleText.text =
+                                    "You are almost there!";
+                            }
+
+                            if (scoreNum == 0)
+                            {
+                                GameBGM.Stop();
+                                spiders0Audio.Play();
+                                gameComplete = 1;
+                                BubbleText.text = "Well done! Thanks for catching the spiders!";
+                            }
                         }
                     }
                 }

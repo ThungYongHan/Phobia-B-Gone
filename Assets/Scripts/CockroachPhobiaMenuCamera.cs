@@ -261,7 +261,7 @@ public class CockroachPhobiaMenuCamera : MonoBehaviour
                         PlayerPrefs.SetInt("cockroachgameVirtualTherapist", gameVirtualTherapist);
                         PlayerPrefs.SetInt("cockroachgameBGM", gameBGM);
                         cockroachSelectionScript.SetCockroach();
-                        SceneManager.LoadScene("SpiderBathroom");
+                        SceneManager.LoadScene("CockroachBathroom");
                     }
                                  
                     if (_gazedAtObject.name == "GameCancel")
