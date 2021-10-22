@@ -87,7 +87,7 @@ public class CockroachGameScript : MonoBehaviour
         }
     }
     
-    void Update()
+    void FixedUpdate()
     {
         if (timeRemaining < 10)
         {

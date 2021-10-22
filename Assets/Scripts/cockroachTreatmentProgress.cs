@@ -124,7 +124,7 @@ public class cockroachTreatmentProgress : MonoBehaviour
     public void quitApp()
     {
         Application.Quit();
-        UnityEditor.EditorApplication.isPlaying = false;
+        //UnityEditor.EditorApplication.isPlaying = false;
     }
     
     public void AnswerFCQButton()

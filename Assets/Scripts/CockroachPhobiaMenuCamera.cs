@@ -30,6 +30,7 @@ public class CockroachPhobiaMenuCamera : MonoBehaviour
         "Cockroaches can hold their breath for 40 minutes, and can survive underwater for 30 minutes.",
         "Cockroaches can live for a week without its head.",
         "There are more than 4000 cockroach species around the world.",
+        "Cockroaches feed on decaying organic matter, and releases nitrogen that is crucial for forest health",
     };
     
     private GameObject DoctorCanvas;

@@ -289,7 +289,7 @@ public class spiderTreatmentProgress : MonoBehaviour
     public void quitApp()
     {
         Application.Quit();
-        UnityEditor.EditorApplication.isPlaying = false;
+        //UnityEditor.EditorApplication.isPlaying = false;
     }
     
     

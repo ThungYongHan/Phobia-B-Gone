@@ -7,7 +7,7 @@ public class TurnOffXR : MonoBehaviour
 {
     public VrModeController turnOffVR;
 
-    void Start()
+    void Awake()
     {
         XRGeneralSettings.Instance.Manager.DeinitializeLoader();
     }

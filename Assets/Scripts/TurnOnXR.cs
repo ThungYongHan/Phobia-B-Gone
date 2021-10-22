@@ -12,7 +12,7 @@ public class TurnOnXR : MonoBehaviour
     
     // Start is called before the first frame update
     //turnOnVR = test.GetComponent<VrModeController>();
-    void Start()
+    void Awake()
     {
         //Screen.orientation = ScreenOrientation.LandscapeLeft;
         /*Screen.orientation = ScreenOrientation.LandscapeLeft;

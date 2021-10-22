@@ -87,7 +87,7 @@ public class SpiderGameScript : MonoBehaviour
         }
     }
     
-    void Update()
+    void FixedUpdate()
     {
         // Debug.Log(_gazedAtObject);
         if (timeRemaining < 10)
@@ -107,6 +107,10 @@ public class SpiderGameScript : MonoBehaviour
             GameOverCanvas.enabled = true;
             GameOverBackToMainMenuButton.enabled = true;
             GameOverRetryGameSessionButton.enabled = true;
+            ExitSpiderGameCanvas.enabled = false;
+            ExitSpiderGameButton.enabled = false;
+            ExitSpiderGameCancelButton.enabled = false;
+            LampCollider.enabled = false;
             BubbleText.text = "Don't sweat it! You can always try again!";
         }
         
@@ -135,8 +139,9 @@ public class SpiderGameScript : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit, _maxDistance))
         {
-            gazeTimer += Time.deltaTime;
             _gazedAtObject = hit.transform.gameObject;
+            Debug.Log(_gazedAtObject);
+            gazeTimer += Time.deltaTime;
             
             if (_gazedAtObject.name == "CuteSpiderGame(Clone)" || _gazedAtObject.name == "NormalSpiderGame(Clone)" || _gazedAtObject.name == "RealisticSpiderGame(Clone)")
             {

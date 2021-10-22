@@ -17,9 +17,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/SpiderPhobiaMenu.unity
     guid: dd7fa4f1c48883946b14cc63738fc4aa
-  - enabled: 0
-    path: 
-    guid: 00000000000000000000000000000000
   - enabled: 1
     path: Assets/Scenes/SpiderBathroom.unity
     guid: 816a88178f8c7b845a02d0f9eb585896
@@ -41,6 +38,27 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/TreatmentProgressCockroach.unity
     guid: 95e52ba39fa27bb4a8c1b39490a44aa0
+  - enabled: 1
+    path: Assets/Scenes/CockroachBathroom.unity
+    guid: f25445fb7ac272140a02612c463e8302
+  - enabled: 1
+    path: Assets/Scenes/SignOutTreatmentProgressSpider.unity
+    guid: 283d73470d52a8248bd3e7c8c0ed63e4
+  - enabled: 1
+    path: Assets/Scenes/SignOutTreatmentProgressCockroach.unity
+    guid: b39f40d75761a5d468034313b3ea2a57
+  - enabled: 1
+    path: Assets/Scenes/SignOutSpiderEval.unity
+    guid: fa015cab130ce1e49afd37357f189d3a
+  - enabled: 1
+    path: Assets/Scenes/SignOutCockroachEval.unity
+    guid: 994003c6c50001c468ee902d06bf631e
+  - enabled: 1
+    path: Assets/Scenes/TreatSpiderEval.unity
+    guid: 35686b24f5736134ab26fafbafece792
+  - enabled: 1
+    path: Assets/Scenes/TreatCockroachEval.unity
+    guid: b320628fbf6dc9541b6d6e5a88b5cc27
   m_configObjects:
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: bed178fbbf08b174aa2ddb29f7610f5b, type: 2}
     xr.sdk.mock-hmd.settings: {fileID: 11400000, guid: 8a104db0b9c87564d8f717ea89a38da9, type: 2}

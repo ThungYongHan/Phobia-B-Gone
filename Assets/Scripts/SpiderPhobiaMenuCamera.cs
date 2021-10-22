@@ -15,6 +15,19 @@ using Random = System.Random;
 
 public class SpiderPhobiaMenuCamera : MonoBehaviour
 {
+    // gameObject hit by physics.raycast
+    private GameObject _hitGameObject;
+    // circular progress bar image 
+    public Image progressCircle;
+    // limit max distance for raycast range
+    private const float MAXGazeDistance = 10;
+    // time needed to complete one gaze interaction
+    private const float TotalTime = 2.5f;
+    // time spent gazing at gameObject
+    private float _gazeTimer;
+
+    
+    
     Firebase.Auth.FirebaseAuth auth;
     Firebase.Auth.FirebaseUser user;
     DatabaseReference reference;
@@ -38,25 +51,26 @@ public class SpiderPhobiaMenuCamera : MonoBehaviour
     };
     
     private GameObject DoctorCanvas;
-    private const float maxDistance = 10;
-    private GameObject _gazedAtObject = null;
-    public Image imgCircle;
-    public float totalTime = 2.5f;
-    private bool gazeStatus;
-    private float gazeTimer;
+    
+    
     private string username;
-    private SpiderSelection spiderSelectionScript;
+    
     public GameObject ArachnophobiaSelectionMenuPanel;
     public GameObject GazeOptionPanel;
     public GameObject GameOptionPanel;
     public GameObject GazePrePanel;
     public GameObject GamePrePanel;
     
-    private GameObject test;
+    public GameObject spiderSelectionMenu;
+    private SpiderSelection _spiderSelectionScript;
+    
     private GameObject test2;
     
+    // default spider size for gaze (size s)
     public int selectedGazeSize = 1;
+    // default number of spiders for gaze
     public int selectedGazeNum = 1;
+    
     
     public int gazeVirtualTherapist = 1;
     public int gameVirtualTherapist = 1;
@@ -69,12 +83,12 @@ public class SpiderPhobiaMenuCamera : MonoBehaviour
     public Toggle GameBGMToggle;
     public Toggle GazeBGMToggle;
     
-    private Button GazeSmall;
-    private ColorBlock GazeColorS;
-    private Button GazeMedium;
-    private ColorBlock GazeColorM;
-    private Button GazeLarge;
-    private ColorBlock GazeColorL;
+    public Button gazeSmall;
+    private ColorBlock _gazeColorS;
+    public Button gazeMedium;
+    private ColorBlock _gazeColorM;
+    public Button gazeLarge;
+    private ColorBlock _gazeColorL;
 
     private GameObject demo;
     private Button GazeNum1;
@@ -84,7 +98,7 @@ public class SpiderPhobiaMenuCamera : MonoBehaviour
     private Button GazeNum5;
     private ColorBlock GazeColor5;
     private GameObject Doctor;
-    public TextMeshPro BubbleText;
+    public TextMeshPro instructionsBubbleText;
 
     private GameObject GazeDoctor;
     private GameObject GameDoctor;
@@ -100,6 +114,11 @@ public class SpiderPhobiaMenuCamera : MonoBehaviour
     void Start()
     {
         FirebaseDatabase.DefaultInstance.SetPersistenceEnabled(false);
+        
+        
+        _spiderSelectionScript = spiderSelectionMenu.GetComponent<SpiderSelection>();
+        
+        
         reference = FirebaseDatabase.DefaultInstance.RootReference;
         InitializeFirebase();
         LoadPatientUsername();
@@ -107,11 +126,11 @@ public class SpiderPhobiaMenuCamera : MonoBehaviour
         DoctorCanvas = GameObject.Find("DoctorCanvas");
         
         GazeInstructionText = GameObject.Find("GazeInstructionText").GetComponent<TextMeshPro>();
-        GazeRelaxtionText = GameObject.Find("GazeRelaxationText").GetComponent<TextMeshPro>();
-        GazeRelaxtionText.enabled = false;
+        //GazeRelaxtionText = GameObject.Find("GazeRelaxationText").GetComponent<TextMeshPro>();
+        //GazeRelaxtionText.enabled = false;
         GameInstructionText = GameObject.Find("GameInstructionText").GetComponent<TextMeshPro>();
-        GameRelaxtionText = GameObject.Find("GameRelaxationText").GetComponent<TextMeshPro>();
-        GameRelaxtionText.enabled = false;
+        //GameRelaxtionText = GameObject.Find("GameRelaxationText").GetComponent<TextMeshPro>();
+        //GameRelaxtionText.enabled = false;
         
         Doctor = GameObject.Find("SpeechBubble");
         //SpeechBubbleText = Doctor.transform.GetChild(0).GetComponent<TextMeshPro>();
@@ -122,15 +141,15 @@ public class SpiderPhobiaMenuCamera : MonoBehaviour
         SpiderGameFactsText = GameDoctor.transform.GetChild(0).GetComponent<TextMeshPro>();
         
         test2 = GameObject.Find("Main Camera");
-        test = GameObject.Find("Spiders");
-        spiderSelectionScript = test.GetComponent<SpiderSelection>();
         
-        GazeSmall = GameObject.Find("GazeSmall").GetComponent<Button>();
-        GazeColorS = GazeSmall.colors;
-        GazeMedium = GameObject.Find("GazeMedium").GetComponent<Button>();
-        GazeColorM = GazeMedium.colors;
-        GazeLarge = GameObject.Find("GazeLarge").GetComponent<Button>();
-        GazeColorL = GazeLarge.colors;
+        
+        
+        gazeSmall = GameObject.Find("GazeSmall").GetComponent<Button>();
+        _gazeColorS = gazeSmall.colors;
+        gazeMedium = GameObject.Find("GazeMedium").GetComponent<Button>();
+        _gazeColorM = gazeMedium.colors;
+        gazeLarge = GameObject.Find("GazeLarge").GetComponent<Button>();
+        _gazeColorL = gazeLarge.colors;
         
         GazeNum1 = GameObject.Find("GazeNum1").GetComponent<Button>();
         GazeColor1 = GazeNum1.colors;
@@ -150,14 +169,18 @@ public class SpiderPhobiaMenuCamera : MonoBehaviour
         GamePrePanel.SetActive(false);
         GameOptionPanel.SetActive(false);
         
+        // default spider size for gaze
         if (selectedGazeSize == 1)
         {
-            GazeColorS.normalColor = Color.green;
-            GazeSmall.colors = GazeColorS;
+            // set gaze spider size 's' button colour to green
+            _gazeColorS.normalColor = Color.green;
+            gazeSmall.colors = _gazeColorS;
         }
 
+        // default number of spiders for gaze
         if (selectedGazeNum == 1)
         {
+            // set gaze number of spiders '1' button colour to green
             GazeColor1.normalColor = Color.green;
             GazeNum1.colors = GazeColor1;
         }
@@ -172,338 +195,299 @@ public class SpiderPhobiaMenuCamera : MonoBehaviour
             GazeBGMToggle.isOn = false;
         }
     }
+    //var ray = new Ray(this.transform.position, this.transform.forward);
+    //Debug.Log(_hitGameObject);
     
     void FixedUpdate()
-    { 
-        var ray = new Ray(this.transform.position, this.transform.forward);
+    {
+        // get information back from raycast (first object hit)
         RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, maxDistance))
+        // cast a ray in the forward direction from the current position and store raycasthit data into hit
+        if (Physics.Raycast(transform.position,transform.forward, out hit, MAXGazeDistance))
         {
-            gazeTimer += Time.deltaTime;
-            imgCircle.fillAmount = gazeTimer / totalTime;
-            _gazedAtObject = hit.transform.gameObject;
-            Debug.Log(_gazedAtObject);
-            if (_gazedAtObject == hit.transform.gameObject)
+            // add to the gazetimer for every moment the raycast is colliding with object 
+            _gazeTimer += Time.deltaTime;
+            // fill the circularprogressbar (fully filled when the gazetimer is equal to time needed to complete gaze interaction)
+            progressCircle.fillAmount = _gazeTimer / TotalTime;
+            // get the gameObject's transform that the raycast collides with
+            _hitGameObject = hit.transform.gameObject;
+            // if the raycast collides with a gameObject
+            if (_hitGameObject)
             {
-                // talk about how you let them view instructions?
-                if (gazeTimer < totalTime)
+                Debug.Log(_hitGameObject);
+                
+                
+                
+                // if the gazetimer is lower than the required gaze time
+                if (_gazeTimer < TotalTime)
                 {
-                    if (_gazedAtObject.name == "GazeExposureButton")
-                    { 
-                        BubbleText.text = ("Exposure Session Where You Stare At Spiders");
-                    }
-                    if (_gazedAtObject.name == "GamifiedExposureButton")
-                    { 
-                        BubbleText.text = ("Exposure Session Where You Catch Spiders");
-                    }
-                    if (_gazedAtObject.name == "TreatmentProgress")
-                    { 
-                        BubbleText.text = ("View Your Arachnophobia Treatment Progress");
-                    }
-                    if (_gazedAtObject.name == "BackSceneButton")
+                    // the name of the gameObject that the ray collides with 
+                    switch (_hitGameObject.name)
                     {
-                        BubbleText.text = ("Go Back To Phobia Selection Menu");
-                    }
-                    if (_gazedAtObject.name == "NextSpider" || _gazedAtObject.name == "PreviousSpider")
-                    {
-                        BubbleText.text = ("Select Desired Spider Model For Exposure Tasks");
-                    }
-                    if (_gazedAtObject.name == "SignOutAndQuitButton")
-                    {
-                        BubbleText.text = ("Sign Out And Quit Phobia-B-Gone After Answering the FSQ");
+                        // if the gameObject name matches with the case, display corresponding text in doctor speech bubble
+                        case "GazeExposureButton":
+                            instructionsBubbleText.text = ("Exposure Session Where You Stare At Spiders");
+                            break;
+                        case "GamifiedExposureButton":
+                            instructionsBubbleText.text = ("Exposure Session Where You Catch Spiders");
+                            break;
+                        case "TreatmentProgress":
+                            instructionsBubbleText.text = ("View Your Arachnophobia Treatment Progress");
+                            break;
+                        case "ReturnToSelectionMenuButton":
+                            instructionsBubbleText.text = ("Go Back To Phobia Selection Menu");
+                            break;
+                        case "NextSpider":
+                        case "PreviousSpider":
+                            instructionsBubbleText.text = ("Select Desired Spider Model For Exposure Tasks");
+                            break;
+                        case "SignOutAndQuitButton":
+                            instructionsBubbleText.text = ("Sign Out And Quit Phobia-B-Gone After Answering the FSQ");
+                            break;
                     }
                 }
 
-                if (gazeTimer > totalTime)
+                // if the gazetimer is higher than the required gaze time
+                if (_gazeTimer > TotalTime)
                 {
-                    gazeTimer = 0;
+                    // reset the gazetimer to restart gaze interaction instance (prevent unwanted interactions)
+                    _gazeTimer = 0;
+                    // play gaze interact sound effect
                     audioSource.Play();
-                    if (_gazedAtObject.name == "RandomSpiderGazeFactsDoctor ")
+                    // the name of the gameObject that the ray collides with 
+                    switch (_hitGameObject.name)
                     {
-                        Random rand = new Random();
-                        int factsNum = rand.Next(0, spiderFacts.Length);
-                        SpiderGazeFactsText.text = spiderFacts[factsNum];
-                    }
-                    
-                    if (_gazedAtObject.name == "RandomSpiderGameFactsDoctor")
-                    {
-                        Random rand = new Random();
-                        int factsNum = rand.Next(0, spiderFacts.Length);
-                        SpiderGameFactsText.text = spiderFacts[factsNum];
-                    }
-                    
-                    if (_gazedAtObject.name == "NextGazeSlide")
-                    {
-                        GazeInstructionText.enabled = false;
-                        GazeRelaxtionText.enabled = true;
-                    }
-                    
-                    if (_gazedAtObject.name == "PreviousGazeSlide")
-                    {
-                        GazeInstructionText.enabled = true;
-                        GazeRelaxtionText.enabled = false;
-                    }
-                    
-                    if (_gazedAtObject.name == "NextGameSlide")
-                    {
-                        GameInstructionText.enabled = false;
-                        GameRelaxtionText.enabled = true;
-                    }
-                    
-                    if (_gazedAtObject.name == "PreviousGameSlide")
-                    {
-                        GameInstructionText.enabled = true;
-                        GameRelaxtionText.enabled = false;
-                    }
-                    
-                    if (_gazedAtObject.name == "GazeStart")
-                    {
-                        GazePrePanel.SetActive(false);
-                        GazeOptionPanel.SetActive(true);
-                    }
-
-                    if (_gazedAtObject.name == "GameStart")
-                    {
-                        GameOptionPanel.SetActive(true);
-                        GamePrePanel.SetActive(false);
-                    }
-                    
-                    if (_gazedAtObject.name == "GameSelect")
-                    {
-                        PlayerPrefs.SetInt("spidergameVirtualTherapist", gameVirtualTherapist);
-                        PlayerPrefs.SetInt("spidergameBGM", gameBGM);
-                        spiderSelectionScript.SetSpider();
-                        SceneManager.LoadScene("SpiderBathroom");
-                    }
-                                 
-                    if (_gazedAtObject.name == "GameCancel")
-                    {
-                        GameBGM.Stop();
-                        gameBGM = 0;
-                        GameBGMToggle.isOn = false;
-                        GameOptionPanel.SetActive(false);
-                        DoctorCanvas.SetActive(true);
-                        ArachnophobiaSelectionMenuPanel.SetActive(true);
-                    }
-                    
-                    if (_gazedAtObject.name == "GameBack")
-                    {
-                        DoctorCanvas.SetActive(true);
-                        GamePrePanel.SetActive(false);
-                        ArachnophobiaSelectionMenuPanel.SetActive(true);
-                    }
-                    
-                    if (_gazedAtObject.name == "GazeExposureButton")
-                    {
-                        DoctorCanvas.SetActive(false);
-                        GazePrePanel.SetActive(true);
-                        ArachnophobiaSelectionMenuPanel.SetActive(false);
-                    }
-                    
-                    if (_gazedAtObject.name == "GamifiedExposureButton")
-                    {
-                        DoctorCanvas.SetActive(false);
-                        GamePrePanel.SetActive(true);
-                        ArachnophobiaSelectionMenuPanel.SetActive(false);
-                    }
-                    
-                    if (_gazedAtObject.name == "BackSceneButton")
-                    {
-                       SceneManager.LoadScene("PhobiaSelectMenu");
-                    }
-                    
-                    if (_gazedAtObject.name == "TreatmentProgress")
-                    {
-                        SceneManager.LoadScene("TreatmentProgressSpider");
-                    }
-                    
-                    if (_gazedAtObject.name == "NextSpider")
-                    {
-                        spiderSelectionScript.NextSpider();
-                        // this code is genius and totally unexpected
-                        // it works because when you reset the timer, the timer starts again from 0 and it will have to wait until it is >2 seconds,
-                        // making it look seamless when gazing at the same thing for a long time where it will enable and disable automatically
-                        // also this will prevent the circle from being full in between scenes, which can cause unwanted interactions
-                    }
-                    
-                    if (_gazedAtObject.name == "PreviousSpider")
-                    { 
-                        spiderSelectionScript.PreviousSpider();
-                    }
-
-                    if (_gazedAtObject.name == "GazeSmall")
-                    {
-                        GazeColorS.normalColor = Color.green;
-                        GazeSmall.colors = GazeColorS;
-                        GazeColorM.normalColor = Color.white;
-                        GazeMedium.colors = GazeColorM;
-                        GazeColorL.normalColor = Color.white;
-                        GazeLarge.colors = GazeColorL;
-                        selectedGazeSize = 1;
-                    }
-                    
-                    if (_gazedAtObject.name == "GazeMedium")
-                    {
-                        GazeColorS.normalColor = Color.white;
-                        GazeSmall.colors = GazeColorS;
-                        GazeColorM.normalColor = Color.green;
-                        GazeMedium.colors = GazeColorM;
-                        GazeColorL.normalColor = Color.white;
-                        GazeLarge.colors = GazeColorL;
-                        selectedGazeSize = 2;
-                    }
-                    
-                    if (_gazedAtObject.name == "GazeLarge")
-                    {
-                        GazeColorS.normalColor = Color.white;
-                        GazeSmall.colors = GazeColorS;
-                        GazeColorM.normalColor = Color.white;
-                        GazeMedium.colors = GazeColorM;
-                        GazeColorL.normalColor = Color.green;
-                        GazeLarge.colors = GazeColorL;
-                        selectedGazeSize = 3;
-                    }
-                    
-                    if (_gazedAtObject.name == "GazeNum1")
-                    {
-                        GazeColor1.normalColor = Color.green;
-                        GazeNum1.colors = GazeColor1;
-                        GazeColor3.normalColor = Color.white;
-                        GazeNum3.colors = GazeColor3;
-                        GazeColor5.normalColor = Color.white;
-                        GazeNum5.colors = GazeColor5;
-                        selectedGazeNum = 1;
-                    }
-                    
-                    if (_gazedAtObject.name == "GazeNum3")
-                    {
-                        GazeColor1.normalColor = Color.white;
-                        GazeNum1.colors = GazeColor1;
-                        GazeColor3.normalColor = Color.green;
-                        GazeNum3.colors = GazeColor3;
-                        GazeColor5.normalColor = Color.white;
-                        GazeNum5.colors = GazeColor5;
-                        selectedGazeNum = 3;
-                    }
-                    
-                    if (_gazedAtObject.name == "GazeNum5")
-                    {
-                        GazeColor1.normalColor = Color.white;
-                        GazeNum1.colors = GazeColor1;
-                        GazeColor3.normalColor = Color.white;
-                        GazeNum3.colors = GazeColor3;
-                        GazeColor5.normalColor = Color.green;
-                        GazeNum5.colors = GazeColor5;
-                        selectedGazeNum = 5;
-                    }
-                    
-                    if (_gazedAtObject.name == "GazeSelect")
-                    {
-                        PlayerPrefs.SetInt("spidergazeBGM", gazeBGM);
-                        PlayerPrefs.SetInt("spiderselectedGazeSize", selectedGazeSize);
-                        PlayerPrefs.SetInt("spiderselectedGazeNum", selectedGazeNum);
-                        PlayerPrefs.SetInt("spidergazeVirtualTherapist", gazeVirtualTherapist);
-                        spiderSelectionScript.SetSpider();
-                        SceneManager.LoadScene("SpiderGazeExposureTaskScene");
-                    }
-                    
-                    if (_gazedAtObject.name == "GazeCancel")
-                    {   
-                        GazeBGM.Stop();
-                        gazeBGM = 0;
-                        GazeBGMToggle.isOn = false;
-                        DoctorCanvas.SetActive(true);
-                        GazeOptionPanel.SetActive(false);
-                        ArachnophobiaSelectionMenuPanel.SetActive(true);
-                    }
-                    
-                    if (_gazedAtObject.name == "GazeBack")
-                    {
-                        DoctorCanvas.SetActive(true);
-                        GazePrePanel.SetActive(false);
-                        ArachnophobiaSelectionMenuPanel.SetActive(true);
-                    }
-                    
-                    if (_gazedAtObject.name == "GazeVirtualTherapistToggle")
-                    {
-                        if (GazeVirtualTherapistToggle.isOn == true)
+                        // if the gameObject name matches with the case, execute the corresponding code
+                        case "ReturnToSelectionMenuButton":
+                            SceneManager.LoadScene("PhobiaSelectMenu");
+                            break;
+                        // case "NextGazeSlide":
+                        //     GazeInstructionText.enabled = false;
+                        //     GazeRelaxtionText.enabled = true;
+                        //     break;
+                        // case "PreviousGazeSlide":
+                        //     GazeInstructionText.enabled = true;
+                        //     GazeRelaxtionText.enabled = false;
+                        //     break;
+                        // case "NextGameSlide":
+                        //     GameInstructionText.enabled = false;
+                        //     GameRelaxtionText.enabled = true;
+                        //     break;
+                        // case "PreviousGameSlide":
+                        //     GameInstructionText.enabled = true;
+                        //     GameRelaxtionText.enabled = false;
+                        //     break;
+                        case "GazeSelect":
+                            GazePrePanel.SetActive(false);
+                            GazeOptionPanel.SetActive(true);
+                            break;
+                        // if user selects to start the gaze exposure session
+                        case "GazeStart":
+                            // set PlayerPrefs for gaze exposure bgm (on or off)
+                            PlayerPrefs.SetInt("spidergazeBGM", gazeBGM);
+                            // set PlayerPrefs for selected spider size
+                            PlayerPrefs.SetInt("spiderselectedGazeSize", selectedGazeSize);
+                            // set PlayerPrefs for selected spider number
+                            PlayerPrefs.SetInt("spiderselectedGazeNum", selectedGazeNum);
+                            // set PlayerPrefs for gaze exposure virtual therapist (enabled or disabled)
+                            PlayerPrefs.SetInt("spidergazeVirtualTherapist", gazeVirtualTherapist);
+                            // set PlayerPrefs for selected spider model
+                            _spiderSelectionScript.SetSpider();
+                            // load arachnophobia gaze exposure scene
+                            SceneManager.LoadScene("SpiderGazeExposureTaskScene");
+                            break;
+                        case "GameStart":
+                            GameOptionPanel.SetActive(true);
+                            GamePrePanel.SetActive(false);
+                            break;
+                        case "RandomSpiderGazeFactsDoctor":
                         {
+                            Random rand = new Random();
+                            int factsNum = rand.Next(0, spiderFacts.Length);
+                            SpiderGazeFactsText.text = spiderFacts[factsNum];
+                            break;
+                        }
+                        case "RandomSpiderGameFactsDoctor":
+                        {
+                            Random rand = new Random();
+                            int factsNum = rand.Next(0, spiderFacts.Length);
+                            SpiderGameFactsText.text = spiderFacts[factsNum];
+                            break;
+                        }
+                        case "GameSelect":
+                            PlayerPrefs.SetInt("spidergameVirtualTherapist", gameVirtualTherapist);
+                            PlayerPrefs.SetInt("spidergameBGM", gameBGM);
+                            _spiderSelectionScript.SetSpider();
+                            SceneManager.LoadScene("SpiderBathroom");
+                            break;
+                        case "GameCancel":
+                            GameBGM.Stop();
+                            gameBGM = 0;
+                            GameBGMToggle.isOn = false;
+                            GameOptionPanel.SetActive(false);
+                            DoctorCanvas.SetActive(true);
+                            ArachnophobiaSelectionMenuPanel.SetActive(true);
+                            break;
+                        case "GameBack":
+                            DoctorCanvas.SetActive(true);
+                            GamePrePanel.SetActive(false);
+                            ArachnophobiaSelectionMenuPanel.SetActive(true);
+                            break;
+                        case "GazeExposureButton":
+                            DoctorCanvas.SetActive(false);
+                            GazePrePanel.SetActive(true);
+                            ArachnophobiaSelectionMenuPanel.SetActive(false);
+                            break;
+                        case "GamifiedExposureButton":
+                            DoctorCanvas.SetActive(false);
+                            GamePrePanel.SetActive(true);
+                            ArachnophobiaSelectionMenuPanel.SetActive(false);
+                            break;
+                        case "TreatmentProgress":
+                            SceneManager.LoadScene("TreatmentProgressSpider");
+                            break;
+                        case "NextSpider":
+                            _spiderSelectionScript.NextSpider();
+                            break;
+                        case "PreviousSpider":
+                            _spiderSelectionScript.PreviousSpider();
+                            break;
+                        case "GazeSmall":
+                            _gazeColorS.normalColor = Color.green;
+                            gazeSmall.colors = _gazeColorS;
+                            _gazeColorM.normalColor = Color.white;
+                            gazeMedium.colors = _gazeColorM;
+                            _gazeColorL.normalColor = Color.white;
+                            gazeLarge.colors = _gazeColorL;
+                            selectedGazeSize = 1;
+                            break;
+                        case "GazeMedium":
+                            _gazeColorS.normalColor = Color.white;
+                            gazeSmall.colors = _gazeColorS;
+                            _gazeColorM.normalColor = Color.green;
+                            gazeMedium.colors = _gazeColorM;
+                            _gazeColorL.normalColor = Color.white;
+                            gazeLarge.colors = _gazeColorL;
+                            selectedGazeSize = 2;
+                            break;
+                        case "GazeLarge":
+                            _gazeColorS.normalColor = Color.white;
+                            gazeSmall.colors = _gazeColorS;
+                            _gazeColorM.normalColor = Color.white;
+                            gazeMedium.colors = _gazeColorM;
+                            _gazeColorL.normalColor = Color.green;
+                            gazeLarge.colors = _gazeColorL;
+                            selectedGazeSize = 3;
+                            break;
+                        case "GazeNum1":
+                            GazeColor1.normalColor = Color.green;
+                            GazeNum1.colors = GazeColor1;
+                            GazeColor3.normalColor = Color.white;
+                            GazeNum3.colors = GazeColor3;
+                            GazeColor5.normalColor = Color.white;
+                            GazeNum5.colors = GazeColor5;
+                            selectedGazeNum = 1;
+                            break;
+                        case "GazeNum3":
+                            GazeColor1.normalColor = Color.white;
+                            GazeNum1.colors = GazeColor1;
+                            GazeColor3.normalColor = Color.green;
+                            GazeNum3.colors = GazeColor3;
+                            GazeColor5.normalColor = Color.white;
+                            GazeNum5.colors = GazeColor5;
+                            selectedGazeNum = 3;
+                            break;
+                        case "GazeNum5":
+                            GazeColor1.normalColor = Color.white;
+                            GazeNum1.colors = GazeColor1;
+                            GazeColor3.normalColor = Color.white;
+                            GazeNum3.colors = GazeColor3;
+                            GazeColor5.normalColor = Color.green;
+                            GazeNum5.colors = GazeColor5;
+                            selectedGazeNum = 5;
+                            break;
+                        
+                        case "GazeCancel":
+                            GazeBGM.Stop();
+                            gazeBGM = 0;
+                            GazeBGMToggle.isOn = false;
+                            DoctorCanvas.SetActive(true);
+                            GazeOptionPanel.SetActive(false);
+                            ArachnophobiaSelectionMenuPanel.SetActive(true);
+                            break;
+                        case "GazeBack":
+                            DoctorCanvas.SetActive(true);
+                            GazePrePanel.SetActive(false);
+                            ArachnophobiaSelectionMenuPanel.SetActive(true);
+                            break;
+                        case "GazeVirtualTherapistToggle" when GazeVirtualTherapistToggle.isOn == true:
                             GazeVirtualTherapistToggle.isOn = false;
                             gazeVirtualTherapist = 0;
-                        }
-                        else if (GazeVirtualTherapistToggle.isOn == false)
+                            break;
+                        case "GazeVirtualTherapistToggle":
                         {
-                            GazeVirtualTherapistToggle.isOn = true;
-                            gazeVirtualTherapist = 1;
+                            if (GazeVirtualTherapistToggle.isOn == false)
+                            {
+                                GazeVirtualTherapistToggle.isOn = true;
+                                gazeVirtualTherapist = 1;
+                            }
+
+                            break;
                         }
-                    }
-                    
-                    if (_gazedAtObject.name == "GameVirtualTherapistToggle")
-                    {
-                        if (GameVirtualTherapistToggle.isOn == true)
-                        {
+                        case "GameVirtualTherapistToggle" when GameVirtualTherapistToggle.isOn == true:
                             GameVirtualTherapistToggle.isOn = false;
                             gameVirtualTherapist = 0;
-                        }
-                        else if (GameVirtualTherapistToggle.isOn == false)
+                            break;
+                        case "GameVirtualTherapistToggle":
                         {
-                            GameVirtualTherapistToggle.isOn = true;
-                            gameVirtualTherapist = 1;
+                            if (GameVirtualTherapistToggle.isOn == false)
+                            {
+                                GameVirtualTherapistToggle.isOn = true;
+                                gameVirtualTherapist = 1;
+                            }
+
+                            break;
                         }
-                    }
-                    
-                    if (_gazedAtObject.name == "GameBGMToggle")
-                    {
-                        if (GameBGMToggle.isOn)
-                        {
+                        case "GameBGMToggle" when GameBGMToggle.isOn:
                             GameBGM.Stop();
                             GameBGMToggle.isOn = false;
                             gameBGM = 0;
-                        }
-                        else 
-                        {
+                            break;
+                        case "GameBGMToggle":
                             GameBGMToggle.isOn = true;
                             GameBGM.volume = 0.3f;
                             GameBGM.Play();
                             gameBGM = 1;
-                        }
-                    }
-                    
-                    if (_gazedAtObject.name == "GazeBGMToggle")
-                    {
-                        if (GazeBGMToggle.isOn)
-                        {
+                            break;
+                        case "GazeBGMToggle" when GazeBGMToggle.isOn:
                             GazeBGM.Stop();
                             GazeBGMToggle.isOn = false;
                             gazeBGM = 0;
-                        }
-                        else 
-                        {
+                            break;
+                        case "GazeBGMToggle":
                             GazeBGMToggle.isOn = true;
                             GazeBGM.volume = 0.3f;
                             GazeBGM.Play();
                             gazeBGM = 1;
-                        }
-                    }
-                    
-                    if (_gazedAtObject.name == "SignOutAndQuitButton")
-                    {
-                        SceneManager.LoadScene("SignOutSpiderEval");
+                            break;
+                        case "SignOutAndQuitButton":
+                            SceneManager.LoadScene("SignOutSpiderEval");
+                            break;
                     }
                 }
             }
             else
             {
-                imgCircle.fillAmount = 0;
-                gazeTimer = 0;
+                progressCircle.fillAmount = 0;
+                _gazeTimer = 0;
             }
         }
         else
         {
-            BubbleText.text = ("Hello there, " + username + "! Welcome to Phobia-B-Gone for arachnophobia!");
-            _gazedAtObject = null;
-           gazeTimer = 0;
-           imgCircle.fillAmount = 0;
+            instructionsBubbleText.text = ("Hello there, " + username + "! Welcome to Phobia-B-Gone for arachnophobia!");
+            _hitGameObject = null;
+           _gazeTimer = 0;
+           progressCircle.fillAmount = 0;
         }
     }
     

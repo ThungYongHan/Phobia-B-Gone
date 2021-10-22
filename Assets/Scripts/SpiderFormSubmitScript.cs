@@ -179,7 +179,7 @@ public class SpiderFormSubmitScript : MonoBehaviour
     public void quitApp()
     {
         Application.Quit();
-        UnityEditor.EditorApplication.isPlaying = false;
+        //UnityEditor.EditorApplication.isPlaying = false;
     }
     
     public void backFSQ()
