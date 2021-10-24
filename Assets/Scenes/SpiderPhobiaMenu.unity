@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.35868108, g: 0.5154899, b: 0.59432304, a: 1}
+  m_IndirectSpecularColor: {r: 0.38673717, g: 0.55400354, b: 0.6381308, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &4
 LightmapSettings:
@@ -1492,7 +1492,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   turnOnVR: {fileID: 0}
-  VrModeController: {fileID: 1378129898}
+  vrModeController: {fileID: 1378129898}
 --- !u!4 &250337512
 Transform:
   m_ObjectHideFlags: 0

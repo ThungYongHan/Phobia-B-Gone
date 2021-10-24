@@ -34,6 +34,7 @@ public class WanderSpiderAI : MonoBehaviour
         // started 50 times per second (FixedUpdate fps)
         if (_isWandering == false)
         {
+            // start spider wandering behavior
             StartCoroutine(Wander());
         }
 
@@ -86,6 +87,7 @@ public class WanderSpiderAI : MonoBehaviour
         { 
             // stop spider walking behavior
             _isWalking = false;
+            // start spider avoidance behavior
             StartCoroutine(Avoid()); 
         }
     }
@@ -107,38 +109,55 @@ public class WanderSpiderAI : MonoBehaviour
         {
             // stop spider rotating animation
             _animator.SetBool("rotate", false);
+            // stop spider avoidance behavior
             StopCoroutine(Avoid());
         }
     }
     
-    // when the spider's collider collides with colliders that have 'Is Trigger' checked
+    // executed for the first frame when the spider's collider
+    // first collides with colliders that have 'Is Trigger' checked
     private void OnTriggerEnter(Collider other)
     {
+        // stop spider walking behavior
         _isWalking = false;
+        // start spider avoidance behavior
         StartCoroutine(Avoid());
     }
     
-    // for every frame the spider's collider collides with colliders that have 'Is Trigger' checked
+    // executed for every frame the spider's collider collides
+    // with colliders that have 'Is Trigger' checked and if the
+    // colliders were colliding in the previous frame
     private void OnTriggerStay(Collider other)
     {
+        // stop spider walking behavior
         _isWalking = false;
+        // start spider avoidance behavior
         StartCoroutine(Avoid());
     }
     
-    // when the spider's collider stops colliding with colliders that have 'Is Trigger' checked'
+    // executed when the spider's collider stops colliding
+    // with colliders that have 'Is Trigger' checked' and if the
+    // colliders were colliding in the previous frame
     private void OnTriggerExit(Collider other)
     {
+        // transition from rotate animation to idle animation 
         _animator.SetBool("rotate", false);
+        // stop spider avoidance behavior
         StopCoroutine(Avoid());
     }
     
 
     IEnumerator Avoid()
     {
-            float avoidTime = Random.Range(0.1f, 1.0f);
+            // randomize the time taken for spider avoidance behavior 
+            float avoidTime = Random.Range(0.5f, 1.5f);
+            // engage the spider in avoidance behavior
             _isAvoiding = true;
+            // transition from idle animation to rotate animation
             _animator.SetBool("rotate", true);
+            // spider engages in avoidance behavior for randomized avoidTime duration
             yield return new WaitForSeconds(avoidTime);
+            // stop spider avoidance behavior
             _isAvoiding = false;
     }
     

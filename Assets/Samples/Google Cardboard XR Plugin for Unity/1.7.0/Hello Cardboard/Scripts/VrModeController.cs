@@ -75,6 +75,8 @@ public class VrModeController : MonoBehaviour
     /// </summary>
     public void Update()
     {
+    Api.UpdateScreenParams();
+    }
         /*if (_isVrModeEnabled)
         {
             /*if (Api.IsCloseButtonPressed)
@@ -86,7 +88,7 @@ public class VrModeController : MonoBehaviour
             {
                 Api.ScanDeviceParams();
             }#1#
-            Api.UpdateScreenParams();
+            
         }
         else
         {
@@ -96,8 +98,7 @@ public class VrModeController : MonoBehaviour
                 EnterVR();
             }#1#
         }*/
-    }
-
+        
     /// <summary>
     /// Enters VR mode.
     /// </summary>

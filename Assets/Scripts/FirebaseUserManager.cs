@@ -9,142 +9,153 @@ using Firebase.Extensions;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 using UnityEngine.XR.Management;
+
 public class FirebaseUserManager : MonoBehaviour
 {
-    DatabaseReference reference;
+    private DatabaseReference _reference;
+    private FirebaseAuth _auth;
     
-    public Text signuperrormessage;
-    public Text loginerrormessage;
-    public GameObject LogInErrorMessagePanel;
-    public GameObject SignUpErrorMessagePanel; 
-    [SerializeField] private InputField loginemail;
-    [SerializeField] private InputField loginpassword;
-    [SerializeField] private InputField signuppassword;
-    [SerializeField] private InputField signuppasswordconfirm;
-    [SerializeField] private InputField signupemail;
-    [SerializeField] private InputField signupusername;
-    
-    FirebaseAuth auth;
+    public Canvas logInCanvas, signUpCanvas;
+    public Text signuperrormessage, loginerrormessage;
+    public GameObject logInErrorMessagePanel, signUpErrorMessagePanel;
+    public InputField loginemail, loginpassword, signuppassword, signuppasswordconfirm, signupemail, signupusername;
 
-    public Canvas LogInCanvas, SignUpCanvas;
     void Start()
     {
-        reference = FirebaseDatabase.DefaultInstance.RootReference;
-        LogInErrorMessagePanel.SetActive(false);
-        SignUpErrorMessagePanel.SetActive(false);
-        auth = FirebaseAuth.DefaultInstance;
-        SignUpCanvas.enabled = false;
+        // gets a DatabaseReference for the root location of this FirebaseDatabase
+        _reference = FirebaseDatabase.DefaultInstance.RootReference;
+        _auth = FirebaseAuth.DefaultInstance;
+        // deactivate error message panel for both login and signup on start
+        logInErrorMessagePanel.SetActive(false);
+        signUpErrorMessagePanel.SetActive(false);
+        // disable signUpCanvas on start 
+        signUpCanvas.enabled = false;
     }
     
+    // create instance of UserDetails class to be converted to JSON format for Firebase 
     UserDetails user = new UserDetails();
     
-    public void switchToSignUp()
+    // user clicks sign up page button
+    public void SwitchToSignUp()
     {
-        SignUpCanvas.enabled = true;
-        LogInCanvas.enabled = false;
+        signUpCanvas.enabled = true;
+        logInCanvas.enabled = false;
     }
     
-    public void switchToLogIn()
+    // user clicks log in page button
+    public void SwitchToLogIn()
     {
-        SignUpCanvas.enabled = false;
-        LogInCanvas.enabled = true;
+        signUpCanvas.enabled = false;
+        logInCanvas.enabled = true;
     }
 
-    public void signup()
+    // user clicks sign up button
+    public void SignUp()
     {
+        // if email is empty or has white-space characters only
         if (string.IsNullOrWhiteSpace(signupemail.text))
         {
-            SignUpErrorMessagePanel.SetActive(true);
+            // active error message panel for sign up page
+            signUpErrorMessagePanel.SetActive(true);
+            // display error message 
             signuperrormessage.text = "Please input an email address!";
         }
+        // if username is empty or has white-space characters only
         else if (string.IsNullOrWhiteSpace(signupusername.text))
         {
-            SignUpErrorMessagePanel.SetActive(true);
+            signUpErrorMessagePanel.SetActive(true);
             signuperrormessage.text = "Please input a username!";
         }
+        // if password does not match password confirmation
         else if (signuppassword.text != signuppasswordconfirm.text)
         {
-            SignUpErrorMessagePanel.SetActive(true);
+            signUpErrorMessagePanel.SetActive(true);
             signuperrormessage.text = "Passwords do not match!";
         }
         else
-        {
-            auth.CreateUserWithEmailAndPasswordAsync(signupemail.text, signuppassword.text).ContinueWithOnMainThread(signuptask =>
+        {   
+            // create a new account with entered email and password
+            _auth.CreateUserWithEmailAndPasswordAsync(signupemail.text, signuppassword.text).ContinueWithOnMainThread(signuptask =>
             {
+                // if task is cancelled 
                 if (signuptask.IsCanceled)
                 {
-                    Debug.LogError("CreateUserWithEmailAndPasswordAsync was canceled.");
+                    signuperrormessage.text = "Sign Up failed";
                     return;
                 }
-
+                //if task failed
                 if (signuptask.IsFaulted)
                 {
-                    Debug.LogError("CreateUserWithEmailAndPasswordAsync encountered an error:" + signuptask.Exception);
+                    signuperrormessage.text = "Sign Up failed";
+                    // if exception is found for task
                     if (signuptask.Exception != null)
                     {
-                        SignUpErrorMessagePanel.SetActive(true);
+                        signUpErrorMessagePanel.SetActive(true);
+                        // initialize FirebaseException object with reference to task exception root cause
                         FirebaseException firebaseEx = signuptask.Exception.GetBaseException() as FirebaseException;
-                        
+                        // get authentication error code of FirebaseException object
                         AuthError errorCode = (AuthError)firebaseEx.ErrorCode;
                         switch (errorCode)
                         {
-                            case AuthError.MissingEmail:
-                                signuperrormessage.text  = "Missing Email";
-                                break;
                             case AuthError.InvalidEmail:
                                 signuperrormessage.text  = "Invalid Email";
+                                break;
+                            case AuthError.EmailAlreadyInUse:
+                                signuperrormessage.text  = "Email Is Already In Use By Another Account";
                                 break;
                             case AuthError.MissingPassword:
                                 signuperrormessage.text  = "Missing Password";
                                 break;
                             case AuthError.WeakPassword:
-                                signuperrormessage.text  = "Chosen Password is too weak!";
-                                break;
-                            case AuthError.EmailAlreadyInUse:
-                                signuperrormessage.text  = "Email is already in use!";
+                                signuperrormessage.text  = "Chosen Password Is Too Weak";
                                 break;
                         }
                         return;
                     }
                 }
-                
+                // get result value from task
                 FirebaseUser newuser = signuptask.Result;
-                Debug.LogFormat("Firebase user is created successfully :{0} ({1})", newuser.DisplayName, newuser.UserId);
+                // store input username into Username variable of user
                 user.Username = signupusername.text;
+                // store input email into Email variable of user 
                 user.Email = signupemail.text;
+                // convert user variables into json format and store as string
                 string json = JsonUtility.ToJson(user);
-                reference.Child("User").Child(newuser.UserId).SetRawJsonValueAsync(json).ContinueWithOnMainThread(task => 
+                // save json string of user variables to the specified node
+                _reference.Child("User").Child(newuser.UserId).SetRawJsonValueAsync(json).ContinueWithOnMainThread(task => 
                 {
                     if (task.IsCompleted)
                     {
-                        Debug.Log("Successfully added new user data to Firebase");
-                        switchToLogIn();
+                        signuperrormessage.text = "User Has Signed Up Successfully";
+                        SwitchToLogIn();
                     }
                     else
                     {
-                        Debug.Log("Unsuccessful");
+                        signuperrormessage.text = "Sign Up Failed";
                     }
                 });
             });
         }
     }
 
-    public void signin()
+    
+    
+    public void LogIn()
     {
-        auth.SignInWithEmailAndPasswordAsync(loginemail.text, loginpassword.text).ContinueWithOnMainThread(logintask =>
+        _auth.SignInWithEmailAndPasswordAsync(loginemail.text, loginpassword.text).ContinueWithOnMainThread(logintask =>
         {
             if (logintask.IsCanceled)
             {
-                Debug.Log("SignInWithEmailAndPasswordAsync was canceled.");
+                loginerrormessage.text  = "Log In Failed";
                 return;
             }
 
             if (logintask.IsFaulted)
             {
-                Debug.Log("SignInWithEmailAndPasswordAsync encountered an error:" + logintask.Exception);
+                loginerrormessage.text  = "Log In Failed";                
                 if (logintask.Exception != null)
                 {
-                    LogInErrorMessagePanel.SetActive(true);
+                    logInErrorMessagePanel.SetActive(true);
                     FirebaseException firebaseEx = logintask.Exception.GetBaseException() as FirebaseException;
                     AuthError errorCode = (AuthError)firebaseEx.ErrorCode;
                     if (string.IsNullOrWhiteSpace(loginemail.text) && string.IsNullOrWhiteSpace(loginpassword.text))
@@ -168,26 +179,31 @@ public class FirebaseUserManager : MonoBehaviour
                             loginerrormessage.text  = "Invalid Email";
                             break;
                         case AuthError.UserNotFound:
-                            loginerrormessage.text  = "Account does not exist";
+                            loginerrormessage.text  = "Account Does Not exist";
                             break;
                     }
                     return;
                 }
             }
-            FirebaseUser returnuser = logintask.Result;
-            Debug.LogFormat("Firebase user is logged in  successfully :{0} ({1})", returnuser.DisplayName, returnuser.UserId);
-            // loginerrormessage.text = "The user is logged in successfully";
+            loginerrormessage.text  = "User Logged In Successfully";
             SceneManager.LoadScene("PhobiaSelectMenu");
         });
     }
 
     public void turnOffLoginErrorPanel()
     {
-        LogInErrorMessagePanel.SetActive(false);
+        logInErrorMessagePanel.SetActive(false);
     }
     
     public void turnOffSignUpErrorPanel()
     {
-        SignUpErrorMessagePanel.SetActive(false);
+        signUpErrorMessagePanel.SetActive(false);
     }
 }
+
+//Debug.LogError("CreateUserWithEmailAndPasswordAsync encountered an error:" + signuptask.Exception);
+//Debug.LogFormat("Firebase user is created successfully :{0} ({1})", newuser.DisplayName, newuser.UserId);
+//Debug.LogFormat("Firebase user is logged in  successfully :{0} ({1})", returnuser.DisplayName, returnuser.UserId);
+
+// FirebaseUser returnuser = logintask.Result;
+// Debug.LogFormat("Firebase user is logged in  successfully :{0} ({1})", returnuser.DisplayName, returnuser.UserId);

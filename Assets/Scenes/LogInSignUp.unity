@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.35146585, g: 0.50557345, b: 0.5830111, a: 1}
+  m_IndirectSpecularColor: {r: 0.38673717, g: 0.55400354, b: 0.6381308, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1065,7 +1065,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Please confirm password
+  m_Text: Enter password confirmation
 --- !u!222 &458836929
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1238,6 +1238,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   turnOffVR: {fileID: 0}
+  vrModeController: {fileID: 0}
 --- !u!4 &496237928
 Transform:
   m_ObjectHideFlags: 0
@@ -1416,7 +1417,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 876459531}
         m_TargetAssemblyTypeName: firebaseauth, Assembly-CSharp
-        m_MethodName: signin
+        m_MethodName: LogIn
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1790,6 +1791,49 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 674627766}
   m_CullTransparentMesh: 1
+--- !u!1 &727861062
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 727861064}
+  - component: {fileID: 727861063}
+  m_Layer: 0
+  m_Name: VrModeController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &727861063
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 727861062}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f478d43f27e324b7199d5dccff4298b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &727861064
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 727861062}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &798966836
 GameObject:
   m_ObjectHideFlags: 0
@@ -1860,7 +1904,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: New Text
+  m_Text: Sign Up Error
 --- !u!222 &798966839
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1964,18 +2008,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6c4823a8c56a324699c525e66d6de4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  logInCanvas: {fileID: 674610505}
+  signUpCanvas: {fileID: 899747370}
   signuperrormessage: {fileID: 798966838}
   loginerrormessage: {fileID: 2053794663}
-  LogInErrorMessagePanel: {fileID: 1821001289}
-  SignUpErrorMessagePanel: {fileID: 2067114325}
+  logInErrorMessagePanel: {fileID: 1821001289}
+  signUpErrorMessagePanel: {fileID: 2067114325}
   loginemail: {fileID: 940362942}
   loginpassword: {fileID: 1243949228}
   signuppassword: {fileID: 402008837}
   signuppasswordconfirm: {fileID: 2120374509}
   signupemail: {fileID: 1460856409}
   signupusername: {fileID: 922145296}
-  LogInCanvas: {fileID: 674610505}
-  SignUpCanvas: {fileID: 899747370}
 --- !u!4 &876459532
 Transform:
   m_ObjectHideFlags: 0
@@ -2717,7 +2761,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 876459531}
         m_TargetAssemblyTypeName: firebaseauth, Assembly-CSharp
-        m_MethodName: signup
+        m_MethodName: SignUp
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3163,7 +3207,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 876459531}
         m_TargetAssemblyTypeName: firebaseauth, Assembly-CSharp
-        m_MethodName: switchToSignUp
+        m_MethodName: SwitchToSignUp
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3675,7 +3719,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 876459531}
         m_TargetAssemblyTypeName: firebaseauth, Assembly-CSharp
-        m_MethodName: switchToLogIn
+        m_MethodName: SwitchToLogIn
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4386,7 +4430,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: New Text
+  m_Text: Log In Error
 --- !u!222 &2053794664
 CanvasRenderer:
   m_ObjectHideFlags: 0

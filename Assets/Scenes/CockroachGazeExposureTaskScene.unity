@@ -6984,6 +6984,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: RealisticCockroachGaze
       objectReference: {fileID: 0}
+    - target: {fileID: 100292, guid: e825c30262c222749ae7c54fad1b5c81, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 400100, guid: e825c30262c222749ae7c54fad1b5c81, type: 3}
       propertyPath: m_RootOrder
       value: 4
@@ -12480,6 +12484,10 @@ PrefabInstance:
       value: CartoonCockroach
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 8dd7e24bebb3a134ab1f9b74510c543d, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 8dd7e24bebb3a134ab1f9b74510c543d, type: 3}
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
@@ -12558,6 +12566,20 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 8dd7e24bebb3a134ab1f9b74510c543d, type: 3}
   m_PrefabInstance: {fileID: 1241933391}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1241933398
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1241933392}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b02e01c86a900a4e89a3fa29609261a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spiderCollider: {fileID: 1241933393}
+  spiderBlockerCollider: {fileID: 1860511921}
 --- !u!28 &1261099798
 Texture2D:
   m_ObjectHideFlags: 0

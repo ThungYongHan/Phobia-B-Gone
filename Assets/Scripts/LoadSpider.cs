@@ -159,7 +159,7 @@ public class LoadSpider : MonoBehaviour
                     _clone.GetComponent<CapsuleCollider>().center = new Vector3(0f, 1f, 0f);
                     _clone2.GetComponent<CapsuleCollider>().center = new Vector3(0f, 1f, 0f);
                     _clone3.GetComponent<CapsuleCollider>().center = new Vector3(0f, 1f, 0f);
-                
+                    
                     _clone.transform.GetChild(2).GetComponent<CapsuleCollider>().center = new Vector3(0f, 1f, 0f);
                     _clone2.transform.GetChild(2).GetComponent<CapsuleCollider>().center = new Vector3(0f, 1f, 0f);
                     _clone3.transform.GetChild(2).GetComponent<CapsuleCollider>().center = new Vector3(0f, 1f, 0f);

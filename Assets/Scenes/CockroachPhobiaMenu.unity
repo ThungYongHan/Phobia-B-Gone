@@ -1547,7 +1547,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   turnOnVR: {fileID: 0}
-  VrModeController: {fileID: 1378129898}
+  vrModeController: {fileID: 1378129898}
 --- !u!4 &250337512
 Transform:
   m_ObjectHideFlags: 0
