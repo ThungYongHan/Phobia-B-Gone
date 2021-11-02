@@ -6,14 +6,13 @@ using Random = UnityEngine.Random;
 
 public class WanderCockroachAI : MonoBehaviour
 {
-    //public float moveSpeed = 0.004f;
     public float moveSpeed = 0.002f;
     public float rotSpeed = 0.5f;
-    private bool isWandering = false;
-    private bool isRotatingLeft = false;
-    private bool isRotatingRight = false;
-    private bool isAvoiding = false;
-    private bool isWalking = false;
+    private bool isWandering;
+    private bool isRotatingLeft;
+    private bool isRotatingRight;
+    private bool isAvoiding;
+    private bool isWalking;
     
     private Animator animator;
     void Awake()
@@ -31,66 +30,19 @@ public class WanderCockroachAI : MonoBehaviour
         if (isRotatingRight == true)
         {
             transform.Rotate(transform.up * rotSpeed);
-           //transform.Rotate(0, 0.1f, 0 * Time.deltaTime);
 
         }
 
-        if (isRotatingLeft == true)
+        // if the spider is engaging in avoiding behavior 
+        if (isAvoiding)
         {
-            transform.Rotate(transform.up * -rotSpeed);
-            //transform.Rotate(0, 0.1f, 0 * Time.deltaTime);
-
-        }
-        
-        if (isAvoiding == true)
-        {
-            int random = Random.Range(0, 4);
-            if (random == 0)
-            {
-                /*transform.Rotate(transform.up * 2f);
-                transform.position += transform.forward * 0.0001f;*/
-                
-                transform.position += transform.forward * 0.0001f;
-                transform.Rotate(transform.up * 2f);
-            }
-            else if (random == 1)
-            {
-                /*transform.Rotate(transform.up * 1.0f);
-                transform.position += transform.forward * 0f;*/
-                
-                transform.position += transform.forward * 0f;
-                transform.Rotate(transform.up * 1.0f);
-            }
-            else if (random == 2)
-            {
-                /*transform.Rotate(transform.up * 2.5f);
-                transform.position += transform.forward * 0.0003f;*/
-                
-                transform.position += transform.forward * 0.0003f;
-                transform.Rotate(transform.up * 2.5f);
-            }
-            else if (random == 3)
-            {
-                /*transform.position += transform.forward * 0.00015f;
-                transform.Rotate(transform.up * 1.5f);*/
-                transform.position += transform.forward * 0.00015f;
-                transform.Rotate(transform.up * 1.5f);
-            }
-            /*else if (random == 2)
-            {
-                transform.position += transform.forward * 0f;
-                transform.Rotate(transform.up * 1.5f);
-            }*/
-            //transform.Rotate(transform.up * rotSpeed);
-            /*int rotate = Random.Range(1, 3);
-            if (rotate == 1)
-            {
-                transform.Rotate(transform.up * 2.0f);
-            }
-            else
-            {
-                transform.Rotate(transform.up * - 2.0f);
-            }*/
+            // randomize spider movement speed when avoiding
+            float randomAvoidMoveSpeed = Random.Range(0, 0.0003f);
+            // randomize spider rotating speed when avoiding
+            float randomAvoidRotateSpeed = Random.Range(1, 2.5f);
+            transform.position += transform.forward * randomAvoidMoveSpeed;
+            // rotates to the right at randomized spider rotation speed
+            transform.Rotate(transform.up * randomAvoidRotateSpeed);
         }
 
         if (isWalking == true)
@@ -160,7 +112,7 @@ public class WanderCockroachAI : MonoBehaviour
 
     IEnumerator Avoid()
     {
-        float avoidTime = Random.Range(0.1f, 1.0f);
+        float avoidTime = Random.Range(0.5f, 1.0f);
             isAvoiding = true;
             animator.SetBool("rotate", true);
             yield return new WaitForSeconds(avoidTime);

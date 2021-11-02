@@ -13,7 +13,8 @@ public class CockroachGameScript : MonoBehaviour
     public float timeRemaining = 90;
     public TextMeshPro timerText;
 
-    public int gameComplete = 0;
+    public bool gameComplete;
+    public bool gameOverPlayOnce;
     private int gameVirtualTherapist;
     private int gameBGM;
     
@@ -43,11 +44,11 @@ public class CockroachGameScript : MonoBehaviour
     private GameObject _gazedAtObject = null;
     public Image imgCircle;
     // changed gaze time for game script 
-    public float totalTime = 0.3f;
+    private float totalTime = 0.05f;
     
-    public float UITime = 2f;
+    private float UITime = 2.5f;
     public float gazeTimer;
-    public int gameOverPlayOnce = 0;
+    
     public GameObject test;
     public LoadCockroachGame loadCockroachGame;
     
@@ -97,10 +98,10 @@ public class CockroachGameScript : MonoBehaviour
         if (timeRemaining <= 0)
         {
             GameBGM.Stop();
-            if (gameOverPlayOnce == 0)
+            if (gameOverPlayOnce == false)
             {
                 gameOverAudio.Play();
-                gameOverPlayOnce += 1;
+                gameOverPlayOnce = true;
             }
             
             GameOverCanvas.enabled = true;
@@ -109,7 +110,7 @@ public class CockroachGameScript : MonoBehaviour
             BubbleText.text = "Don't sweat it! You can always try again!";
         }
         
-        if (gameComplete == 0)
+        if (gameComplete == false)
         {
             if (timeRemaining > 0)
             {
@@ -146,12 +147,9 @@ public class CockroachGameScript : MonoBehaviour
                         imgCircle.fillAmount = gazeTimer / totalTime;
                         if (gazeTimer > totalTime)
                         {
-                            
-                                Debug.Log("You are looking at the cockroach!");
-                                scoreNum -= 1;
+                            scoreNum -= 1;
                                 ScoreText.text = (scoreNum).ToString();
                                 // this only destroys the gameobject that I am looking at, not the other gameobjects with the same name
-                                Destroy(_gazedAtObject);
                                 cockroachCatchFX.Play();
                                 if (scoreNum == 26 || scoreNum == 22 || scoreNum == 17 || scoreNum == 12 ||
                                     scoreNum == 8 || scoreNum == 4)
@@ -176,6 +174,12 @@ public class CockroachGameScript : MonoBehaviour
                                     BubbleText.text =
                                         "Keep it up!";
                                 }
+                                
+                                if (scoreNum <= 12)
+                                {
+                                    BubbleText.text =
+                                        "Eliminating cockroaches can prevent the triggering of allergies that can cause asthma";
+                                }
 
                                 if (scoreNum <= 8)
                                 {
@@ -193,7 +197,7 @@ public class CockroachGameScript : MonoBehaviour
                                 {
                                     GameBGM.Stop();
                                     cockroaches0Audio.Play();
-                                    gameComplete = 1;
+                                    gameComplete = true;
                                     BubbleText.text = "Well done! Thanks for eliminating the cockroaches!";
                                 }
                         }

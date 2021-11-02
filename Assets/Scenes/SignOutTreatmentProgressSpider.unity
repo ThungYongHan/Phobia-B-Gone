@@ -11110,8 +11110,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2198dc865578b954bb7f4d7d5de90fcb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  turnOffVR: {fileID: 0}
-  VrModeController: {fileID: 1913567797}
+  vrModeController: {fileID: 1913567797}
 --- !u!1 &1600414402
 GameObject:
   m_ObjectHideFlags: 0

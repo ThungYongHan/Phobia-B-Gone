@@ -6,14 +6,16 @@ using Google.XR.Cardboard;
 
 public class TurnOnXR : MonoBehaviour
 {
-    public VrModeController turnOnVR;
+    private VrModeController _turnOnVR;
     public GameObject vrModeController;
     
     void Awake()
     {
+        // set screen orientation to landscape left
         Screen.orientation = ScreenOrientation.LandscapeLeft;
-        turnOnVR = vrModeController.GetComponent<VrModeController>();
-        turnOnVR.EnterVR();
-        Api.Recenter();
+        _turnOnVR = vrModeController.GetComponent<VrModeController>();
+        // enter vr mode
+        _turnOnVR.EnterVR();
     }
 }
+

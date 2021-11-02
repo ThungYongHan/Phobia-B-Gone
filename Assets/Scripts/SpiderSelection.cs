@@ -31,7 +31,8 @@ public class SpiderSelection : MonoBehaviour
         selectedSpider--;
         if (selectedSpider < 0)
         {
-            // set the selectedSpider index number to be equal to the length of the spiders array (eg: from 0 to 3)
+            // set the selectedSpider index number to be equal to the length of the spiders array
+            // (eg: from 0 to 3)
             selectedSpider += spiders.Length;
         }
         // set the spider model of the current index to active

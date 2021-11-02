@@ -10,25 +10,27 @@ using UnityEngine.SceneManagement;
 
 public class CockroachFormSubmitScript : MonoBehaviour
 {
-    Firebase.Auth.FirebaseAuth auth;
-    Firebase.Auth.FirebaseUser user;
+    private FirebaseAuth _auth;
+    private FirebaseUser _user;
+    private DatabaseReference _reference;
     private int iterateNum = 0;
     public Slider Q1, Q2, Q3, Q4, Q5, Q6, Q7, Q8, Q9, Q10, Q11, Q12, Q13, Q14, Q15, Q16, Q17, Q18;
-    DatabaseReference reference;
+    
     
     void Start()
     {
         FirebaseDatabase.DefaultInstance.SetPersistenceEnabled(false);
-        reference = FirebaseDatabase.DefaultInstance.RootReference;
+        _auth = FirebaseAuth.DefaultInstance;
+        _reference = FirebaseDatabase.DefaultInstance.RootReference;
+        _user = _auth.CurrentUser;
         
-        InitializeFirebase();
         CountPatientCockroachData();
     }
     Questionnaire questionnaire = new Questionnaire();
     
     public void CountPatientCockroachData()
     {
-        reference.Child("Questionnaires").Child(user.UserId).Child("Cockroach").GetValueAsync().ContinueWithOnMainThread(task =>
+        _reference.Child("Questionnaires").Child(_user.UserId).Child("Cockroach").GetValueAsync().ContinueWithOnMainThread(task =>
         {
             if (task.IsCompleted)
             {
@@ -66,8 +68,8 @@ public class CockroachFormSubmitScript : MonoBehaviour
         string json = JsonUtility.ToJson(questionnaire);
 
         Debug.Log(currentdatetime);
-        var user = auth.CurrentUser;
-        reference.Child("Questionnaires").Child(user.UserId).Child("Cockroach").Child(iterateNum.ToString()).SetRawJsonValueAsync(json).ContinueWith(task => 
+        var user = _auth.CurrentUser;
+        _reference.Child("Questionnaires").Child(user.UserId).Child("Cockroach").Child(iterateNum.ToString()).SetRawJsonValueAsync(json).ContinueWith(task => 
         {
             if (task.IsCompleted)
             {
@@ -93,8 +95,8 @@ public class CockroachFormSubmitScript : MonoBehaviour
         string json = JsonUtility.ToJson(questionnaire);
 
         Debug.Log(currentdatetime);
-        var user = auth.CurrentUser;
-        reference.Child("Questionnaires").Child(user.UserId).Child("Cockroach").Child(iterateNum.ToString()).SetRawJsonValueAsync(json).ContinueWith(task => 
+        var user = _auth.CurrentUser;
+        _reference.Child("Questionnaires").Child(user.UserId).Child("Cockroach").Child(iterateNum.ToString()).SetRawJsonValueAsync(json).ContinueWith(task => 
         {
             if (task.IsCompleted)
             {
@@ -111,7 +113,7 @@ public class CockroachFormSubmitScript : MonoBehaviour
     public void quitApp()
     {
         Application.Quit();
-        //UnityEditor.EditorApplication.isPlaying = false;
+        SceneManager.LoadScene("SignOutTreatmentProgressCockroach");
     }
     
     public void signOutSubmit()
@@ -126,8 +128,8 @@ public class CockroachFormSubmitScript : MonoBehaviour
         string json = JsonUtility.ToJson(questionnaire);
         
         Debug.Log(currentdatetime);
-        var user = auth.CurrentUser;
-        reference.Child("Questionnaires").Child(user.UserId).Child("Cockroach").Child(iterateNum.ToString()).SetRawJsonValueAsync(json).ContinueWith(task => 
+        var user = _auth.CurrentUser;
+        _reference.Child("Questionnaires").Child(user.UserId).Child("Cockroach").Child(iterateNum.ToString()).SetRawJsonValueAsync(json).ContinueWith(task => 
         {
             if (task.IsCompleted)
             {
@@ -145,32 +147,4 @@ public class CockroachFormSubmitScript : MonoBehaviour
     {
         SceneManager.LoadScene("TreatmentProgressCockroach");
     }
-    
-    void InitializeFirebase() {
-        Debug.Log("Setting up Firebase Auth");
-        auth = Firebase.Auth.FirebaseAuth.DefaultInstance;
-        auth.StateChanged += AuthStateChanged;
-        AuthStateChanged(this, null);
-    }
-
-    void AuthStateChanged(object sender, System.EventArgs eventArgs) {
-        if (auth.CurrentUser != user) {
-            bool signedIn = user != auth.CurrentUser && auth.CurrentUser != null;
-            if (!signedIn && user != null) {
-                Debug.Log("Signed out " + user.UserId);
-            }
-            user = auth.CurrentUser;
-            if (signedIn) {
-                Debug.Log("Signed in " + user.UserId);
-            }
-        }
-    }
-
-    void OnDestroy() {
-        auth.StateChanged -= AuthStateChanged;
-        auth = null;
-    }
-
-
-
 }

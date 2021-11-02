@@ -79,7 +79,8 @@ public class WanderSpiderAI : MonoBehaviour
         }
     }
     
-    // when the spider's collider begun touching other colliders 
+    // executed for the first frame when the spider's collider
+    // begun touching other colliders without isTrigger checked
     private void OnCollisionEnter(Collision other)
     {
         // if the collider that is collided with is not the table_2 collider
@@ -92,7 +93,8 @@ public class WanderSpiderAI : MonoBehaviour
         }
     }
     
-    // for every frame the spider's collider is touching other colliders
+    // executed for every frame the spider's collider is touching
+    // other colliders without isTrigger checked
     private void OnCollisionStay(Collision other)
     {
         if (other.gameObject.name != "table_2")
@@ -102,7 +104,8 @@ public class WanderSpiderAI : MonoBehaviour
         }
     }
 
-    // when the spider's collider stops touching other colliders
+    // executed when the spider's collider stops touching
+    // other colliders without isTrigger checked
     private void OnCollisionExit(Collision other)
     {
         if (other.gameObject.name != "table_2")
@@ -150,7 +153,7 @@ public class WanderSpiderAI : MonoBehaviour
     IEnumerator Avoid()
     {
             // randomize the time taken for spider avoidance behavior 
-            float avoidTime = Random.Range(0.5f, 1.5f);
+            float avoidTime = Random.Range(0.5f, 1.0f);
             // engage the spider in avoidance behavior
             _isAvoiding = true;
             // transition from idle animation to rotate animation

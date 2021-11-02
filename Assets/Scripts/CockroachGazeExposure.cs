@@ -12,7 +12,6 @@ public class CockroachGazeExposure : MonoBehaviour
 {
     public AudioSource progressBarFilledAudio, audioSource, GazeBGM;
     
-    
     private int gazeVirtualTherapist;
 
     public Collider ExitCockroachGazeButton;
@@ -30,12 +29,13 @@ public class CockroachGazeExposure : MonoBehaviour
     public GameObject DoctorCanvas;
     
     private const float maxDistance = 10;
-    private GameObject gazedAtObject = null;
+    private GameObject _hitGameObject = null;
     public Image imgCircle;
     public float totalTime = 2.5f;
     public float gazeTimer;
     private GameObject parent;
     public Slider slider;
+    
     // slider filling speed
     public float FillSpeed = 2f;
     
@@ -81,11 +81,11 @@ public class CockroachGazeExposure : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(ray, out hit, maxDistance))
         {
-            gazedAtObject = hit.transform.gameObject;
-            Debug.Log(gazedAtObject);
+            _hitGameObject = hit.transform.gameObject;
+            Debug.Log(_hitGameObject);
             gazeTimer += Time.deltaTime;
             // this is to bypass the triggering gazetimer adding when looking at the tablecolliders (messing with the retry menu)
-            if (gazedAtObject.name == "table_2")
+            if (_hitGameObject.name == "table_2")
             {
                 gazeTimer = 0;
             }
@@ -101,7 +101,7 @@ public class CockroachGazeExposure : MonoBehaviour
         }
         else
         {
-            gazedAtObject = null;
+            _hitGameObject = null;
             gazeTimer = 0;
             imgCircle.fillAmount = 0;
         }
@@ -111,11 +111,15 @@ public class CockroachGazeExposure : MonoBehaviour
     {
         if (slider.value < 5f)
         {
-            BubbleText.text = "Gaze at the spiders to fill the progress bar!";
+            BubbleText.text = "Gaze at the cockroaches to fill the progress bar!";
         }
         if (slider.value > 10f)
         {
-            BubbleText.text = "You can exit the gaze exposure task by gazing at the square pillow on the bed at the back!";
+            BubbleText.text = "I want you to feel safe, these cockroaches are virtual!";
+        }
+        if (slider.value > 15f)
+        {
+            BubbleText.text = "You can exit the gaze exposure task by gazing at the square pillow on the bed at the back!";       
         }
         if (slider.value > 20f)
         {
@@ -123,25 +127,29 @@ public class CockroachGazeExposure : MonoBehaviour
         }
         if (slider.value > 25f)
         {
-            BubbleText.text = "Take deep breaths to calm yourself down if you are feeling distressed";
+            BubbleText.text = "Take off the headset if you have to! We can always try again!";
         }
-        if (slider.value > 30f)
+        if (slider.value > 35f)
         {
-            BubbleText.text = "Spiders actually eat more insects than birds and bats combined!";
+            BubbleText.text = "Take slow and deep breaths to calm yourself down if you are feeling distressed";
         }
-        if (slider.value > 45f)
+        if (slider.value > 40f)
         {
             BubbleText.text = "You are doing great!";
         }
-        if (slider.value > 55f)
+        if (slider.value > 50f)
         {
-            BubbleText.text = "By eating pests like fleas and mosquitoes, spiders can prevent the spread of disease!";
+            BubbleText.text = "Fossil evidence shows that cockroaches originated more than 300 million years ago!";
         }
-        if (slider.value > 65f)
+        if (slider.value > 60f)
+        {
+            BubbleText.text = "Cockroaches feed on organic matter and releases nitrogen that is crucial for forests!";
+        }
+        if (slider.value > 70f)
         {
             BubbleText.text = "Keep it up!";
         }
-        if (slider.value > 75f)
+        if (slider.value > 80f)
         {
             BubbleText.text = "You are progressing really well!";
         }
@@ -159,49 +167,60 @@ public class CockroachGazeExposure : MonoBehaviour
             sliderMax = true;
             BubbleText.text = "The progress bar is fully filled! You have completed the gaze exposure session!";
         }
-        if (gazedAtObject.name == "PillowCollider")
+        switch (_hitGameObject.name)
         {
-            imgCircle.fillAmount = gazeTimer / totalTime;
-            if (gazeTimer > totalTime)
+            case "PillowCollider":
             {
-                audioSource.Play();
-                ExitCockroachGazeCanvas.enabled = true;
-                ExitCockroachGazeButton.enabled = true;
-                ExitCockroachGazeCancelButton.enabled = true;
-                PillowCollider.enabled = false; 
-                gazeTimer = 0;
+                imgCircle.fillAmount = gazeTimer / totalTime;
+                if (gazeTimer > totalTime)
+                {
+                    audioSource.Play();
+                    ExitCockroachGazeCanvas.enabled = true;
+                    ExitCockroachGazeButton.enabled = true;
+                    ExitCockroachGazeCancelButton.enabled = true;
+                    PillowCollider.enabled = false; 
+                    gazeTimer = 0;
+                }
+
+                break;
+            }
+            case "ExitCockroachGazeCancelButton":
+            {
+                imgCircle.fillAmount = gazeTimer / totalTime;
+                if (gazeTimer > totalTime)
+                {
+                    audioSource.Play();
+                    ExitCockroachGazeCanvas.enabled = false;
+                    ExitCockroachGazeButton.enabled = false;
+                    ExitCockroachGazeCancelButton.enabled = false;
+                    PillowCollider.enabled = true; 
+                    gazeTimer = 0;
+                }
+
+                break;
+            }
+            case "ExitCockroachGazeButton":
+            {
+                imgCircle.fillAmount = gazeTimer / totalTime;
+                if (gazeTimer > totalTime)
+                {
+                    SceneManager.LoadScene("CockroachPhobiaMenu");
+                    gazeTimer = 0;
+                }
+
+                break;
             }
         }
-        if (gazedAtObject.name == "ExitCockroachGazeCancelButton")
-        {
-            imgCircle.fillAmount = gazeTimer / totalTime;
-            if (gazeTimer > totalTime)
-            {
-                audioSource.Play();
-                ExitCockroachGazeCanvas.enabled = false;
-                ExitCockroachGazeButton.enabled = false;
-                ExitCockroachGazeCancelButton.enabled = false;
-                PillowCollider.enabled = true; 
-                gazeTimer = 0;
-            }
-        }
-        if (gazedAtObject.name == "ExitCockroachGazeButton")
-        {
-            imgCircle.fillAmount = gazeTimer / totalTime;
-            if (gazeTimer > totalTime)
-            {
-                SceneManager.LoadScene("CockroachPhobiaMenu");
-                gazeTimer = 0;
-            }
-        }
-        if (gazedAtObject.name != "Plane" && gazedAtObject.name != "table_2" && 
-            gazedAtObject.name != "PillowCollider" && gazedAtObject.name != "ExitCockroachGazeButton" && gazedAtObject.name != "ExitCockroachGazeCancelButton" )
+
+        // if the ray cast collides with spider colliders
+        if (_hitGameObject.name == "CartoonCockroach(Clone)" ||
+            _hitGameObject.name == "RealisticCockroachGaze(Clone)")
         {
             slider.value += FillSpeed * Time.deltaTime;
         }
         else
         {
-            gazedAtObject = null;
+            _hitGameObject = null;
         }
     }
     
@@ -213,7 +232,7 @@ public class CockroachGazeExposure : MonoBehaviour
         
         BackToMainMenuButton.enabled = true;
         RetryGazeSessionButton.enabled = true;
-        if (gazedAtObject.name == "BackToMainMenuButton" )
+        if (_hitGameObject.name == "BackToMainMenuButton" )
         {
             imgCircle.fillAmount = gazeTimer / totalTime;
             if (gazeTimer > totalTime)
@@ -222,7 +241,7 @@ public class CockroachGazeExposure : MonoBehaviour
                 gazeTimer = 0;
             }
         }
-        else if (gazedAtObject.name == "RetryGazeSessionButton")
+        else if (_hitGameObject.name == "RetryGazeSessionButton")
         {
             imgCircle.fillAmount = gazeTimer / totalTime;
             if (gazeTimer > totalTime)
@@ -234,7 +253,7 @@ public class CockroachGazeExposure : MonoBehaviour
         else
         {
             imgCircle.fillAmount = 0;
-            gazedAtObject = null;
+            _hitGameObject = null;
         }
 
     }

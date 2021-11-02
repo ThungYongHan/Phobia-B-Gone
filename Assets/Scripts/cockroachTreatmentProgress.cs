@@ -14,32 +14,33 @@ public class cockroachTreatmentProgress : MonoBehaviour
     private int firstnum;
     private int lastnum;
     private int firstminuslast;
+    
+    private FirebaseAuth _auth;
+    private FirebaseUser _user;
+    private DatabaseReference _reference;
     public TextMeshProUGUI TreatmentProgressText;
     public TextMeshPro SpeechText;
-    Firebase.Auth.FirebaseAuth auth;
-    Firebase.Auth.FirebaseUser user;
-    DatabaseReference reference;
-    DatabaseReference cockroach;
+    // DatabaseReference cockroach;
 
     void Start()
     {
         FirebaseDatabase.DefaultInstance.SetPersistenceEnabled(false);
-        reference = FirebaseDatabase.DefaultInstance.RootReference;
-        InitializeFirebase();
+        _auth = FirebaseAuth.DefaultInstance;
+        _reference = FirebaseDatabase.DefaultInstance.RootReference;
+        // get currently logged-in user
+        _user = _auth.CurrentUser;
         LoadPatientCockroachTreatmentData();
-        GetPatientData();
+        // GetPatientData();
         ComparePatientData();
     }
     
     public void ComparePatientData()
     {
-        reference.Child("Questionnaires").Child(user.UserId).Child("Cockroach").GetValueAsync().ContinueWithOnMainThread(task =>
+        _reference.Child("Questionnaires").Child(_user.UserId).Child("Cockroach").GetValueAsync().ContinueWithOnMainThread(task =>
         {
             if (task.IsCompleted)
             {
                 DataSnapshot snapshot = task.Result;
-                Debug.Log("Successful");
-                
                 int treatmentCount = (int)snapshot.ChildrenCount;
                 string strtreatmentCount = treatmentCount.ToString();
                 Debug.Log(treatmentCount);
@@ -76,21 +77,16 @@ public class cockroachTreatmentProgress : MonoBehaviour
     
     public void LoadPatientCockroachTreatmentData()
     {
-        reference.Child("Questionnaires").Child(user.UserId).Child("Cockroach").GetValueAsync().ContinueWithOnMainThread(task =>
+        _reference.Child("Questionnaires").Child(_user.UserId).Child("Cockroach").GetValueAsync().ContinueWithOnMainThread(task =>
         {
             if (task.IsCompleted)
             {
-                
                 DataSnapshot snapshot = task.Result;
-                Debug.Log("Successful");
-                
                 int treatmentCount = (int)snapshot.ChildrenCount;
-                string strtreatmentCount = treatmentCount.ToString();
-                Debug.Log(treatmentCount);
                 for (int i = 1; i <= treatmentCount; i++)
                 {   
-                    TreatmentProgressText.text += snapshot.Child(i.ToString()).Child("AnswerDateTime").Value.ToString() + "                   " 
-                        + snapshot.Child(i.ToString()).Child("AnswerScore").Value.ToString() + "\n" + "\n";
+                    TreatmentProgressText.text += snapshot.Child(i.ToString()).Child("AnswerDateTime").Value + "                   " 
+                        + snapshot.Child(i.ToString()).Child("AnswerScore").Value + "\n" + "\n";
                 }
             }
             else
@@ -100,21 +96,21 @@ public class cockroachTreatmentProgress : MonoBehaviour
         });
     }
     
-    public void GetPatientData()
-    {
-        reference.Child("Questionnaires").Child(user.UserId).Child("Cockroach").GetValueAsync().ContinueWith(task =>
-        {
-            if (task.IsCompleted)
-            {
-                DataSnapshot snapshot = task.Result;
-                Debug.Log("Successful");
-            }
-            else
-            {
-                Debug.Log("Unsuccessful");
-            }
-        });
-    }
+    // public void GetPatientData()
+    // {
+    //     _reference.Child("Questionnaires").Child(_user.UserId).Child("Cockroach").GetValueAsync().ContinueWith(task =>
+    //     {
+    //         if (task.IsCompleted)
+    //         {
+    //             DataSnapshot snapshot = task.Result;
+    //             Debug.Log("Successful");
+    //         }
+    //         else
+    //         {
+    //             Debug.Log("Unsuccessful");
+    //         }
+    //     });
+    // }
     
     public void BackToMenuButton()
     {
@@ -123,38 +119,13 @@ public class cockroachTreatmentProgress : MonoBehaviour
     
     public void quitApp()
     {
+        _auth.SignOut();
         Application.Quit();
-        //UnityEditor.EditorApplication.isPlaying = false;
     }
     
     public void AnswerFCQButton()
     {
         SceneManager.LoadScene("TreatCockroachEval");
-    }
-    
-    void InitializeFirebase() {
-        Debug.Log("Setting up Firebase Auth");
-        auth = Firebase.Auth.FirebaseAuth.DefaultInstance;
-        auth.StateChanged += AuthStateChanged;
-        AuthStateChanged(this, null);
-    }
-
-    void AuthStateChanged(object sender, System.EventArgs eventArgs) {
-        if (auth.CurrentUser != user) {
-            bool signedIn = user != auth.CurrentUser && auth.CurrentUser != null;
-            if (!signedIn && user != null) {
-                Debug.Log("Signed out " + user.UserId);
-            }
-            user = auth.CurrentUser;
-            if (signedIn) {
-                Debug.Log("Signed in " + user.UserId);
-            }
-        }
-    }
-
-    void OnDestroy() {
-        auth.StateChanged -= AuthStateChanged;
-        auth = null;
     }
 }
 

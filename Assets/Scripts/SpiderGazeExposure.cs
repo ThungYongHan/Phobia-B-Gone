@@ -10,164 +10,103 @@ using UnityEngine.UI;
 
 public class SpiderGazeExposure : MonoBehaviour
 {
+    // audio source for progress bar fully filled sound,
+    // gaze interaction sound, and gaze exposure background music
     public AudioSource progressBarFilledAudio, audioSource, GazeBGM;
-    private int gazeVirtualTherapist;
-
-    public Collider ExitSpiderGazeButton;
-    public Collider ExitSpiderGazeCancelButton;
     
-    public Collider BackToMainMenuButton;
-    public Collider RetryGazeSessionButton;
-    public Collider PillowCollider;
+    // to be used to store obtained PlayerPrefs value for toggleable virtual therapist
+    // companion and background music in gaze exposure options menu
+    private int gazeVirtualTherapist;
+    private int gazeBGM;
+
+    public Collider ExitSpiderGazeButton, ExitSpiderGazeCancelButton, 
+        BackToMainMenuButton, RetryGazeSessionButton, PillowCollider;
+    
+    // progress bar canvas
+    public Canvas ProgressCanvas;
     public Canvas ExitSpiderGazeCanvas;
     public Canvas BackToMainMenuCanvas;
     
+    // virtual therapist companion speech bubble text
     public TextMeshPro BubbleText;
-    
-    public Canvas ProgressCanvas;
+    // virtual therapist companion canvas 
     public GameObject DoctorCanvas;
     
-    private const float maxDistance = 10;
-    private GameObject gazedAtObject = null;
-    public Image imgCircle;
-    public float totalTime = 2.5f;
-    public float gazeTimer;
+    private GameObject _hitGameObject;
+    public Image progressCircle;
+    private const float MAXGazeDistance = 10;
+    private const float TotalTime = 2.5f;
+    private float _gazeTimer;
+    
+    // slider used for progress bar
     public Slider slider;
-    // slider filling speed
+    // progress bar filling speed
     public float FillSpeed = 2f;
-
-    private int gazeBGM;
-    /*private BoxCollider OptionTest0 = null;
-    private BoxCollider OptionTest1 = null;
-    private BoxCollider OptionTest2 = null;
-    private BoxCollider OptionTest3 = null;
-    private BoxCollider OptionTest4 = null;
-
-    private BoxCollider SelectButton = null;
-    private BoxCollider CancelButton = null;
-    private BoxCollider ConfirmButton = null;*/
-    
-    private TextMeshProUGUI numTest;
-    private TextMeshProUGUI numTest2;
-    
-    //public JSONReadandWrite scriptB;
-    
-    public bool sliderMax = false;
+    // is progress bar fully filled? (default false)
+    public bool sliderMax;
 
     private void Awake()
     {
+        // get PlayerPrefs value for toggleable gaze exposure background music
         gazeBGM = PlayerPrefs.GetInt("spidergazeBGM");
+        // if user has the gaze bgm toggle marked as checked
         if (gazeBGM == 1)
         {
+            // play the gaze background music at normal volume
             GazeBGM.volume = 1f;
             GazeBGM.Play();
         }
         
-        BackToMainMenuButton.enabled = false;
-        RetryGazeSessionButton.enabled = false;
-        
-        ExitSpiderGazeCanvas.enabled = false;
-        ExitSpiderGazeButton.enabled = false;
-        ExitSpiderGazeCancelButton.enabled = false;
-        BackToMainMenuCanvas.enabled = false;
-        
+        // get PlayerPrefs value for toggleable gaze exposure virtual therapist companion
         gazeVirtualTherapist = PlayerPrefs.GetInt("spidergazeVirtualTherapist");
+        // if user has the gaze exposure virtual therapist companion toggle marked as checked
         if (gazeVirtualTherapist == 1)
         {
+            // activate the virtual therapist companion canvas
             DoctorCanvas.SetActive(true);
         }
         else
         {
+            // deactivate the virtual therapist companion canvas
             DoctorCanvas.SetActive(false);
         }
         
-        ProgressCanvas = GameObject.Find("ProgressCanvas").GetComponent<Canvas>();
-        
-        /*if (test != null)
-        {
-            // then reference the gameobject's script
-            //scriptB = test.GetComponent<JSONReadandWrite>();
-        }*/
-        //scriptB.SaveToJson();
-       
-        // set HiddenCanvas Button's Collider to false at the start to prevent "ghost" box colliders
-
-        // slider = parent.transform.GetChild(0).GetComponent<Slider>();
-        // enable canvas in editor then disable canvas in awake in order to reference it
-        //myCanvas = GameObject.Find("HiddenCanvas").GetComponent<Canvas>();
-        //myCanvas.enabled = false;
+        // deactivate Return To Arachnophobia Menu canvas
+        BackToMainMenuCanvas.enabled = false;
+        BackToMainMenuButton.enabled = false;
+        RetryGazeSessionButton.enabled = false;
+        // deactivate Exit Arachnophobia Gaze Exposure canvas
+        ExitSpiderGazeCanvas.enabled = false;
+        ExitSpiderGazeButton.enabled = false;
+        ExitSpiderGazeCancelButton.enabled = false;
     }
     
     void FixedUpdate()
     {
-        var ray = new Ray(this.transform.position, this.transform.forward);
         RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, maxDistance))
+        if (Physics.Raycast(transform.position,transform.forward, out hit, MAXGazeDistance))
         {
-            /*lasthit = hit.transform.gameObject;
-            gazeTimer += Time.deltaTime; 
-            _gazedAtObject = lasthit;*/ 
-            // this is important to not trigger raycast with non spider objects
-            gazedAtObject = hit.transform.gameObject;
-            gazeTimer += Time.deltaTime;
-            // this is to bypass the triggering gazetimer adding when looking at the tablecolliders (messing with the retry menu)
-            if (gazedAtObject.name == "table_2")
+            _hitGameObject = hit.transform.gameObject;
+            _gazeTimer += Time.deltaTime;
+            if (_hitGameObject.name == "table_2")
             {
-                gazeTimer = 0;
+                _gazeTimer = 0;
             }
+            // if progress bar is not fully filled
             if (sliderMax == false)
             {
                 InsectGazing();
             }
             else
             {
-                ProgressCanvas.enabled = false;
                 CompletedMenuGazing();
-                /*
-                imgCircle.fillAmount = gazeTimer / totalTime;
-                _gazedAtObject = lasthit;
-                if (_gazedAtObject.name == "BackToMainMenuButton")
-                {
-                    if (gazeTimer > totalTime)
-                    {
-                        if (_gazedAtObject.name == "BackToMainMenuButton")
-                        {
-                            SceneManager.LoadScene("SpiderPhobiaMenu");
-                        }
-                    }
-                }
-                else
-                {
-                    imgCircle.fillAmount = 0;
-                }*/
-                /*imgCircle.fillAmount = gazeTimer / totalTime;
-                _gazedAtObject = lasthit;
-                if (gazeTimer > totalTime)
-                {
-                    if (_gazedAtObject.name == "BackToMainMenuButton")
-                    {
-                        SceneManager.LoadScene("SpiderPhobiaMenu");
-                    }
-                }
-                else
-                {
-                    imgCircle.fillAmount = 0;
-                }*/
-                //FormGazing();
-                // this is crucial, need to set if(myCanvas1.enabled == false) so that enableCanvas1() is not called each frame, which previously
-                // would have disabled "Confirm" and "Select" buttons in
-                // myCanvas2 and also set all buttons in myCanvas 1 to be always active (interactable)
-                /*if (myCanvas1.enabled == false)
-                {
-                    EnableCanvas1(); 
-                }*/
             }
         }
         else
         {
-            gazedAtObject = null;
-            gazeTimer = 0;
-            imgCircle.fillAmount = 0;
+            _hitGameObject = null;
+            _gazeTimer = 0;
+            progressCircle.fillAmount = 0;
         }
     }
 
@@ -179,7 +118,12 @@ public class SpiderGazeExposure : MonoBehaviour
         }
         if (slider.value > 10f)
         {
-            BubbleText.text = "You can exit the gaze exposure task by gazing at the square pillow on the bed at the back!";
+            BubbleText.text = "I want you to feel safe, these spiders are virtual!";
+        }
+        if (slider.value > 15f)
+        {
+            BubbleText.text = "You can exit the gaze exposure task by gazing at the square pillow " +
+                              "on the bed at the back!";       
         }
         if (slider.value > 20f)
         {
@@ -187,25 +131,31 @@ public class SpiderGazeExposure : MonoBehaviour
         }
         if (slider.value > 25f)
         {
-            BubbleText.text = "Take deep breaths to calm yourself down if you are feeling distressed";
+            BubbleText.text = "Take off the headset if you have to! We can always try again!";
         }
-        if (slider.value > 30f)
+        if (slider.value > 35f)
         {
-            BubbleText.text = "Spiders actually eat more insects than birds and bats combined!";
+            BubbleText.text = "Take slow and deep breaths to calm yourself down if you are feeling " +
+                              "distressed";
         }
-        if (slider.value > 45f)
+        if (slider.value > 40f)
         {
             BubbleText.text = "You are doing great!";
         }
-        if (slider.value > 55f)
+        if (slider.value > 50f)
         {
-            BubbleText.text = "By eating pests like fleas and mosquitoes, spiders can prevent the spread of disease!";
+            BubbleText.text = "Spiders actually eat more insects than birds and bats combined!";
         }
-        if (slider.value > 65f)
+        if (slider.value > 60f)
+        {
+            BubbleText.text = "By eating pests like fleas and mosquitoes, spiders help prevent the " +
+                              "spread of disease!";
+        }
+        if (slider.value > 70f)
         {
             BubbleText.text = "Keep it up!";
         }
-        if (slider.value > 75f)
+        if (slider.value > 80f)
         {
             BubbleText.text = "You are progressing really well!";
         }
@@ -213,95 +163,139 @@ public class SpiderGazeExposure : MonoBehaviour
         {
             BubbleText.text = "Almost there!";
         }
-
-        // when the slider is fully filled
+        // when the slider reaches max value (progress bar fully filled)
         if (slider.value == 100.0f)
         {
+            // play progress bar filled audio clip with reduced volume
             progressBarFilledAudio.volume = 0.4f;
             progressBarFilledAudio.Play();
-            BackToMainMenuCanvas.enabled = true;
+            // set sliderMax bool to true to indicate that progress bar is fully filled
             sliderMax = true;
-            BubbleText.text = "The progress bar is fully filled! You have completed the gaze exposure session!";
+            BubbleText.text = "The progress bar is fully filled! You have completed the gaze " +
+                              "exposure session!";
         }
-        if (gazedAtObject.name == "PillowCollider")
+        
+        switch (_hitGameObject.name)
         {
-            imgCircle.fillAmount = gazeTimer / totalTime;
-            if (gazeTimer > totalTime)
+            // square pillow on the bed at the back
+            case "PillowCollider":
             {
-                audioSource.Play();
-                ExitSpiderGazeCanvas.enabled = true;
-                ExitSpiderGazeButton.enabled = true;
-                ExitSpiderGazeCancelButton.enabled = true;
-                PillowCollider.enabled = false; 
-                gazeTimer = 0;
+                BubbleText.text = "You can exit the gaze exposure task by gazing at the square pillow on the bed at the back!"; 
+                progressCircle.fillAmount = _gazeTimer / TotalTime;
+                if (_gazeTimer > TotalTime)
+                {
+                    // play gaze interaction beep sound
+                    audioSource.Play();
+                    // enable exit gaze exposure task window canvas
+                    ExitSpiderGazeCanvas.enabled = true;
+                    ExitSpiderGazeButton.enabled = true;
+                    ExitSpiderGazeCancelButton.enabled = true;
+                    PillowCollider.enabled = false; 
+                    _gazeTimer = 0;
+                }
+                break;
+            }
+            // confirm button
+            case "ExitSpiderGazeCancelButton":
+            {
+                progressCircle.fillAmount = _gazeTimer / TotalTime;
+                if (_gazeTimer > TotalTime)
+                {
+                    audioSource.Play();
+                    ExitSpiderGazeCanvas.enabled = false;
+                    ExitSpiderGazeButton.enabled = false;
+                    ExitSpiderGazeCancelButton.enabled = false;
+                    PillowCollider.enabled = true; 
+                    _gazeTimer = 0;
+                }
+                break;
+            }
+            // cancel button
+            case "ExitSpiderGazeButton":
+            {
+                progressCircle.fillAmount = _gazeTimer / TotalTime;
+                if (_gazeTimer > TotalTime)
+                {
+                    audioSource.Play();
+                    SceneManager.LoadScene("SpiderPhobiaMenu");
+                    _gazeTimer = 0;
+                }
+                break;
             }
         }
-        if (gazedAtObject.name == "ExitSpiderGazeCancelButton")
+        
+        // if the ray cast collides with spider colliders
+        if (_hitGameObject.name == "CuteSpiderGaze(Clone)" || 
+            _hitGameObject.name == "NormalSpiderGaze(Clone)" || 
+            _hitGameObject.name == "RealisticSpiderGaze(Clone)")
         {
-            imgCircle.fillAmount = gazeTimer / totalTime;
-            if (gazeTimer > totalTime)
-            {
-                audioSource.Play();
-                ExitSpiderGazeCanvas.enabled = false;
-                ExitSpiderGazeButton.enabled = false;
-                ExitSpiderGazeCancelButton.enabled = false;
-                PillowCollider.enabled = true; 
-                gazeTimer = 0;
-            }
-        }
-        if (gazedAtObject.name == "ExitSpiderGazeButton")
-        {
-            imgCircle.fillAmount = gazeTimer / totalTime;
-            if (gazeTimer > totalTime)
-            {
-                audioSource.Play();
-                SceneManager.LoadScene("SpiderPhobiaMenu");
-                gazeTimer = 0;
-            }
-        }
-        if (gazedAtObject.name != "Plane" && gazedAtObject.name != "table_2" && 
-            gazedAtObject.name != "PillowCollider" && gazedAtObject.name != "ExitSpiderGazeButton" && gazedAtObject.name != "ExitSpiderGazeCancelButton" )
-        {
+            // increase the progress bar slider value 
+            // according to specified filling speed 
             slider.value += FillSpeed * Time.deltaTime;
         }
-        else
-        {
-            gazedAtObject = null;
-        }
+        
+        // else
+        // {
+        //     _hitGameObject = null;
+        // }
     }
     
     private void CompletedMenuGazing()
     {
+        // deactivate progress bar canvas
+        ProgressCanvas.enabled = false;
+        // deactivate Exit Arachnophobia Gaze Exposure canvas
         ExitSpiderGazeCanvas.enabled = false;
         ExitSpiderGazeButton.enabled = false;
         ExitSpiderGazeCancelButton.enabled = false;
         
+        // activate Return To Arachnophobia Menu canvas
+        BackToMainMenuCanvas.enabled = true;
         BackToMainMenuButton.enabled = true;
         RetryGazeSessionButton.enabled = true;
-        if (gazedAtObject.name == "BackToMainMenuButton")
+        
+        // the name of the gameObject with collider that the ray collides with 
+        switch (_hitGameObject.name)
         {
-            imgCircle.fillAmount = gazeTimer / totalTime;
-            if (gazeTimer > totalTime)
+            // confirm button
+            case "BackToMainMenuButton":
             {
-                audioSource.Play();
-                SceneManager.LoadScene("SpiderPhobiaMenu");
-                gazeTimer = 0;
+                // fill the circularprogressbar (fully filled when the gazetimer
+                // is equal to time needed to complete gaze interaction)
+                progressCircle.fillAmount = _gazeTimer / TotalTime;
+                // if the gazetimer is higher than the required gaze time
+                if (_gazeTimer > TotalTime)
+                {
+                    // play gaze interact sound effect
+                    audioSource.Play();
+                    // load the arachnophobia exposure therapy menu scene
+                    SceneManager.LoadScene("SpiderPhobiaMenu");
+                    // reset the gazetimer to restart gaze interaction instance
+                    // (prevent unwanted interactions)
+                    _gazeTimer = 0;
+                }
+                break;
             }
-        }
-        else if (gazedAtObject.name == "RetryGazeSessionButton")
-        {
-            imgCircle.fillAmount = gazeTimer / totalTime;
-            if (gazeTimer > totalTime)
+            // retry button
+            case "RetryGazeSessionButton":
             {
-                audioSource.Play();
-                SceneManager.LoadScene("SpiderGazeExposureTaskScene");
-                gazeTimer = 0;
+                progressCircle.fillAmount = _gazeTimer / TotalTime;
+                if (_gazeTimer > TotalTime)
+                {
+                    audioSource.Play();
+                    // load the current scene again
+                    SceneManager.LoadScene("SpiderGazeExposureTaskScene");
+                    _gazeTimer = 0;
+                }
+                break; 
+            // if physics.raycast is not colliding with any gameObjects attached
+            // with colliders
             }
-        }
-        else
-        {
-            imgCircle.fillAmount = 0;
-            gazedAtObject = null;
+            default:
+                // reset the circular progress bar fill amount
+                progressCircle.fillAmount = 0;
+                _hitGameObject = null;
+                break;
         }
     }
 }

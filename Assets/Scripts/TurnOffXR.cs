@@ -5,12 +5,12 @@ using UnityEngine.XR.Management;
 using Google.XR.Cardboard;
 public class TurnOffXR : MonoBehaviour
 {
-    public VrModeController turnOffVR;
+    private VrModeController _turnOffVR;
     public GameObject vrModeController;
     
     void Awake()
     {
-        turnOffVR = vrModeController.GetComponent<VrModeController>();
-        turnOffVR.ExitVR();
+        _turnOffVR = vrModeController.GetComponent<VrModeController>();
+        _turnOffVR.ExitVR();
     }
 }

@@ -548,7 +548,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 24357752}
   m_LocalRotation: {x: -0, y: -0.0003874451, z: 0, w: -0.99999994}
-  m_LocalPosition: {x: 0, y: 0, z: -0.102}
+  m_LocalPosition: {x: 0, y: 0, z: -0.012}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1707166118}
@@ -556,7 +556,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 161.257, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.193, y: 0.087}
+  m_AnchoredPosition: {x: 0.181, y: 0.078}
   m_SizeDelta: {x: 5, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &24357754
@@ -690,7 +690,7 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!28 &24874127
 Texture2D:
@@ -4406,7 +4406,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 397128114}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e92b58025ab10524abd6f54d2e4263f4, type: 3}
   m_Name: 
@@ -4448,7 +4448,7 @@ MonoBehaviour:
   totalTime: 2.5
   gazeTimer: 0
   slider: {fileID: 647197343}
-  FillSpeed: 50
+  FillSpeed: 2
   sliderMax: 0
 --- !u!114 &397128124
 MonoBehaviour:
@@ -5581,7 +5581,6 @@ GameObject:
   m_Component:
   - component: {fileID: 555667030}
   - component: {fileID: 555667032}
-  - component: {fileID: 555667031}
   m_Layer: 0
   m_Name: UICamera
   m_TagString: Untagged
@@ -5603,14 +5602,6 @@ Transform:
   m_Father: {fileID: 397128115}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!81 &555667031
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 555667029}
-  m_Enabled: 1
 --- !u!20 &555667032
 Camera:
   m_ObjectHideFlags: 0
@@ -6986,7 +6977,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 100292, guid: e825c30262c222749ae7c54fad1b5c81, type: 3}
       propertyPath: m_Layer
-      value: 10
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400100, guid: e825c30262c222749ae7c54fad1b5c81, type: 3}
       propertyPath: m_RootOrder
@@ -7150,27 +7141,8 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 80
+  m_Constraints: 112
   m_CollisionDetection: 0
---- !u!114 &686079990
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 686079986}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b02e01c86a900a4e89a3fa29609261a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  spiderCollider: {fileID: 686079988}
-  spiderBlockerCollider: {fileID: 1656199159}
---- !u!4 &686079992 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 400100, guid: e825c30262c222749ae7c54fad1b5c81, type: 3}
-  m_PrefabInstance: {fileID: 686079985}
-  m_PrefabAsset: {fileID: 0}
 --- !u!28 &688562148
 Texture2D:
   m_ObjectHideFlags: 0
@@ -10558,18 +10530,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.80562425, y: 1.6051344, z: 0.7573105}
   m_Center: {x: -0.012173295, y: 0.0008202791, z: 0.37277293}
---- !u!114 &987943080
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 987943077}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 86ab15a5670d75d44828bb6a3ab3c6f1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!64 &987943081
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -12485,7 +12445,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 8dd7e24bebb3a134ab1f9b74510c543d, type: 3}
       propertyPath: m_Layer
-      value: 10
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 8dd7e24bebb3a134ab1f9b74510c543d, type: 3}
       propertyPath: m_IsActive
@@ -12545,7 +12505,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 80
+  m_Constraints: 112
   m_CollisionDetection: 0
 --- !u!114 &1241933396
 MonoBehaviour:
@@ -12561,25 +12521,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 0.002
   rotSpeed: 0.5
---- !u!4 &1241933397 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 8dd7e24bebb3a134ab1f9b74510c543d, type: 3}
-  m_PrefabInstance: {fileID: 1241933391}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1241933398
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1241933392}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5b02e01c86a900a4e89a3fa29609261a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  spiderCollider: {fileID: 1241933393}
-  spiderBlockerCollider: {fileID: 1860511921}
 --- !u!28 &1261099798
 Texture2D:
   m_ObjectHideFlags: 0
@@ -16740,68 +16681,6 @@ Texture2D:
     offset: 0
     size: 0
     path: 
---- !u!1 &1656199157
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1656199158}
-  - component: {fileID: 1656199160}
-  - component: {fileID: 1656199159}
-  m_Layer: 11
-  m_Name: RealisticCockoach Collision Blocker
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1656199158
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1656199157}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 686079992}
-  m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!136 &1656199159
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1656199157}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.03931567
-  m_Height: 0
-  m_Direction: 1
-  m_Center: {x: 0, y: 0.03, z: -0.007211596}
---- !u!54 &1656199160
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1656199157}
-  serializedVersion: 2
-  m_Mass: 100000
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 0
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 80
-  m_CollisionDetection: 0
 --- !u!28 &1657204227
 Texture2D:
   m_ObjectHideFlags: 0
@@ -19234,68 +19113,6 @@ Texture2D:
     offset: 0
     size: 0
     path: 
---- !u!1 &1860511919
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1860511920}
-  - component: {fileID: 1860511922}
-  - component: {fileID: 1860511921}
-  m_Layer: 11
-  m_Name: CartoonCockoach Collision Blocker
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1860511920
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1860511919}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 1241933397}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!136 &1860511921
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1860511919}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 1.1521589
-  m_Height: 0
-  m_Direction: 1
-  m_Center: {x: -0.0004132589, y: 1.4999999, z: -0.2751301}
---- !u!54 &1860511922
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1860511919}
-  serializedVersion: 2
-  m_Mass: 100000
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 0
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 80
-  m_CollisionDetection: 0
 --- !u!28 &1871599865
 Texture2D:
   m_ObjectHideFlags: 0

@@ -7,13 +7,13 @@ using Random = UnityEngine.Random;
 public class GameCockroachAI : MonoBehaviour
 {
     //0.01 GOOD MOVESPEED
-    public float moveSpeed = 0.006f;
+    private float moveSpeed = 0.008f;
     //public float moveSpeed = 0.002f;
     public float rotSpeed = 0.6f;
     private bool isWandering = false;
     private bool isRotatingLeft = false;
     private bool isRotatingRight = false;
-    private bool isAvoiding = false;
+    private bool _isAvoiding = false;
     private bool isWalking = false;
     
     private Animator animator;
@@ -33,66 +33,23 @@ public class GameCockroachAI : MonoBehaviour
         if (isRotatingRight == true)
         {
             transform.Rotate(transform.up * rotSpeed);
-           //transform.Rotate(0, 0.1f, 0 * Time.deltaTime);
-
         }
 
         if (isRotatingLeft == true)
         {
             transform.Rotate(transform.up * -rotSpeed);
-            //transform.Rotate(0, 0.1f, 0 * Time.deltaTime);
-
         }
         
-        if (isAvoiding == true)
+        // if the spider is engaging in avoiding behavior 
+        if (_isAvoiding)
         {
-            int random = Random.Range(0, 4);
-            if (random == 0)
-            {
-                transform.position += transform.forward * 0.0001f;
-                transform.Rotate(transform.up * 2f);
-                /*transform.Rotate(transform.up * 2f);
-                transform.position += transform.forward * 0.0001f;*/
-                
-            }
-            else if (random == 1)
-            {
-                //transform.Rotate(transform.up * 1f);
-                transform.position += transform.forward * 0.0002f;
-                transform.Rotate(transform.up * 1.0f);
-                
-            }
-            else if (random == 2)
-            {
-                transform.position += transform.forward * 0.0003f;
-                transform.Rotate(transform.up * 2.5f);
-                /*transform.Rotate(transform.up * 2.5f);
-                transform.position += transform.forward * 0.0003f;*/
-                
-            }
-            else if (random == 3)
-            {
-                transform.position += transform.forward * 0.00015f;
-                transform.Rotate(transform.up * 1.5f);
-                /*transform.Rotate(transform.up * 1.5f);
-                transform.position += transform.forward * 0.00015f;*/
-                
-            }
-            /*else if (random == 2)
-            {
-                transform.position += transform.forward * 0f;
-                transform.Rotate(transform.up * 1.5f);
-            }*/
-            //transform.Rotate(transform.up * rotSpeed);
-            /*int rotate = Random.Range(1, 3);
-            if (rotate == 1)
-            {
-                transform.Rotate(transform.up * 2.0f);
-            }
-            else
-            {
-                transform.Rotate(transform.up * - 2.0f);
-            }*/
+            // randomize spider movement speed when avoiding
+            float randomAvoidMoveSpeed = Random.Range(0, 0.0003f);
+            // randomize spider rotating speed when avoiding
+            float randomAvoidRotateSpeed = Random.Range(1, 2.5f);
+            transform.position += transform.forward * randomAvoidMoveSpeed;
+            // rotates to the right at randomized spider rotation speed
+            transform.Rotate(transform.up * randomAvoidRotateSpeed);
         }
 
         if (isWalking == true)
@@ -191,11 +148,11 @@ public class GameCockroachAI : MonoBehaviour
 
     IEnumerator Avoid()
     {
-        float avoidTime = Random.Range(0.1f, 1.0f);
-            isAvoiding = true;
+        float avoidTime = Random.Range(0.5f, 1.0f);
+            _isAvoiding = true;
             animator.SetBool("rotate", true);
             yield return new WaitForSeconds(avoidTime);
-            isAvoiding = false;
+            _isAvoiding = false;
     }
     
     IEnumerator Wander()

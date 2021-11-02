@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Firebase.Auth;
 using Firebase.Database;
 using Firebase.Extensions;
 using TMPro;
@@ -15,7 +16,7 @@ using Random = System.Random;
 
 public class SpiderPhobiaMenuCamera : MonoBehaviour
 {
-    // gameObject hit by physics.raycast
+    // gameObject attached with collider hit by physics.raycast
     private GameObject _hitGameObject;
     // circular progress bar image 
     public Image progressCircle;
@@ -25,16 +26,15 @@ public class SpiderPhobiaMenuCamera : MonoBehaviour
     private const float TotalTime = 2.5f;
     // time spent gazing at gameObject
     private float _gazeTimer;
-
     
-    
-    Firebase.Auth.FirebaseAuth auth;
-    Firebase.Auth.FirebaseUser user;
-    DatabaseReference reference;
-
+    // gaze interaction sound clip audio source
+    public AudioSource audioSource;
     public AudioSource GameBGM;
     public AudioSource GazeBGM;
-    public AudioSource audioSource;
+    
+    private FirebaseAuth _auth;
+    private FirebaseUser _user;
+    private DatabaseReference _reference;
     
     private string[] spiderFacts =
     {
@@ -52,7 +52,6 @@ public class SpiderPhobiaMenuCamera : MonoBehaviour
     
     private GameObject DoctorCanvas;
     
-    
     private string username;
     
     public GameObject ArachnophobiaSelectionMenuPanel;
@@ -64,13 +63,10 @@ public class SpiderPhobiaMenuCamera : MonoBehaviour
     public GameObject spiderSelectionMenu;
     private SpiderSelection _spiderSelectionScript;
     
-    private GameObject test2;
-    
     // default spider size for gaze (size s)
     public int selectedGazeSize = 1;
     // default number of spiders for gaze
     public int selectedGazeNum = 1;
-    
     
     public int gazeVirtualTherapist = 1;
     public int gameVirtualTherapist = 1;
@@ -114,35 +110,24 @@ public class SpiderPhobiaMenuCamera : MonoBehaviour
     void Start()
     {
         FirebaseDatabase.DefaultInstance.SetPersistenceEnabled(false);
-        
-        
         _spiderSelectionScript = spiderSelectionMenu.GetComponent<SpiderSelection>();
-        
-        
-        reference = FirebaseDatabase.DefaultInstance.RootReference;
-        InitializeFirebase();
+        _reference = FirebaseDatabase.DefaultInstance.RootReference;
+        _auth = FirebaseAuth.DefaultInstance;
+        // get currently logged-in user
+        _user = _auth.CurrentUser;
         LoadPatientUsername();
         // cannot disable screen space camera canvas for some reason, so switching the code to call it as a gameobject and disabling it entirely
         DoctorCanvas = GameObject.Find("DoctorCanvas");
         
         GazeInstructionText = GameObject.Find("GazeInstructionText").GetComponent<TextMeshPro>();
-        //GazeRelaxtionText = GameObject.Find("GazeRelaxationText").GetComponent<TextMeshPro>();
-        //GazeRelaxtionText.enabled = false;
         GameInstructionText = GameObject.Find("GameInstructionText").GetComponent<TextMeshPro>();
-        //GameRelaxtionText = GameObject.Find("GameRelaxationText").GetComponent<TextMeshPro>();
-        //GameRelaxtionText.enabled = false;
         
         Doctor = GameObject.Find("SpeechBubble");
-        //SpeechBubbleText = Doctor.transform.GetChild(0).GetComponent<TextMeshPro>();
         GazeDoctor = GameObject.Find("SpiderGazeFacts");
         SpiderGazeFactsText = GazeDoctor.transform.GetChild(0).GetComponent<TextMeshPro>();
         
         GameDoctor = GameObject.Find("SpiderGameFacts");
         SpiderGameFactsText = GameDoctor.transform.GetChild(0).GetComponent<TextMeshPro>();
-        
-        test2 = GameObject.Find("Main Camera");
-        
-        
         
         gazeSmall = GameObject.Find("GazeSmall").GetComponent<Button>();
         _gazeColorS = gazeSmall.colors;
@@ -158,12 +143,6 @@ public class SpiderPhobiaMenuCamera : MonoBehaviour
         GazeNum5 = GameObject.Find("GazeNum5").GetComponent<Button>();
         GazeColor5 = GazeNum5.colors;
         
-        // then reference the gameobject's script
-        //GazeOptionPanel = GameObject.Find("GazeOptionPanel");
-        //ArachnophobiaSelectionMenuPanel = GameObject.Find("ArachnophobiaSelectionMenuPanel");
-        //GazePrePanel = GameObject.Find("GazePrePanel");
-        //GamePrePanel = GameObject.Find("GamePrePanel");
-
         GazePrePanel.SetActive(false);
         GazeOptionPanel.SetActive(false);
         GamePrePanel.SetActive(false);
@@ -172,7 +151,7 @@ public class SpiderPhobiaMenuCamera : MonoBehaviour
         // default spider size for gaze
         if (selectedGazeSize == 1)
         {
-            // set gaze spider size 's' button colour to green
+            // set spider size 's' button colour to green
             _gazeColorS.normalColor = Color.green;
             gazeSmall.colors = _gazeColorS;
         }
@@ -180,7 +159,7 @@ public class SpiderPhobiaMenuCamera : MonoBehaviour
         // default number of spiders for gaze
         if (selectedGazeNum == 1)
         {
-            // set gaze number of spiders '1' button colour to green
+            // set number of spiders '1' button colour to green
             GazeColor1.normalColor = Color.green;
             GazeNum1.colors = GazeColor1;
         }
@@ -195,33 +174,25 @@ public class SpiderPhobiaMenuCamera : MonoBehaviour
             GazeBGMToggle.isOn = false;
         }
     }
-    //var ray = new Ray(this.transform.position, this.transform.forward);
-    //Debug.Log(_hitGameObject);
     
     void FixedUpdate()
     {
-        // get information back from raycast (first object hit)
+        // get information back from raycast (first gameObject attached with collider hit)
         RaycastHit hit;
         // cast a ray in the forward direction from the current position and store raycasthit data into hit
         if (Physics.Raycast(transform.position,transform.forward, out hit, MAXGazeDistance))
         {
-            // add to the gazetimer for every moment the raycast is colliding with object 
+            // add to the gazetimer for every moment the raycast is colliding with gameObject attached with collider
             _gazeTimer += Time.deltaTime;
             // fill the circularprogressbar (fully filled when the gazetimer is equal to time needed to complete gaze interaction)
             progressCircle.fillAmount = _gazeTimer / TotalTime;
             // get the gameObject's transform that the raycast collides with
             _hitGameObject = hit.transform.gameObject;
-            // if the raycast collides with a gameObject
-            if (_hitGameObject)
-            {
-                Debug.Log(_hitGameObject);
-                
-                
-                
+            
                 // if the gazetimer is lower than the required gaze time
                 if (_gazeTimer < TotalTime)
                 {
-                    // the name of the gameObject that the ray collides with 
+                    // the name of the gameObject attached with collider that the ray collides with  
                     switch (_hitGameObject.name)
                     {
                         // if the gameObject name matches with the case, display corresponding text in doctor speech bubble
@@ -232,17 +203,17 @@ public class SpiderPhobiaMenuCamera : MonoBehaviour
                             instructionsBubbleText.text = ("Exposure Session Where You Catch Spiders");
                             break;
                         case "TreatmentProgress":
-                            instructionsBubbleText.text = ("View Your Arachnophobia Treatment Progress");
+                            instructionsBubbleText.text = ("View Your Arachnophobia Treatment Progress (Exit VR mode)");
                             break;
                         case "ReturnToSelectionMenuButton":
-                            instructionsBubbleText.text = ("Go Back To Phobia Selection Menu");
+                            instructionsBubbleText.text = ("Go Back To Phobia Selection Menu (Exit VR mode)");
                             break;
                         case "NextSpider":
                         case "PreviousSpider":
                             instructionsBubbleText.text = ("Select Desired Spider Model For Exposure Tasks");
                             break;
                         case "SignOutAndQuitButton":
-                            instructionsBubbleText.text = ("Sign Out And Quit Phobia-B-Gone After Answering the FSQ");
+                            instructionsBubbleText.text = ("Sign Out And Quit Phobia-B-Gone After Answering the FSQ (Exit VR mode)");
                             break;
                     }
                 }
@@ -254,29 +225,13 @@ public class SpiderPhobiaMenuCamera : MonoBehaviour
                     _gazeTimer = 0;
                     // play gaze interact sound effect
                     audioSource.Play();
-                    // the name of the gameObject that the ray collides with 
+                    // the name of the gameObject attached with collider that the ray collides with  
                     switch (_hitGameObject.name)
                     {
                         // if the gameObject name matches with the case, execute the corresponding code
                         case "ReturnToSelectionMenuButton":
                             SceneManager.LoadScene("PhobiaSelectMenu");
                             break;
-                        // case "NextGazeSlide":
-                        //     GazeInstructionText.enabled = false;
-                        //     GazeRelaxtionText.enabled = true;
-                        //     break;
-                        // case "PreviousGazeSlide":
-                        //     GazeInstructionText.enabled = true;
-                        //     GazeRelaxtionText.enabled = false;
-                        //     break;
-                        // case "NextGameSlide":
-                        //     GameInstructionText.enabled = false;
-                        //     GameRelaxtionText.enabled = true;
-                        //     break;
-                        // case "PreviousGameSlide":
-                        //     GameInstructionText.enabled = true;
-                        //     GameRelaxtionText.enabled = false;
-                        //     break;
                         case "GazeSelect":
                             GazePrePanel.SetActive(false);
                             GazeOptionPanel.SetActive(true);
@@ -300,7 +255,7 @@ public class SpiderPhobiaMenuCamera : MonoBehaviour
                             GameOptionPanel.SetActive(true);
                             GamePrePanel.SetActive(false);
                             break;
-                        case "RandomSpiderGazeFactsDoctor":
+                        case "RandomSpiderGazeFactsDoctor ":
                         {
                             Random rand = new Random();
                             int factsNum = rand.Next(0, spiderFacts.Length);
@@ -362,12 +317,16 @@ public class SpiderPhobiaMenuCamera : MonoBehaviour
                             selectedGazeSize = 1;
                             break;
                         case "GazeMedium":
+                            // set spider size 's' button colour to white
                             _gazeColorS.normalColor = Color.white;
                             gazeSmall.colors = _gazeColorS;
+                            // set size m button colour to green
                             _gazeColorM.normalColor = Color.green;
                             gazeMedium.colors = _gazeColorM;
+                            // set size l button colour to white
                             _gazeColorL.normalColor = Color.white;
                             gazeLarge.colors = _gazeColorL;
+                            // set selected gaze size integer to 2
                             selectedGazeSize = 2;
                             break;
                         case "GazeLarge":
@@ -389,12 +348,16 @@ public class SpiderPhobiaMenuCamera : MonoBehaviour
                             selectedGazeNum = 1;
                             break;
                         case "GazeNum3":
+                            // set number of spiders '1' button colour to white
                             GazeColor1.normalColor = Color.white;
                             GazeNum1.colors = GazeColor1;
+                            // set number of spiders '3' button colour to green
                             GazeColor3.normalColor = Color.green;
                             GazeNum3.colors = GazeColor3;
+                            // set number of spiders '5' button colour to white
                             GazeColor5.normalColor = Color.white;
                             GazeNum5.colors = GazeColor5;
+                            // set selected gaze number integer to 3
                             selectedGazeNum = 3;
                             break;
                         case "GazeNum5":
@@ -420,7 +383,7 @@ public class SpiderPhobiaMenuCamera : MonoBehaviour
                             GazePrePanel.SetActive(false);
                             ArachnophobiaSelectionMenuPanel.SetActive(true);
                             break;
-                        case "GazeVirtualTherapistToggle" when GazeVirtualTherapistToggle.isOn == true:
+                        case "GazeVirtualTherapistToggle" when GazeVirtualTherapistToggle.isOn:
                             GazeVirtualTherapistToggle.isOn = false;
                             gazeVirtualTherapist = 0;
                             break;
@@ -434,7 +397,7 @@ public class SpiderPhobiaMenuCamera : MonoBehaviour
 
                             break;
                         }
-                        case "GameVirtualTherapistToggle" when GameVirtualTherapistToggle.isOn == true:
+                        case "GameVirtualTherapistToggle" when GameVirtualTherapistToggle.isOn:
                             GameVirtualTherapistToggle.isOn = false;
                             gameVirtualTherapist = 0;
                             break;
@@ -474,52 +437,28 @@ public class SpiderPhobiaMenuCamera : MonoBehaviour
                             SceneManager.LoadScene("SignOutSpiderEval");
                             break;
                     }
-                }
+                // }
             }
-            else
-            {
-                progressCircle.fillAmount = 0;
-                _gazeTimer = 0;
-            }
+            // else
+            // {
+            //     progressCircle.fillAmount = 0;
+            //     _gazeTimer = 0;
+            // }
         }
+        // if physics.raycast is not colliding with any gameObjects attached with colliders
         else
         {
             instructionsBubbleText.text = ("Hello there, " + username + "! Welcome to Phobia-B-Gone for arachnophobia!");
-            _hitGameObject = null;
-           _gazeTimer = 0;
+            // reset the gazetimer to restart gaze interaction instance (prevent unwanted interactions)
+            _gazeTimer = 0;
+            // reset the circular progress bar fill amount
            progressCircle.fillAmount = 0;
         }
     }
     
-    void InitializeFirebase() {
-        Debug.Log("Setting up Firebase Auth");
-        auth = Firebase.Auth.FirebaseAuth.DefaultInstance;
-        auth.StateChanged += AuthStateChanged;
-        AuthStateChanged(this, null);
-    }
-
-    void AuthStateChanged(object sender, System.EventArgs eventArgs) {
-        if (auth.CurrentUser != user) {
-            bool signedIn = user != auth.CurrentUser && auth.CurrentUser != null;
-            if (!signedIn && user != null) {
-                Debug.Log("Signed out " + user.UserId);
-            }
-            user = auth.CurrentUser;
-            if (signedIn) {
-                Debug.Log("Signed in " + user.UserId);
-            }
-        }
-    }
-
-    void OnDestroy() {
-        auth.StateChanged -= AuthStateChanged;
-        auth = null;
-    }
-    
-    
-    public void LoadPatientUsername()
+    private void LoadPatientUsername()
     {
-        reference.Child("User").Child(user.UserId).GetValueAsync().ContinueWithOnMainThread(task =>
+        _reference.Child("User").Child(_user.UserId).GetValueAsync().ContinueWithOnMainThread(task =>
         {
             if (task.IsCompleted)
             {

@@ -8,76 +8,211 @@ using Firebase.Auth;
 using Firebase.Extensions;
 using TMPro;
 using UnityEngine.SceneManagement;
+// GetPatientData();
 
 public class spiderTreatmentProgress : MonoBehaviour
 {
-    private int firstnum;
-    private int lastnum;
-    private int firstminuslast;
+    private FirebaseAuth _auth;
+    private FirebaseUser _user;
+    private DatabaseReference _reference;
     public TextMeshProUGUI TreatmentProgressText;
     public TextMeshPro SpeechText;
-    Firebase.Auth.FirebaseAuth auth;
-    Firebase.Auth.FirebaseUser user;
-    DatabaseReference reference;
-    DatabaseReference spider;
-
+    
     void Start()
     {
+        // prevent retrieval of deleted or old data
         FirebaseDatabase.DefaultInstance.SetPersistenceEnabled(false);
-        reference = FirebaseDatabase.DefaultInstance.RootReference;
-        InitializeFirebase();
+        _auth = FirebaseAuth.DefaultInstance;
+        // get the root reference location of the firebase database
+        _reference = FirebaseDatabase.DefaultInstance.RootReference;
+        // get currently logged-in user
+        _user = _auth.CurrentUser;
         LoadPatientSpiderTreatmentData();
-        GetPatientData();
         ComparePatientData();
     }
     
-    public void ComparePatientData()
+    private void LoadPatientSpiderTreatmentData()
     {
-        reference.Child("Questionnaires").Child(user.UserId).Child("Spider").GetValueAsync().ContinueWithOnMainThread(task =>
+        // get snapshot of all data at specified path
+        _reference.Child("Questionnaires").Child(_user.UserId).Child("Spider").GetValueAsync().ContinueWithOnMainThread(task =>
         {
             if (task.IsCompleted)
             {
+                // get result value from task
                 DataSnapshot snapshot = task.Result;
-                Debug.Log("Successful");
-                
+                // get the number of children in the snapshot
                 int treatmentCount = (int)snapshot.ChildrenCount;
-                string strtreatmentCount = treatmentCount.ToString();
-                Debug.Log(treatmentCount);
-                string test1= snapshot.Child("1").Child("AnswerScore").Value.ToString();
-                string test2 = snapshot.Child(strtreatmentCount).Child("AnswerScore").Value.ToString();
-                int test1num = int.Parse(test1);
-                int test2num = int.Parse(test2);
-                int firstminuslast = test1num - test2num;
-                string strfirstminuslast = firstminuslast.ToString(); 
-                
-                if (treatmentCount == 1)
-                {
-                    SpeechText.text = "Welcome to Phobia-B-Gone! Answer the FSQ after exposure tasks and see your progress over-time!";
-                }
-                else if (firstminuslast > 0)
-                {
-                    SpeechText.text = "Well done! Your FSQ score has improved by " + strfirstminuslast  + " since you started!";
-                }
-                else if (firstminuslast < 0)
-                {
-                    SpeechText.text = "Your FSQ score has dropped by " + strfirstminuslast  + " since you started, please take a break or consult a therapist if needed";
-                }
-                else
-                {
-                    SpeechText.text = "Your current FSQ score is the same as your initial score, use the app as much as you want and take breaks if needed!";
+                // for loop to iterate through child data one-by-one in the snapshot and then display them all
+                for (int i = 1; i <= treatmentCount; i++)
+                {   
+                    TreatmentProgressText.text += snapshot.Child(i.ToString()).Child("AnswerDateTime").Value + "                   " 
+                        + snapshot.Child(i.ToString()).Child("AnswerScore").Value + "\n" + "\n";
                 }
             }
             else
             {
-                Debug.Log("Unsuccessful");
+                SpeechText.text = "Arachnophobia Treatment Data Retrieval Failed";
             }
         });
-        
-        
-        
     }
     
-    /*public void ComparePatientData()
+    private void ComparePatientData()
+    {
+        // get snapshot of all data at specified path
+        _reference.Child("Questionnaires").Child(_user.UserId).Child("Spider").GetValueAsync().ContinueWithOnMainThread(task =>
+        {
+            if (task.IsCompleted)
+            {
+                // get result value from task
+                DataSnapshot snapshot = task.Result;
+                // get the number of children in the snapshot
+                int treatmentDataCount = (int)snapshot.ChildrenCount;
+                // store the number of children in the snapshot as string
+                string strtreatmentDataCount = treatmentDataCount.ToString();
+                // store the first FSQ score as string
+                string firstTreatmentData= snapshot.Child("1").Child("AnswerScore").Value.ToString();
+                // store the last FSQ score as string
+                string lastTreatmentData = snapshot.Child(strtreatmentDataCount).Child("AnswerScore").Value.ToString();
+                int integerfirstTreatmentData = int.Parse(firstTreatmentData);
+                int integerlastTreatmentData = int.Parse(lastTreatmentData);
+                // first FSQ score minus last FSQ score and store the difference as integer for comparison
+                int firstminuslast = integerfirstTreatmentData - integerlastTreatmentData;
+                string strfirstminuslast = firstminuslast.ToString(); 
+                
+                // if currently logged-in user only has one FSQ score data
+                if (treatmentDataCount == 1)
+                {
+                    SpeechText.text = "Welcome to Phobia-B-Gone! Answer the FSQ after exposure tasks and see your progress over-time!";
+                }
+                else if (treatmentDataCount == 0)
+                {
+                    SpeechText.text = "You do not have any existing FSQ score data. Please go answer the FSQ to get your baseline score!";
+                }
+                // if the first FSQ score minus last FSQ score difference is larger than 0 (patient phobia improved)
+                else if (firstminuslast > 0)
+                {
+                    SpeechText.text = "Well done! Your FSQ score has improved by " + strfirstminuslast + " points since you started!";
+                }
+                // if the first FSQ score minus last FSQ score difference is smaller than 0 (patient phobia worsened)
+                else if (firstminuslast < 0)
+                {
+                    string negativeToPositive = strfirstminuslast;
+                    // remove first char of score difference string (which is negative symbol)
+                    negativeToPositive = negativeToPositive.Substring(1);
+                    SpeechText.text = "Your FSQ score has dropped by " + negativeToPositive + " points since you started, please take a " +
+                                      "break or consult a therapist if needed.";
+                }
+                // if the first FSQ score minus last FSQ score difference is equal to 0
+                else if (firstminuslast == 0)
+                {
+                    SpeechText.text = "Your current FSQ score is the same as your initial score, use the app as much as you want " +
+                                      "and take breaks if needed!";
+                }
+            }
+            else
+            {
+                SpeechText.text = "Arachnophobia Treatment Data Comparison Failed";
+            }
+        });
+    }
+
+    // private void GetPatientData()
+    // {
+    //     _reference.Child("Questionnaires").Child(_user.UserId).Child("Spider").GetValueAsync().ContinueWith(task =>
+    //     {
+    //         if (task.IsCompleted)
+    //         {
+    //             DataSnapshot snapshot = task.Result;
+    //             Debug.Log("Successful");
+    //             //Debug.Log(snapshot.ChildrenCount.ToString());
+    //         }
+    //         else
+    //         {
+    //             Debug.Log("Unsuccessful");
+    //         }
+    //     });
+    // }
+    
+    public void BackToMenuButton()
+    {
+        SceneManager.LoadScene("SpiderPhobiaMenu");
+    }
+    
+    public void quitApp()
+    {
+        _auth.SignOut();
+        Application.Quit();
+        //UnityEditor.EditorApplication.isPlaying = false;
+        //UnityEditor.EditorApplication.isPlaying = false;
+    }
+    
+    public void AnswerFSQButton()
+    {
+        SceneManager.LoadScene("TreatSpiderEval");
+    }
+    
+
+}
+
+//     // Handle initialization of the necessary firebase modules:
+//     void InitializeFirebase() {
+//         Debug.Log("Setting up Firebase Auth");
+//         _auth = Firebase.Auth.FirebaseAuth.DefaultInstance;
+//         _auth.StateChanged += AuthStateChanged;
+//         AuthStateChanged(this, null);
+//     }
+//
+// // Track state changes of the auth object.
+//     void AuthStateChanged(object sender, System.EventArgs eventArgs) {
+//         if (_auth.CurrentUser != _user) {
+//             bool signedIn = _user != _auth.CurrentUser && _auth.CurrentUser != null;
+//             if (!signedIn && _user != null) {
+//                 Debug.Log("Signed out " + _user.UserId);
+//             }
+//             _user = _auth.CurrentUser;
+//             if (signedIn) {
+//                 Debug.Log("Signed in " + _user.UserId);
+//             }
+//         }
+//     }
+//
+//     void OnDestroy() {
+//         _auth.StateChanged -= AuthStateChanged;
+//         _auth = null;
+//     }
+// private int firstnum;
+// private int lastnum;
+// private int firstminuslast;
+// DatabaseReference spider;
+/*FirebaseDatabase.DefaultInstance.GetReference("Questionnaires")
+            .GetValueAsync().ContinueWithOnMainThread(task => {
+                if (task.IsFaulted) {
+                    Debug.Log("Data is not retrieved!");
+                    // Handle the error...
+                }
+                else if (task.IsCompleted) {
+                    DataSnapshot snapshot = task.Result;
+                    // Do something with snapshot...
+                }
+            });*/
+/*reference.Child("Questionnaires").Child(user.UserId).Child("Spider").GetValueAsync().ContinueWith(task =>
+{
+    if (task.IsCompleted)
+    {
+        Debug.Log("successful");
+        DataSnapshot snapshot = task.Result;
+        //Debug.Log(data.text = snapshot.Child("UserName").Value.ToString());
+        Debug.Log(snapshot.Child("2021-10-03T21:49:23").Value.ToString());
+        /*Debug.Log(snapshot.Child("UserName").Value.ToString());
+        Debug.Log(snapshot.Child("Email").Value.ToString());#1#
+    }
+    else
+    {
+        Debug.Log("Unsuccessful");
+    }
+
+});*/
+/*public void ComparePatientData()
     {
         reference.Child("Questionnaires").Child(user.UserId).Child("Spider").ValueChanged += HandleValueChanged;
 
@@ -187,143 +322,28 @@ public class spiderTreatmentProgress : MonoBehaviour
         
     }
     */
-    public void LoadPatientSpiderTreatmentData()
-    {
-        reference.Child("Questionnaires").Child(user.UserId).Child("Spider").GetValueAsync().ContinueWithOnMainThread(task =>
-        {
-            if (task.IsCompleted)
-            {
-                
-                DataSnapshot snapshot = task.Result;
-                Debug.Log("Successful");
-                
-                int treatmentCount = (int)snapshot.ChildrenCount;
-                string strtreatmentCount = treatmentCount.ToString();
-                Debug.Log(treatmentCount);
-                /*string test1= snapshot.Child("1").Child("AnswerScore").Value.ToString();
-                string test2 = snapshot.Child(strtreatmentCount).Child("AnswerScore").Value.ToString();
-                int test1num = int.Parse(test1);
-                int test2num = int.Parse(test2);
-                int firstminuslast = test1num - test2num;
-                string strfirstminuslast = firstminuslast.ToString(); */
-                for (int i = 1; i <= treatmentCount; i++)
-                {   
-                    TreatmentProgressText.text += snapshot.Child(i.ToString()).Child("AnswerDateTime").Value.ToString() + "                   " 
-                        + snapshot.Child(i.ToString()).Child("AnswerScore").Value.ToString() + "\n" + "\n";
-                }
-                /*if (treatmentCount == 1)
-                {
-                    SpeechText.text = "Welcome to Phobia-B-Gone! Answer the FSQ after exposure tasks and see your progress over-time!";
-                }
-                else if (firstminuslast > 0)
-                {
-                    SpeechText.text = "Well done! Your FSQ score has improved by " + strfirstminuslast  + " since you started!";
-                }
-                else if (firstminuslast < 0)
-                {
-                    SpeechText.text = "Your FSQ score has dropped by " + strfirstminuslast  + " since you started, please rest if needed";
-
-                }
-                else
-                {
-                    SpeechText.text = "Your current FSQ score is the same as your initial score, use the app as much as you want!";
-                }*/
-            }
-            else
-            {
-                Debug.Log("Unsuccessful");
-            }
-        });
-    }
-    
-    public void GetPatientData()
-    {
-        reference.Child("Questionnaires").Child(user.UserId).Child("Spider").GetValueAsync().ContinueWith(task =>
-        {
-            if (task.IsCompleted)
-            {
-                DataSnapshot snapshot = task.Result;
-                Debug.Log("Successful");
-                //Debug.Log(snapshot.ChildrenCount.ToString());
-            }
-            else
-            {
-                Debug.Log("Unsuccessful");
-            }
-        });
-        /*FirebaseDatabase.DefaultInstance.GetReference("Questionnaires")
-            .GetValueAsync().ContinueWithOnMainThread(task => {
-                if (task.IsFaulted) {
-                    Debug.Log("Data is not retrieved!");
-                    // Handle the error...
-                }
-                else if (task.IsCompleted) {
-                    DataSnapshot snapshot = task.Result;
-                    // Do something with snapshot...
-                }
-            });*/
-        /*reference.Child("Questionnaires").Child(user.UserId).Child("Spider").GetValueAsync().ContinueWith(task =>
-        {
-            if (task.IsCompleted)
-            {
-                Debug.Log("successful");
-                DataSnapshot snapshot = task.Result;
-                //Debug.Log(data.text = snapshot.Child("UserName").Value.ToString());
-                Debug.Log(snapshot.Child("2021-10-03T21:49:23").Value.ToString());
-                /*Debug.Log(snapshot.Child("UserName").Value.ToString());
-                Debug.Log(snapshot.Child("Email").Value.ToString());#1#
-            }
-            else
-            {
-                Debug.Log("Unsuccessful");
-            }
-
-        });*/
-    }
-    
-    public void BackToMenuButton()
-    {
-        SceneManager.LoadScene("SpiderPhobiaMenu");
-    }
-    
-    public void quitApp()
-    {
-        Application.Quit();
-        //UnityEditor.EditorApplication.isPlaying = false;
-    }
-    
-    
-    public void AnswerFSQButton()
-    {
-        SceneManager.LoadScene("TreatSpiderEval");
-    }
-    
-    // Handle initialization of the necessary firebase modules:
-    void InitializeFirebase() {
-        Debug.Log("Setting up Firebase Auth");
-        auth = Firebase.Auth.FirebaseAuth.DefaultInstance;
-        auth.StateChanged += AuthStateChanged;
-        AuthStateChanged(this, null);
-    }
-
-// Track state changes of the auth object.
-    void AuthStateChanged(object sender, System.EventArgs eventArgs) {
-        if (auth.CurrentUser != user) {
-            bool signedIn = user != auth.CurrentUser && auth.CurrentUser != null;
-            if (!signedIn && user != null) {
-                Debug.Log("Signed out " + user.UserId);
-            }
-            user = auth.CurrentUser;
-            if (signedIn) {
-                Debug.Log("Signed in " + user.UserId);
-            }
-        }
-    }
-
-    void OnDestroy() {
-        auth.StateChanged -= AuthStateChanged;
-        auth = null;
-    }
+// InitializeFirebase();
+/*if (treatmentCount == 1)
+{
+    SpeechText.text = "Welcome to Phobia-B-Gone! Answer the FSQ after exposure tasks and see your progress over-time!";
 }
+else if (firstminuslast > 0)
+{
+    SpeechText.text = "Well done! Your FSQ score has improved by " + strfirstminuslast  + " since you started!";
+}
+else if (firstminuslast < 0)
+{
+    SpeechText.text = "Your FSQ score has dropped by " + strfirstminuslast  + " since you started, please rest if needed";
 
-
+}
+else
+{
+    SpeechText.text = "Your current FSQ score is the same as your initial score, use the app as much as you want!";
+}*/
+/*string test1= snapshot.Child("1").Child("AnswerScore").Value.ToString();
+string test2 = snapshot.Child(strtreatmentCount).Child("AnswerScore").Value.ToString();
+int test1num = int.Parse(test1);
+int test2num = int.Parse(test2);
+int firstminuslast = test1num - test2num;
+string strfirstminuslast = firstminuslast.ToString(); */
+// SpeechText.text = "Your FSQ score has dropped by " + strfirstminuslast + " points since you started, please take a break or consult a therapist if needed.";

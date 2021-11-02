@@ -18,11 +18,12 @@ public class FirebaseUserManager : MonoBehaviour
     public Canvas logInCanvas, signUpCanvas;
     public Text signuperrormessage, loginerrormessage;
     public GameObject logInErrorMessagePanel, signUpErrorMessagePanel;
-    public InputField loginemail, loginpassword, signuppassword, signuppasswordconfirm, signupemail, signupusername;
+    public InputField loginemail, loginpassword, signuppassword, 
+        signuppasswordconfirm, signupemail, signupusername;
 
     void Start()
     {
-        // gets a DatabaseReference for the root location of this FirebaseDatabase
+        // get the root reference location of the firebase database
         _reference = FirebaseDatabase.DefaultInstance.RootReference;
         _auth = FirebaseAuth.DefaultInstance;
         // deactivate error message panel for both login and signup on start
@@ -32,7 +33,7 @@ public class FirebaseUserManager : MonoBehaviour
         signUpCanvas.enabled = false;
     }
     
-    // create instance of UserDetails class to be converted to JSON format for Firebase 
+    // create object of UserDetails class to be converted to JSON format for Firebase 
     UserDetails user = new UserDetails();
     
     // user clicks sign up page button
@@ -75,7 +76,8 @@ public class FirebaseUserManager : MonoBehaviour
         else
         {   
             // create a new account with entered email and password
-            _auth.CreateUserWithEmailAndPasswordAsync(signupemail.text, signuppassword.text).ContinueWithOnMainThread(signuptask =>
+            _auth.CreateUserWithEmailAndPasswordAsync(signupemail.text, signuppassword.text)
+                .ContinueWithOnMainThread(signuptask =>
             {
                 // if task is cancelled 
                 if (signuptask.IsCanceled)
@@ -115,13 +117,13 @@ public class FirebaseUserManager : MonoBehaviour
                 }
                 // get result value from task
                 FirebaseUser newuser = signuptask.Result;
-                // store input username into Username variable of user
+                // store input username into Username variable of user object
                 user.Username = signupusername.text;
-                // store input email into Email variable of user 
+                // store input email into Email variable of user object
                 user.Email = signupemail.text;
-                // convert user variables into json format and store as string
+                // convert user object variables into json format and store as string
                 string json = JsonUtility.ToJson(user);
-                // save json string of user variables to the specified node
+                // save json string of user object variables to the specified path
                 _reference.Child("User").Child(newuser.UserId).SetRawJsonValueAsync(json).ContinueWithOnMainThread(task => 
                 {
                     if (task.IsCompleted)
@@ -137,33 +139,39 @@ public class FirebaseUserManager : MonoBehaviour
             });
         }
     }
-
-    
     
     public void LogIn()
     {
-        _auth.SignInWithEmailAndPasswordAsync(loginemail.text, loginpassword.text).ContinueWithOnMainThread(logintask =>
+        // log in user with entered email and password
+        _auth.SignInWithEmailAndPasswordAsync(loginemail.text, loginpassword.text)
+            .ContinueWithOnMainThread(logintask =>
         {
+            // if task is cancelled 
             if (logintask.IsCanceled)
             {
                 loginerrormessage.text  = "Log In Failed";
                 return;
             }
 
+            //if task failed
             if (logintask.IsFaulted)
             {
-                loginerrormessage.text  = "Log In Failed";                
+                loginerrormessage.text  = "Log In Failed";      
+                // if exception is found for task
                 if (logintask.Exception != null)
                 {
                     logInErrorMessagePanel.SetActive(true);
+                    // initialize FirebaseException object with reference to task exception root cause
                     FirebaseException firebaseEx = logintask.Exception.GetBaseException() as FirebaseException;
+                    // get authentication error code of FirebaseException object
                     AuthError errorCode = (AuthError)firebaseEx.ErrorCode;
+                    // if email and password are empty or have white-space characters only
                     if (string.IsNullOrWhiteSpace(loginemail.text) && string.IsNullOrWhiteSpace(loginpassword.text))
                     {
                         loginerrormessage.text  = "Missing Email and Password!";
                         return;
                     }
-                    
+                    // display error message if authentication error code matches AuthError case
                     switch (errorCode)
                     {
                         case AuthError.MissingEmail:
@@ -186,6 +194,7 @@ public class FirebaseUserManager : MonoBehaviour
                 }
             }
             loginerrormessage.text  = "User Logged In Successfully";
+            // load phobia selection menu
             SceneManager.LoadScene("PhobiaSelectMenu");
         });
     }
