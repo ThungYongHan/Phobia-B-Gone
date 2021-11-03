@@ -10,6 +10,11 @@ using UnityEngine.UI;
 
 public class CockroachGameScript : MonoBehaviour
 {
+    private GameObject _hitGameObject;
+    public Image imgCircle;
+    private const float MAXGazeDistance = 10;
+    
+    
     public float timeRemaining = 90;
     public TextMeshPro timerText;
 
@@ -40,17 +45,15 @@ public class CockroachGameScript : MonoBehaviour
     
     public TextMeshPro BubbleText;
     
-    private const float _maxDistance = 10;
-    private GameObject _gazedAtObject = null;
-    public Image imgCircle;
+    
     // changed gaze time for game script 
     private float totalTime = 0.05f;
     
     private float UITime = 2.5f;
     public float gazeTimer;
     
-    public GameObject test;
-    public LoadCockroachGame loadCockroachGame;
+    public GameObject gameSpawn;
+    private LoadCockroachGame loadCockroachGame;
     
     public int scoreNum = 30;
     public TextMeshPro ScoreText;
@@ -69,8 +72,8 @@ public class CockroachGameScript : MonoBehaviour
         GameOverBackToMainMenuButton.enabled = false;
         GameOverRetryGameSessionButton.enabled = false;
         
-        test = GameObject.Find("GameSpawn");
-        loadCockroachGame = test.GetComponent<LoadCockroachGame>();
+        gameSpawn = GameObject.Find("GameSpawn");
+        loadCockroachGame = gameSpawn.GetComponent<LoadCockroachGame>();
         gameVirtualTherapist = PlayerPrefs.GetInt("cockroachgameVirtualTherapist");
         gameBGM = PlayerPrefs.GetInt("cockroachgameBGM");
         if (gameBGM == 1)
@@ -131,25 +134,28 @@ public class CockroachGameScript : MonoBehaviour
             RetryGameSessionButton.enabled = true;
             
         }
-        var ray = new Ray(this.transform.position, this.transform.forward);
         RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, _maxDistance))
+        if (Physics.Raycast(transform.position,transform.forward, out hit, MAXGazeDistance))
         {
+            _hitGameObject = hit.transform.gameObject;
             gazeTimer += Time.deltaTime;
-            _gazedAtObject = hit.transform.gameObject;
             
-            if (_gazedAtObject.name == "CartoonCockroachGame(Clone)" || _gazedAtObject.name == "RealisticCockroachGame(Clone)")
+            switch (_hitGameObject.name)
             {
-                if (timeRemaining > 0)
+                case "CartoonCockroachGame(Clone)":
+                case "RealisticCockroachGame(Clone)":
                 {
-                    if (scoreNum > 0)
+                    if (timeRemaining > 0)
                     {
-                        imgCircle.fillAmount = gazeTimer / totalTime;
-                        if (gazeTimer > totalTime)
+                        if (scoreNum > 0)
                         {
-                            scoreNum -= 1;
+                            imgCircle.fillAmount = gazeTimer / totalTime;
+                            if (gazeTimer > totalTime)
+                            {
+                                scoreNum -= 1;
                                 ScoreText.text = (scoreNum).ToString();
                                 // this only destroys the gameobject that I am looking at, not the other gameobjects with the same name
+                                Destroy(_hitGameObject);
                                 cockroachCatchFX.Play();
                                 if (scoreNum == 26 || scoreNum == 22 || scoreNum == 17 || scoreNum == 12 ||
                                     scoreNum == 8 || scoreNum == 4)
@@ -200,93 +206,107 @@ public class CockroachGameScript : MonoBehaviour
                                     gameComplete = true;
                                     BubbleText.text = "Well done! Thanks for eliminating the cockroaches!";
                                 }
+                            }
                         }
                     }
+
+                    break;
                 }
-            }
-            
-            else if (_gazedAtObject.name == "LampCollider")
-            {
-                imgCircle.fillAmount = gazeTimer / UITime;
-                if (gazeTimer > UITime)
+                case "LampCollider":
                 {
-                    audioSource.Play();
-                    LampCollider.enabled = false;
-                    ExitCockroachGameCanvas.enabled = true;
-                    ExitCockroachGameButton.enabled = true;
-                    ExitCockroachGameCancelButton.enabled = true;
-                    gazeTimer = 0;
+                    imgCircle.fillAmount = gazeTimer / UITime;
+                    if (gazeTimer > UITime)
+                    {
+                        audioSource.Play();
+                        LampCollider.enabled = false;
+                        ExitCockroachGameCanvas.enabled = true;
+                        ExitCockroachGameButton.enabled = true;
+                        ExitCockroachGameCancelButton.enabled = true;
+                        gazeTimer = 0;
+                    }
+
+                    break;
                 }
-                
-            }
-            else if (_gazedAtObject.name == "ExitCockroachGameCancelButton")
-            {
-                imgCircle.fillAmount = gazeTimer / UITime;
-                if (gazeTimer > UITime)
+                case "ExitCockroachGameCancelButton":
                 {
-                    audioSource.Play();
-                    ExitCockroachGameCanvas.enabled = false;
-                    ExitCockroachGameButton.enabled = false;
-                    ExitCockroachGameCancelButton.enabled = false;
-                    LampCollider.enabled = true; 
-                    gazeTimer = 0;
+                    imgCircle.fillAmount = gazeTimer / UITime;
+                    if (gazeTimer > UITime)
+                    {
+                        audioSource.Play();
+                        ExitCockroachGameCanvas.enabled = false;
+                        ExitCockroachGameButton.enabled = false;
+                        ExitCockroachGameCancelButton.enabled = false;
+                        LampCollider.enabled = true; 
+                        gazeTimer = 0;
+                    }
+
+                    break;
                 }
-            }
-            else if (_gazedAtObject.name == "ExitCockroachGameButton")
-            {
-                imgCircle.fillAmount = gazeTimer / UITime;
-                if (gazeTimer > UITime)
+                case "ExitCockroachGameButton":
                 {
-                    audioSource.Play();
-                    SceneManager.LoadScene("CockroachPhobiaMenu");
-                    gazeTimer = 0;
+                    imgCircle.fillAmount = gazeTimer / UITime;
+                    if (gazeTimer > UITime)
+                    {
+                        audioSource.Play();
+                        SceneManager.LoadScene("CockroachPhobiaMenu");
+                        gazeTimer = 0;
+                    }
+
+                    break;
                 }
-            }
-            else if (_gazedAtObject.name == "BackToMainMenuButton" )
-            {
-                imgCircle.fillAmount = gazeTimer / UITime;
-                if (gazeTimer > UITime)
+                case "BackToMainMenuButton":
                 {
-                    audioSource.Play();
-                    SceneManager.LoadScene("CockroachPhobiaMenu");
-                    gazeTimer = 0;
+                    imgCircle.fillAmount = gazeTimer / UITime;
+                    if (gazeTimer > UITime)
+                    {
+                        audioSource.Play();
+                        SceneManager.LoadScene("CockroachPhobiaMenu");
+                        gazeTimer = 0;
+                    }
+
+                    break;
                 }
-            }
-            else if (_gazedAtObject.name == "RetryGameSessionButton")
-            {
-                imgCircle.fillAmount = gazeTimer / UITime;
-                if (gazeTimer > UITime)
+                case "RetryGameSessionButton":
                 {
-                    audioSource.Play();
-                    SceneManager.LoadScene("CockroachBathroom");
-                    gazeTimer = 0;
+                    imgCircle.fillAmount = gazeTimer / UITime;
+                    if (gazeTimer > UITime)
+                    {
+                        audioSource.Play();
+                        SceneManager.LoadScene("CockroachBathroom");
+                        gazeTimer = 0;
+                    }
+
+                    break;
                 }
-            }
-            else if (_gazedAtObject.name == "GameOverRetryGameSessionButton")
-            {
-                imgCircle.fillAmount = gazeTimer / UITime;
-                if (gazeTimer > UITime)
+                case "GameOverRetryGameSessionButton":
                 {
-                    audioSource.Play();
-                    SceneManager.LoadScene("CockroachBathroom");
-                    gazeTimer = 0;
+                    imgCircle.fillAmount = gazeTimer / UITime;
+                    if (gazeTimer > UITime)
+                    {
+                        audioSource.Play();
+                        SceneManager.LoadScene("CockroachBathroom");
+                        gazeTimer = 0;
+                    }
+
+                    break;
                 }
-            }
-            else if (_gazedAtObject.name == "GameOverBackToMainMenuButton")
-            {
-                imgCircle.fillAmount = gazeTimer / UITime;
-                if (gazeTimer > UITime)
+                case "GameOverBackToMainMenuButton":
                 {
-                    audioSource.Play();
-                    SceneManager.LoadScene("CockroachPhobiaMenu");
-                    gazeTimer = 0;
+                    imgCircle.fillAmount = gazeTimer / UITime;
+                    if (gazeTimer > UITime)
+                    {
+                        audioSource.Play();
+                        SceneManager.LoadScene("CockroachPhobiaMenu");
+                        gazeTimer = 0;
+                    }
+
+                    break;
                 }
-            }
-            else
-            {
-                _gazedAtObject = null;
-                gazeTimer = 0;
-                imgCircle.fillAmount = 0;
+                default:
+                    _hitGameObject = null;
+                    gazeTimer = 0;
+                    imgCircle.fillAmount = 0;
+                    break;
             }
         }
     }

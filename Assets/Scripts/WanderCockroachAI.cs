@@ -33,15 +33,15 @@ public class WanderCockroachAI : MonoBehaviour
 
         }
 
-        // if the spider is engaging in avoiding behavior 
+        // if the cockroach is engaging in avoiding behavior 
         if (isAvoiding)
         {
-            // randomize spider movement speed when avoiding
+            // randomize cockroach movement speed when avoiding
             float randomAvoidMoveSpeed = Random.Range(0, 0.0003f);
-            // randomize spider rotating speed when avoiding
+            // randomize cockroach rotating speed when avoiding
             float randomAvoidRotateSpeed = Random.Range(1, 2.5f);
             transform.position += transform.forward * randomAvoidMoveSpeed;
-            // rotates to the right at randomized spider rotation speed
+            // rotates to the right at randomized cockroach rotation speed
             transform.Rotate(transform.up * randomAvoidRotateSpeed);
         }
 

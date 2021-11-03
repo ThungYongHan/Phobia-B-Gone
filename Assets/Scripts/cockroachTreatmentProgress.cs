@@ -61,7 +61,10 @@ public class cockroachTreatmentProgress : MonoBehaviour
                 }
                 else if (firstminuslast < 0)
                 {
-                    SpeechText.text = "Your FCQ score has dropped by " + strfirstminuslast  + " since you started, please take a break or consult a therapist if needed";
+                    string negativeToPositive = strfirstminuslast;
+                    // remove first char of score difference string (which is negative symbol)
+                    negativeToPositive = negativeToPositive.Substring(1);
+                    SpeechText.text = "Your FCQ score has dropped by " + negativeToPositive  + " since you started, please take a break or consult a therapist if needed";
                 }
                 else
                 {

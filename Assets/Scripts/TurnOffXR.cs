@@ -12,5 +12,6 @@ public class TurnOffXR : MonoBehaviour
     {
         _turnOffVR = vrModeController.GetComponent<VrModeController>();
         _turnOffVR.ExitVR();
+        Camera.main.ResetAspect();
     }
 }
